@@ -400,26 +400,43 @@
             *********************************************************************************
             */
 
+            // nota: como las transformaciones se aplican en sentido inverso,
+            //  los comentarios solo tienen sentido de abajo para arriba
+
             // tierra
             m1=mat4.create(); 
-            mat4.translate(m1,m1,[60,0,0]);    
-            setTransform(tierra,m1);
+            mat4.rotate(m1, m1, tiempo,[0,1,0]);        // rotar alrededor del sol
+            mat4.translate(m1,m1,[60,0,0]);             // alejar del origen
+
   
             // luna
-            m2=mat4.create();      
-            mat4.translate(m2,m2,[90,0,0]);    
-            setTransform(luna,m2);  
+            m2=mat4.create();
+            mat4.translate(m2, m1, [0,0,0]);            // centrar con la tierra
+            mat4.rotate(m2, m2, tiempo*365/27,[0,1,0]); // rotar alrededor del origen
+            mat4.translate(m2,m2,[20,0,0]);             // alejar del origen
+            setTransform(luna,m2);
 
             // apollo
             m3=mat4.create();
-            mat4.translate(m3,m3,[110,0,0]); 
-            setTransform(apollo,m3);    
+            mat4.translate(m3, m2,[0,0,0]);             // centrar con la luna
+            mat4.rotate(m3, m3, -Math.PI/4,[0,0,1]);    // inclinar
+            mat4.translate(m3, m3,[0,2,0]);             // alejar del origen
+            setTransform(apollo,m3);
 
             // iss
-            m4=mat4.create(); 
-            mat4.translate(m4,m4,[130,0,0]);            
-            setTransform(iss,m4);  
+            m4=mat4.create();
+            mat4.rotate(m4, m4, tiempo,[0,1,0]);        // rotar alrededor de la tierra
+            mat4.translate(m4,m4,[60,0,0]);             // seguir a la tierra
+            mat4.rotate(m4, m4, -tiempo ,[0, 1, 0]);    // asi logro que no mire siempre al sol
+            mat4.rotate(m4, m4, tiempo*27,[0,0,1]);     // rotacion alrededor del origen
+            mat4.translate(m4,m4,[10,0,0]);             // alejar del origen
+            mat4.rotate(m4, m4, -Math.PI/2,[0,1,0]);    // paneles que miran a la tierra
+            setTransform(iss,m4);
 
+            // 23 grados de rotacion para la tierra y rotacion sobre su eje
+            mat4.rotate(m1, m1, 0.4014257, [1, 0, 0]);
+            mat4.rotate(m1, m1, tiempo*365, [0, 1, 0]);
+            setTransform(tierra,m1);
 
             // *********************************************************************************************
 

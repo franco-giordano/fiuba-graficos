@@ -21,8 +21,6 @@
             background: rgba(0,0,0,0.5);
             border: 1px solid #999999;
             color:#999999;
-            
-
         }
     </style>
 </head>
@@ -434,6 +432,7 @@
             setTransform(iss,m4);
 
             // 23 grados de rotacion para la tierra y rotacion sobre su eje
+            mat4.rotate(m1, m1, -tiempo ,[0, 1, 0]);    // asi logro que no mire siempre al sol
             mat4.rotate(m1, m1, 0.4014257, [1, 0, 0]);
             mat4.rotate(m1, m1, tiempo*365, [0, 1, 0]);
             setTransform(tierra,m1);

@@ -66,6 +66,26 @@ function Plano(ancho,largo){
 }
 
 
+function Esfera(radio){
+
+    this.getPosicion=function(u,v){
+
+        var x=(u-0.5)*ancho;
+        var z=(v-0.5)*largo;
+        return [x,0,z];
+    }
+
+    this.getNormal=function(u,v){
+        return [0,1,0];
+    }
+
+    this.getCoordenadasTextura=function(u,v){
+        return [u,v];
+    }
+}
+
+
+
 
 
 function generarSuperficie(superficie,filas,columnas){
@@ -101,18 +121,32 @@ function generarSuperficie(superficie,filas,columnas){
     }
 
     // Buffer de indices de los triángulos
-    
-    //indexBuffer=[];  
-    indexBuffer=[0,1,2,2,1,3]; // Estos valores iniciales harcodeados solo dibujan 2 triangulos, REMOVER ESTA LINEA!
 
+    var filasReales = filas+1;
+    var columnasReales = columnas + 1;
+    
+    indexBuffer=[];
+    
     for (i=0; i < filas; i++) {
         for (j=0; j < columnas; j++) {
-
-            // completar la lógica necesaria para llenar el indexbuffer en funcion de filas y columnas
-            // teniendo en cuenta que se va a dibujar todo el buffer con la primitiva "triangle_strip" 
-            
+            indexBuffer.push(i*columnasReales + j);
+            indexBuffer.push((i+1)*columnasReales + j);
+        }
+        
+        // agrego los ultimos dos vertices de la ultima columna
+        indexBuffer.push(i*columnasReales + j);
+        indexBuffer.push((i+1)*columnasReales + j);
+        
+        // agrego el ultimo vertice y el siguiente para generar el triangulo degenerado
+        // solo si no llegue al ultimo quad
+        if (i != filas - 1) {
+            indexBuffer.push((i+1)*columnasReales + j);
+            indexBuffer.push(i*columnasReales + j + 1);
         }
     }
+
+    console.log("Long. de IndexBuffer esperada: ", 2*columnasReales*(filasReales-1) + 2*(filasReales-1) - 2);
+    console.log(indexBuffer.flatMap(x => x+1));
 
     // Creación e Inicialización de los buffers
 
@@ -165,11 +199,8 @@ function dibujarMalla(mallaDeTriangulos){
 
 
     if (modo!="wireframe"){
-        gl.uniform1i(shaderProgram.useLightingUniform,(lighting=="true"));                    
-        /*
-            Aqui es necesario modificar la primitiva por triangle_strip
-        */
-        gl.drawElements(gl.TRIANGLES, mallaDeTriangulos.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.uniform1i(shaderProgram.useLightingUniform,(lighting=="true"));
+        gl.drawElements(gl.TRIANGLE_STRIP, mallaDeTriangulos.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
     
     if (modo!="smooth") {

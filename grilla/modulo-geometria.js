@@ -25,6 +25,13 @@
     
 */
 
+var ELECCION = 'plano';
+
+var SUPERFICIES = {
+    plano: new Plano(3,3),
+    esfera: new Esfera(2),
+    tubosenoidal: new TuboSenoidal(.3,.25,2,5)
+};
 
 var superficie3D;
 var mallaDeTriangulos;
@@ -35,7 +42,7 @@ var columnas=80;
 
 function crearGeometria(){
 
-    superficie3D=new TuboSenoidal(.3,.25,2,5);
+    superficie3D=SUPERFICIES[ELECCION];
     mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
     
 }
@@ -187,9 +194,6 @@ function generarSuperficie(superficie,filas,columnas){
             indexBuffer.push(i*columnasReales + j + 1);
         }
     }
-
-    console.log("Long. de IndexBuffer esperada: ", 2*columnasReales*(filasReales-1) + 2*(filasReales-1) - 2);
-    console.log(indexBuffer.flatMap(x => x+1));
 
     // Creación e Inicialización de los buffers
 

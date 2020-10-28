@@ -29,14 +29,14 @@
 var superficie3D;
 var mallaDeTriangulos;
 
-var filas=1;
-var columnas=1;
+var filas=30;
+var columnas=30;
 
 
 function crearGeometria(){
         
 
-    superficie3D=new Plano(3,3);
+    superficie3D=new TuboSenoidal(1,1,1,2);
     mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
     
 }
@@ -66,20 +66,46 @@ function Plano(ancho,largo){
 }
 
 
-function Esfera(radio){
+function Esfera(radio) {
 
-    this.getPosicion=function(u,v){
-
-        var x=(u-0.5)*ancho;
-        var z=(v-0.5)*largo;
-        return [x,0,z];
+    this.getPosicion=function(u,v) {
+        var x = radio*Math.cos(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var z = radio*Math.sin(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var y = radio*Math.cos(Math.PI*v);
+        return [x,y,z];
     }
 
-    this.getNormal=function(u,v){
-        return [0,1,0];
+    this.getNormal=function(u,v) {
+        var x = radio*Math.cos(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var z = radio*Math.sin(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var y = radio*Math.cos(Math.PI*v);
+        var norm = Math.sqrt([x,y,z].flatMap(x=>Math.pow(x,2)).reduce((a,b) => a+b, 0));
+        return [x/norm, y/norm, z/norm];
     }
 
-    this.getCoordenadasTextura=function(u,v){
+    this.getCoordenadasTextura=function(u,v) {
+        return [u,v];
+    }
+}
+
+function TuboSenoidal(amplitud_onda, long_onda, radio, altura) {
+
+    this.getPosicion=function(u,v) {
+        u = Math.sin(2*Math.PI*u);
+        var x = radio*Math.cos(2*Math.PI*u);
+        var z = radio*Math.sin(2*Math.PI*u);
+        var y = v;
+        return [x,y,z];
+    }
+
+    this.getNormal=function(u,v) {
+        var x = radio*Math.cos(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var z = radio*Math.sin(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var y = radio*Math.cos(Math.PI*v);
+        return [x,y,z];
+    }
+
+    this.getCoordenadasTextura=function(u,v) {
         return [u,v];
     }
 }

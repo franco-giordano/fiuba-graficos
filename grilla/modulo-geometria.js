@@ -29,14 +29,13 @@
 var superficie3D;
 var mallaDeTriangulos;
 
-var filas=30;
-var columnas=30;
+var filas=80;
+var columnas=80;
 
 
 function crearGeometria(){
-        
 
-    superficie3D=new TuboSenoidal(1,1,1,2);
+    superficie3D=new TuboSenoidal(.3,.25,2,5);
     mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
     
 }
@@ -76,9 +75,10 @@ function Esfera(radio) {
     }
 
     this.getNormal=function(u,v) {
-        var x = radio*Math.cos(2*Math.PI*u)*Math.sin(Math.PI*v);
-        var z = radio*Math.sin(2*Math.PI*u)*Math.sin(Math.PI*v);
-        var y = radio*Math.cos(Math.PI*v);
+        var coords = this.getPosicion(u,v);
+        var x = coords[0];
+        var y = coords[1];
+        var z = coords[2];
         var norm = Math.sqrt([x,y,z].flatMap(x=>Math.pow(x,2)).reduce((a,b) => a+b, 0));
         return [x/norm, y/norm, z/norm];
     }
@@ -91,18 +91,35 @@ function Esfera(radio) {
 function TuboSenoidal(amplitud_onda, long_onda, radio, altura) {
 
     this.getPosicion=function(u,v) {
-        u = Math.sin(2*Math.PI*u);
-        var x = radio*Math.cos(2*Math.PI*u);
-        var z = radio*Math.sin(2*Math.PI*u);
-        var y = v;
+        var delta = amplitud_onda*Math.cos(v*2*Math.PI/long_onda);
+        var x = (radio + delta)*Math.cos(2*Math.PI*u);
+        var z = (radio + delta)*Math.sin(2*Math.PI*u);
+        var y = altura/2*(v-0.5);
+        return [x,y,z];
+    }
+
+    this.restaVec=function(vecA, vecB) {
+        return [vecA[0] - vecB[0], vecA[1] - vecB[1], vecA[2] - vecB[2]];
+    }
+
+    this.prodVectorial = function(vecA, vecB) {
+        var x = vecA[1] * vecB[2] - vecA[2] * vecB[1];
+        var y = vecA[2] * vecB[0] - vecA[0] * vecB[2];
+        var z = vecA[0] * vecB[1] - vecA[1] * vecB[0];
         return [x,y,z];
     }
 
     this.getNormal=function(u,v) {
-        var x = radio*Math.cos(2*Math.PI*u)*Math.sin(Math.PI*v);
-        var z = radio*Math.sin(2*Math.PI*u)*Math.sin(Math.PI*v);
-        var y = radio*Math.cos(Math.PI*v);
-        return [x,y,z];
+        var orig = this.getPosicion(u,v);
+        var delta1 = this.getPosicion(u+.01,v);
+        var delta2 = this.getPosicion(u,v+.01);
+
+        var sup1 = this.restaVec(delta1, orig);
+        var sup2 = this.restaVec(delta2, orig);
+
+        var normal = this.prodVectorial(sup1, sup2);
+
+        return normal;
     }
 
     this.getCoordenadasTextura=function(u,v) {

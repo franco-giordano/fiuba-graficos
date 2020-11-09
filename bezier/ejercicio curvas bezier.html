@@ -1,0 +1,96 @@
+<!DOCTYPE html>	
+<html>
+<style>
+
+
+	body{
+		background-color:#CCCCCC;
+		font-family:arial;
+		font-size:16px;
+		
+	}
+
+	#container{
+	}
+
+	#svg{
+		background-image: url("s.png");	
+		border:1px solid black;
+        display: inline-block;
+		
+		
+	}
+
+	#info{
+        padding: 30px;
+        vertical-align: top;;       
+        min-width: 200px;;
+        
+		
+		border:1px solid black;
+        display: inline-block;
+	}
+    #container{
+        display: block;
+        text-align: center;
+    }
+</style>
+<script src="js/jquery.min.js"></script>
+
+<body>
+
+	
+    <div id="container">
+	<svg  id="svg" width="800" height="800" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" fill="transparent">
+	
+		<path d="M 600 -15 C 600 0, 600 10, 600 205" stroke="red" fill="transparent"/>
+
+		<path d="M 600 -15 C 599 -15, 590 -15, 580 -15" stroke="red" fill="transparent"/>
+
+		<path d="M 580 -15 C 560 70, 520 -15, 400 -15" stroke="red" fill="transparent"/>
+
+		<path d="M 400 -15 C 260 -15, 85 200, 400 350" stroke="red" fill="transparent"/>
+
+		<path d="M 400 350 C 800 535, 315 790, 245 430" stroke="red" fill="transparent"/>
+
+		<path d="M 245 430 C 240 430, 240 430, 230 430" stroke="red" fill="transparent"/>
+
+		<path d="M 230 430 C 230 450, 230 450, 230 645" stroke="red" fill="transparent"/>
+
+		<path d="M 230 645 C 231 645, 231 645, 245 645" stroke="red" fill="transparent"/>
+
+		<path d="M 245 645 C 250 560, 340 645, 450 645" stroke="red" fill="transparent"/>
+
+		<path d="M 450 645 C 590 645, 800 440, 450 260" stroke="red" fill="transparent"/>
+
+		<path d="M 450 260 C 60 90, 540 -150, 580 205" stroke="red" fill="transparent"/>
+
+		<path d="M 600 205 C 599 205, 590 205, 580 205" stroke="red" fill="transparent"/>
+		
+	
+	</svg>	
+        <div id="info">
+        -
+        </div>
+        <br>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths">Referencia: SVG Paths<a/>
+    </div>
+	
+
+    
+        
+    <script>
+
+        $("#svg").mousemove(function(e){
+        
+            var x=e.pageX;
+            var y=e.pageY;
+            
+            $("#info").html("x:"+x+" y:"+y);
+        });
+
+    </script>
+
+</body>
+</html>
+

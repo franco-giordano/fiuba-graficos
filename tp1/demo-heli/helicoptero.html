@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    
+    <meta charset="UTF-8">
+    <title>Three.js - Hola Mundo</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css"></link>
+
+    <script src="js/jquery.min.js"></script>    
+    <script src="js/three.js"></script>    
+    <script src="js/controls/OrbitControls.js"></script>  
+
+
+    <script src="controlHelicoptero.js"></script>  
+    <style>
+
+    #display{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        border: 1px solid white;
+        padding: 10px;
+        color: white;
+        background-color:rgba(0,0,0,0.3);
+        min-height: 300px;
+        min-width: 400px;;
+        text-align: left;
+    }
+
+    </style>
+</head>
+<body>
+    <div id="container3D"></div>
+    <div id="display"></div>
+
+    <script type="text/javascript">
+  
+        var $window=$(window);    
+        var $container = $('#container3D');
+
+        var renderer,camera,scene,controls;            
+
+        function start(){
+
+            // configuración básica de Three.js
+            renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize($window.width(), $window.height()-10);
+            renderer.setClearColor(0x333333);
+            
+            var aspect=$window.width()/$window.height();
+
+            camera = new THREE.PerspectiveCamera(65,aspect,0.1,100000);
+            camera.position.set(50,50,50);
+            camera.lookAt(new THREE.Vector3(0,0,0));
+
+            scene = new THREE.Scene();
+            //controls = new THREE.OrbitControls(camera,renderer.domElement);
+
+            $container.append(renderer.domElement);
+            $window.resize(onResize);
+
+            // Defino elementos de la escena
+
+            var ambienLight=new THREE.AmbientLight(0x222266);
+            scene.add(ambienLight);
+
+            var light1 = new THREE.PointLight(0xFFFFFF, 1);
+            light1.position.set(500.0,1000.0,0.0);
+            scene.add(light1);
+
+            var gridHelper = new THREE.GridHelper( 1000,100 );
+            scene.add( gridHelper );
+
+            var axesHelper = new THREE.AxesHelper( 8 );
+            scene.add( axesHelper );
+
+            for (var i=0;i<30;i++){
+                var h=10+Math.random()*50;
+                var r=5+Math.random()*15;
+                var geometry = new THREE.ConeBufferGeometry( r, h, 32 );
+                var material = new THREE.MeshPhongMaterial( {color: 0xffff00} );
+                var cone = new THREE.Mesh( geometry, material );
+                cone.position.set((-0.5+Math.random())*500,h/2,(-0.5+Math.random())*500);
+                scene.add( cone );
+            }
+
+
+// ***************************************************************************************
+
+            // creo un objeto contenedor
+            contenedorHelicoptero=new THREE.Group();    
+            var geometry = new THREE.SphereBufferGeometry( 1, 32, 32 );
+			var material = new THREE.MeshPhongMaterial( {color: 0xff00ff} );
+			var sphere = new THREE.Mesh( geometry, material );
+			contenedorHelicoptero.add( sphere );
+      
+
+            // creo el helicoptero
+            
+            var geometry = new THREE.BoxGeometry( 10, 1, 5 );
+            var material = new THREE.MeshPhongMaterial( {color: 0xCCCCCC} );
+
+
+            helicoptero = new THREE.Mesh( geometry, material );
+			helicoptero.position.y=5;            
+            var axesHelper = new THREE.AxesHelper( 8 );
+            helicoptero.add(axesHelper);           
+
+            // creo la helice
+            var geometry = new THREE.BoxGeometry( 20, 0.3, 1 );
+            var material = new THREE.MeshPhongMaterial( {color: 0xCC6666} );
+            helice = new THREE.Mesh( geometry, material );
+            helice.position.y=2;
+            helicoptero.add(helice);
+
+            // agrego el helicoptero al contenedor
+            contenedorHelicoptero.add(helicoptero);			
+			var axesHelper = new THREE.AxesHelper( 16 );
+            contenedorHelicoptero.add(axesHelper);
+            
+            // agrego el contenedor a la escena
+            scene.add(contenedorHelicoptero);
+			            
+            // agrego la cola al helicoptero
+            var geometry = new THREE.BoxGeometry( 9, 1, 2 );
+            var material = new THREE.MeshPhongMaterial( {color: 0xCCCCCC} );
+            cola = new THREE.Mesh( geometry, material );
+            cola.position.x=-10;
+            helicoptero.add(cola);
+
+                        
+            render();
+        }
+
+
+        function onResize(){
+            
+            renderer.setSize($window.width(), $window.height()-10);
+                    
+            camera.aspect=$window.width()/$window.height();
+            camera.updateProjectionMatrix();
+
+        }
+
+        function render() {
+            requestAnimationFrame(render);
+
+
+            // es necesario llamar al metodo update en cada frame
+            controlHelicopterio.update();				
+
+            // obtengo la posicion del contenedorHelicoptero
+            var p=controlHelicopterio.getPosition();            
+            contenedorHelicoptero.position.set(p.x,p.y,p.z);
+
+            // obtengo la rotacion respecto del eje Y
+            contenedorHelicoptero.rotation.y=controlHelicopterio.getYaw();
+
+            // obtengo las rotaciones respecto de Z y respecto de X (relativas a contenedorHelicoptero)
+
+            helicoptero.rotation.z=controlHelicopterio.getPitch();
+            helicoptero.rotation.x=controlHelicopterio.getRoll();
+
+            helice.rotation.y+=0.35;    // animacion de la helice
+
+			// la cámara sigue al contenedorHelicoptero
+            camera.position.set(p.x+30,p.y+30,p.z+30);
+            camera.lookAt(new THREE.Vector3(p.x,p.y,p.z));
+			
+			// actualizo la info en pantalla.
+            $("#display").html(controlHelicopterio.getInfo());
+			
+            renderer.render(scene, camera,false,false);   
+        }
+
+
+        var controlHelicopterio=new ControlHelicoptero();
+        
+
+
+        start();
+    
+
+    </script>
+
+
+</body>
+</html>

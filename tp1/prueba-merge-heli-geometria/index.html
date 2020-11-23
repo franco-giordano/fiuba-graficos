@@ -4,8 +4,11 @@
     <script src="js/gl-matrix-3.3.0.js"></script>    
     <script src="js/webgl-utils.js"></script>
     <script src="js/dat.gui.js"></script>
+    <script src="vector.js"></script>
     <script src="discretizador.js"></script>
     <script src="modulo-geometria.js"></script>
+    <script src="controlHelicoptero.js"></script>
+
 <style>
         html{
             height: 100%;
@@ -62,7 +65,7 @@
         var matrizVista = mat4.create();            
         var matrizModelado = mat4.create();  
         
-        
+        var controlHelicoptero=new ControlHelicoptero();
 
         function initGL(canvas) {
 
@@ -229,10 +232,17 @@
         
         function tick() {
             requestAnimFrame(tick);
+
+            controlHelicoptero.update();
+            var p = controlHelicoptero.getPosition();
+            var pos = vec3.fromValues(p.x, p.y, p.z);
+
             time+=1/60;
             
             // acumulo rotaciones en matrizModelado		        
-            mat4.rotate(matrizModelado, matrizModelado,0.03*velocidadAngular, [0, 1, 0]);
+            // mat4.rotate(matrizModelado, matrizModelado,0.03*velocidadAngular, [0, 1, 0]);
+            mat4.translate(matrizModelado, matrizModelado, pos);
+            // console.log(matrizModelado);
                     
             drawScene();
         }

@@ -2,62 +2,33 @@
 var mat4=glMatrix.mat4;
 var vec4=glMatrix.vec4;
 
+const CANT_NIVELES = 100;
+const CANT_VERTICES = 100;
+
+
+// var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
+var controlF = [[0,0,0], [-1,1,0], [1,1,0], [0,0,0]];
+
+// var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
+// var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
+var controlR = [[0,0,0], [0,0,-3], [3,0,3]];
 
 var ELECCION = 'supbarrido';
+
+var supp = new SuperficieDiscretizada(controlF, controlR);
 
 var SUPERFICIES = {
     plano: new Plano(3,3),
     esfera: new Esfera(2),
     tubosenoidal: new TuboSenoidal(.3,.25,2,5),
-
-    curvaBezier: new CurvaBezier([[0,0], [1,0], [1,1], [0,1]]),
-    curva: discretizadorDeCurvas(curvaBezier, 1),
-
-    supbarrido: new SuperficieBarrido(curva,[[
-            [0,0,0,0], [0,0,1,0], [0,0,2,0]
-        ], [
-            mat4.fromValues(0,1,0,0,
-                1,0,0,0,
-                0,0,1,0,
-                0,0,0,0),
-        
-            mat4.fromValues(0,1,0,0,
-                1,0,0,0,
-                0,0,1,0,
-                0,0,0,0),
-
-            mat4.fromValues(0,1,0,0,
-                1,0,0,0,
-                0,0,1,0,
-                0,0,0,0)
-        ]])
-
-    /*([[0,0], [1,0], [1,1], [0,1]],
-        [[
-            [0,0,0,0], [0,0,1,0], [0,0,2,0]
-        ], [
-            mat4.fromValues(0,1,0,0,
-                1,0,0,0,
-                0,0,1,0,
-                0,0,0,0),
-        
-            mat4.fromValues(0,1,0,0,
-                1,0,0,0,
-                0,0,1,0,
-                0,0,0,0),
-
-            mat4.fromValues(0,1,0,0,
-                1,0,0,0,
-                0,0,1,0,
-                0,0,0,0)
-        ]])*/
+    supbarrido: new SuperficieBarrido(supp.forma, supp.recorrido)
 };
 
 var superficie3D;
 var mallaDeTriangulos;
 
-var filas=2;
-var columnas=3;
+var filas = CANT_NIVELES;
+var columnas = CANT_VERTICES;
 
 
 function crearGeometria(){
@@ -75,25 +46,23 @@ function dibujarGeometria(){
 
 function SuperficieBarrido(forma, recorrido) {
 
-    /**
-     * forma = [[x1,y1], [x2,y2], ...]
+    /* 
+     * Parametros a recibir de la forma:
+     * forma = [Vector(x1,y1,0), Vector(x2,y2,0), ...]
      * recorrido = [[modelado1, modelado2, ...], [matNormal1, ...]]
      */
 
     this.getPosicion=function(u,v){
-        var cantNiveles = filas;
-        var cantVertices = columnas;
-        // // assert cantNiveles == recorrido[0].length
-        // console.log("recorrido:", recorrido);
-        // console.log(recorrido[1][v*cantNiveles]);
+        assert(CANT_NIVELES+1 == recorrido[0].length, "No coinciden los niveles esperados: " +(CANT_NIVELES+1) +" "+ recorrido[0].length);
+        assert(CANT_VERTICES+1 == forma.length, "No coinciden los vertices esperados: " +(CANT_VERTICES+1) +" "+ forma.length);
 
-        var vectorModelado = vec4.clone(recorrido[0][v*cantNiveles]);
+        var vectorModelado = vec4.clone(recorrido[0][Math.round(v*CANT_NIVELES)].elementos);
         // console.log(vectorModelado);
         
-        var matrizNormal = recorrido[1][v*cantNiveles];
+        var matrizNormal = recorrido[1][Math.round(v*CANT_NIVELES)];
         // console.log(matrizNormal);
 
-        var vertice = vec4.clone(forma[u*cantVertices].concat([0,0]));
+        var vertice = vec4.clone(Vector.extender3Da4H(forma[Math.round(u*CANT_VERTICES)]).elementos);
         // console.log(vertice);
 
         var nuevoVertice = vec4.create();

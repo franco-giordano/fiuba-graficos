@@ -1,6 +1,8 @@
 
 var mat4=glMatrix.mat4;
 var vec4=glMatrix.vec4;
+var vec3=glMatrix.vec3;
+
 
 const CANT_NIVELES = 100;
 const CANT_VERTICES = 100;
@@ -11,7 +13,9 @@ var controlF = [[0,0,0], [-1,1,0], [1,1,0], [0,0,0]];
 
 // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
 // var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-var controlR = [[0,0,0], [0,0,-3], [3,0,3]];
+var controlR = [[0,0,0], [0,3,1], [1,0,2], [0,0,3], [0,3,2], [2,0,1]];
+
+
 
 var ELECCION = 'supbarrido';
 

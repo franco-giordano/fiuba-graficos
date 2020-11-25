@@ -56,6 +56,7 @@ class CurvaBezier {
 		this.puntos = puntos;
 		this.n = puntos.length;
 		this.CACHE_TNGT = {};
+		this.normalAnterior = vec3.fromValues(0,0,0);
 	}
 
 	_binomial(m, k) {
@@ -78,12 +79,27 @@ class CurvaBezier {
 	
 	_prodVectorialNormal(vecA, vecB) {
 		var vecC = this._prodVectorial(vecA, vecB);
-		var x = vecC[0];
-        var y = vecC[1];
-        var z = vecC[2];
-		var norm = Math.sqrt([x,y,z].flatMap(x=>Math.pow(x,2)).reduce((a,b) => a+b, 0));
+		var norm = this._norma(vecC);
 		norm = norm == 0 ? 1 : norm;		// TODO: ???????????????????????????
-		return [x/norm, y/norm, z/norm];
+		return vecC.flatMap(x=>x/norm);
+	}
+
+	_norma(vecA) {
+		var x = vecA[0];
+        var y = vecA[1];
+        var z = vecA[2];
+		var norm = Math.sqrt([x,y,z].flatMap(x=>Math.pow(x,2)).reduce((a,b) => a+b, 0));
+
+		return norm;
+	}
+
+	_obtenerPerpendicular(vector) {
+		var punto = [1,0,0];
+		var resultado = this._prodVectorial(punto, vector);
+		if (this._norma(resultado) == 0) {
+			return [0,1,0];
+		}
+		return punto;
 	}
 
 	normal(t) {
@@ -91,7 +107,27 @@ class CurvaBezier {
 		var punto2 = this.tangente(t + 0.01);
 		var aux = this._prodVectorial(punto1, punto2);
 		
-		return this._prodVectorialNormal(aux, punto1);
+		aux = this._prodVectorialNormal(aux, punto1);
+
+		// si estoy en una recta...
+		if (this._norma(aux) == 0) {
+			aux = this._obtenerPerpendicular(punto1);
+		}
+
+		aux = vec3.fromValues(...aux);
+
+		// fix por si cambia la concavidad
+		if (vec3.squaredLength(this.normalAnterior) != 0){
+            var a = vec3.angle(this.normalAnterior, aux);
+            var err = Math.abs(1*Math.PI - a);
+            if (err <= 0.5*Math.PI){
+                vec3.scale(aux,aux,-1);
+            }
+		}
+
+		this.normalAnterior = aux;
+		
+		return [aux[0], aux[1], aux[2]];
 	}
 
 	tangente(t) {

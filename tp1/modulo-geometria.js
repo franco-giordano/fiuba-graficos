@@ -7,7 +7,7 @@ var vec3=glMatrix.vec3;
 const CANT_NIVELES = 100;
 const CANT_VERTICES = 100;
 
-var mallaDeTriangulos;
+var mallasDeTriangulos = [];
 
 function crearGeometria(controlF, controlR){
     
@@ -16,12 +16,16 @@ function crearGeometria(controlF, controlR){
 
     var supp = new SuperficieDiscretizada(controlF, controlR);
     var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido);
-    mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
+    var mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
+
+    mallasDeTriangulos.push(mallaDeTriangulos);
 }
 
 function dibujarGeometria(){
 
-    dibujarMalla(mallaDeTriangulos);
+    for (const malla of mallasDeTriangulos) {
+        dibujarMalla(malla);
+    }
 
 }
 

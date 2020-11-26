@@ -263,14 +263,19 @@
             
             
             // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
-            var controlF = [[0,0,0], [-1,1,0], [1,1,0], [0,0,0]];
+            var controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
 
             // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
             // var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-            var controlR = [[0,0,0], [0,3,1], [1,0,2], [0,0,3], [0,3,2], [2,0,1]];
+            var controlR = [[0,0,0], [0,3,1], [0,2,2], [0,0,3]];
 
             crearGeometria(controlF, controlR);
-            // console.log(discretizadorDeCurvas);
+
+            var controlF2 = [[0,0,0], [-1,1,0], [1,1,0], [0,0,0]];
+
+            var controlR2 = [[0,0,0], [0,0,1], [0,0,2], [0,0,3]];
+
+            crearGeometria(controlF2, controlR2);
 
             gl.clearColor(66.2, 0.2, 0.2, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT);

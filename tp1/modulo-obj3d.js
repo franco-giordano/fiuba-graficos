@@ -32,9 +32,6 @@ class Objeto3D {
         mat4.multiply(mat,matPadre,this.matrizModelado);
         
         if(this.mallaTriangulos){
-            // dibujamos la malla de triángulos con WebGL
-            // si el objeto tiene geometría asociada
-
             gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_SHADER_UNIFORM, false, mat);
             dibujarMalla(this.mallaTriangulos);
         }

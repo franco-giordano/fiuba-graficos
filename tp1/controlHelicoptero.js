@@ -50,14 +50,12 @@ function ControlHelicoptero(){
             case "s":
                 xArrow=-1;
                 break;       
-
             case "a":
                 zArrow=1;
                 break;                                
             case "d":
                 zArrow=-1;
                 break;
-
             case "e":
                 yArrow=1;
                 break;                

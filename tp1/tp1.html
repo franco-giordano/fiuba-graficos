@@ -9,6 +9,7 @@
     <script src="modulo-geometria.js"></script>
     <script src="controlHelicoptero.js"></script>
     <script src="modulo-obj3d.js"></script>
+    <script src="modulo-helicoptero.js"></script>
 
 <style>
         html{
@@ -65,8 +66,6 @@
         var matrizProyeccion = mat4.create();            
         var matrizVista = mat4.create();            
         var matrizModelado = mat4.create();
-
-        var controlHelicoptero=new ControlHelicoptero();        
         
         var objetosEscena = [];
 
@@ -241,19 +240,14 @@
         function tick() {
             requestAnimFrame(tick);
             time+=1/60;
-            
-            controlHelicoptero.update();
-            var p = controlHelicoptero.getPosition();
-            var [rotX,rotY,rotZ] = controlHelicoptero.getRotaciones();
 
-            objetosEscena[0].setPosicion(p.x, p.y, p.z);
-            objetosEscena[0].setRotacion(rotX,rotY,rotZ);
+            var nuevaPos = objetosEscena[0].actualizar();
 
             // Definimos la ubicación de la camara                        
             
             mat4.lookAt(matrizVista,
-                vec3.fromValues(p.x+6, p.y+6, p.z+6),
-                vec3.fromValues(p.x, p.y, p.z),
+                vec3.fromValues(nuevaPos.x+6, nuevaPos.y+6, nuevaPos.z+6),
+                vec3.fromValues(nuevaPos.x, nuevaPos.y, nuevaPos.z),
                 vec3.fromValues(0,1,0)
             );
 
@@ -281,15 +275,7 @@
             initGL(canvas);
             initShaders();
 
-            
-            // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
-            var controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
-            
-            // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
-            // var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-            var controlR = [[0,0,0], [1,0,0], [2,0,0], [3,0,0]];
-            
-            var heli = new Objeto3D(crearGeometria(controlF, controlR));
+            var heli = new Helicoptero();
             objetosEscena.push(heli);
 
 

@@ -8,6 +8,7 @@
     <script src="discretizador.js"></script>
     <script src="modulo-geometria.js"></script>
     <script src="controlHelicoptero.js"></script>
+    <script src="modulo-obj3d.js"></script>
 
 <style>
         html{
@@ -67,6 +68,7 @@
 
         var controlHelicoptero=new ControlHelicoptero();        
         
+        var objetosEscena = [];
 
         function initGL(canvas) {
 
@@ -175,12 +177,14 @@
             shaderProgram.frameUniform = gl.getUniformLocation(shaderProgram, "time");
             shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
             shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+            Objeto3D.MODEL_MATRIX_SHADER_UNIFORM = shaderProgram.mMatrixUniform;
         }
         
     
         function setMatrixUniforms() {
             
-            gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, matrizModelado);
+            // gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, matrizModelado);
             gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, matrizVista);
             gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, matrizProyeccion);
     
@@ -227,7 +231,10 @@
             gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);            
 
             setMatrixUniforms();
-            dibujarGeometria();
+
+            for (const objeto of objetosEscena) {
+                objeto.dibujar(matrizModelado);
+            }
             
         }
         
@@ -237,10 +244,10 @@
             
             controlHelicoptero.update();
             var p = controlHelicoptero.getPosition();
-            var pos = vec3.fromValues(p.x, p.y, p.z);
-            
-            // acumulo rotaciones en matrizModelado		        
-            mat4.translate(matrizModelado, matrizModelado,pos);
+            var [rotX,rotY,rotZ] = controlHelicoptero.getRotaciones();
+
+            objetosEscena[0].setPosicion(p.x, p.y, p.z);
+            objetosEscena[0].setRotacion(rotX,rotY,rotZ);
 
             drawScene();
         }
@@ -261,21 +268,43 @@
             initShaders();
 
             
-            
             // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
             var controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
-
+            
             // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
             // var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-            var controlR = [[0,0,0], [0,3,1], [0,2,2], [0,0,3]];
+            var controlR = [[0,0,0], [0,0,1], [0,0,2], [0,0,3]];
+            
+            var curvita = new Objeto3D(crearGeometria(controlF, controlR));
+            objetosEscena.push(curvita);
 
-            crearGeometria(controlF, controlR);
 
-            var controlF2 = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
+            // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
+            controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
+            
+            // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
+            // var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
+            controlR = [[0,0,0], [1,0,0], [2,0,0], [3,0,0]];
+            
+            curvita = new Objeto3D(crearGeometria(controlF, controlR));
+            objetosEscena.push(curvita);
 
-            var controlR2 = [[0,0,0], [0,0,1], [0,0,2], [0,0,3]];
 
-            crearGeometria(controlF2, controlR2);
+            // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
+            controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
+            
+            // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
+            // var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
+            controlR = [[0,0,0], [0,.5,0], [0,.5,0], [0,1,0]];
+            
+            curvita = new Objeto3D(crearGeometria(controlF, controlR));
+            objetosEscena[0].agregarHijo(curvita);
+
+            // var controlF2 = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
+
+            // var controlR2 = [[0,0,0], [0,0,1], [0,0,2], [0,0,3]];
+
+            // crearGeometria(controlF2, controlR2);
 
             gl.clearColor(66.2, 0.2, 0.2, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT);

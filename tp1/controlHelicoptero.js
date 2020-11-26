@@ -144,6 +144,10 @@ function ControlHelicoptero(){
         return pitch;
     }
 
+    this.getRotaciones=function() {
+        return [angle,roll,pitch];
+    }
+
     this.getSpeed=function(){
         return speed;
     }

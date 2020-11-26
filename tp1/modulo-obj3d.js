@@ -25,6 +25,7 @@ class Objeto3D {
     };
     
     dibujar(matPadre) {
+        this.matrizModelado = mat4.create();
         var mat=mat4.create();
         this._actualizarMatrizModelado();
         

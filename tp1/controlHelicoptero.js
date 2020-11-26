@@ -42,25 +42,26 @@ function ControlHelicoptero(){
 
 
     $("body").keydown(function(e){
+        console.log(e.key)
         switch(e.key){
-            case "ArrowUp":
+            case "w":
                 xArrow=1;
                 break;
-            case "ArrowDown":
+            case "s":
                 xArrow=-1;
                 break;       
 
-            case "ArrowLeft":
+            case "a":
                 zArrow=1;
                 break;                                
-            case "ArrowRight":
+            case "d":
                 zArrow=-1;
                 break;
 
-            case "PageUp":
+            case "e":
                 yArrow=1;
                 break;                
-            case "PageDown":
+            case "q":
                 yArrow=-1;
                 break;                
         }
@@ -145,7 +146,7 @@ function ControlHelicoptero(){
     }
 
     this.getRotaciones=function() {
-        return [angle,roll,pitch];
+        return [roll,angle,pitch];
     }
 
     this.getSpeed=function(){

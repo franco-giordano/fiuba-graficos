@@ -7,39 +7,16 @@ var vec3=glMatrix.vec3;
 const CANT_NIVELES = 100;
 const CANT_VERTICES = 100;
 
-
-// var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
-var controlF = [[0,0,0], [-1,1,0], [1,1,0], [0,0,0]];
-
-// var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
-// var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-var controlR = [[0,0,0], [0,3,1], [1,0,2], [0,0,3], [0,3,2], [2,0,1]];
-
-
-
-var ELECCION = 'supbarrido';
-
-var supp = new SuperficieDiscretizada(controlF, controlR);
-
-var SUPERFICIES = {
-    plano: new Plano(3,3),
-    esfera: new Esfera(2),
-    tubosenoidal: new TuboSenoidal(.3,.25,2,5),
-    supbarrido: new SuperficieBarrido(supp.forma, supp.recorrido)
-};
-
-var superficie3D;
 var mallaDeTriangulos;
 
-var filas = CANT_NIVELES;
-var columnas = CANT_VERTICES;
-
-
-function crearGeometria(){
-
-    superficie3D=SUPERFICIES[ELECCION];
-    mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
+function crearGeometria(controlF, controlR){
     
+    var filas = CANT_NIVELES;
+    var columnas = CANT_VERTICES;
+
+    var supp = new SuperficieDiscretizada(controlF, controlR);
+    var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido);
+    mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
 }
 
 function dibujarGeometria(){

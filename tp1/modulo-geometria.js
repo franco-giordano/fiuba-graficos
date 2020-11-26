@@ -16,9 +16,9 @@ function crearGeometria(controlF, controlR){
 
     var supp = new SuperficieDiscretizada(controlF, controlR);
     var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido);
-    var mallaDeTriangulos=generarSuperficie(superficie3D,filas,columnas);
+    var malla=generarSuperficie(superficie3D,filas,columnas);
 
-    mallasDeTriangulos.push(mallaDeTriangulos);
+    mallasDeTriangulos.push(malla);
 }
 
 function dibujarGeometria(){

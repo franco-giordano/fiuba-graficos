@@ -240,7 +240,7 @@
             var pos = vec3.fromValues(p.x, p.y, p.z);
             
             // acumulo rotaciones en matrizModelado		        
-            mat4.rotate(matrizModelado, matrizModelado,0.03*p.x, [0, 1, 0]);
+            mat4.translate(matrizModelado, matrizModelado,pos);
 
             drawScene();
         }

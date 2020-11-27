@@ -37,7 +37,9 @@ function SuperficieBarrido(forma, recorrido) {
     this.getPosicion=function(u,v){
         assert(CANT_NIVELES+1 == recorrido[0].length, "No coinciden los niveles esperados: " +(CANT_NIVELES+1) +" "+ recorrido[0].length);
         assert(CANT_VERTICES+1 == forma.length, "No coinciden los vertices esperados: " +(CANT_VERTICES+1) +" "+ forma.length);
-
+        if (u>1) u=1;
+        if (v>1) v=1;
+        
         var vectorModelado = vec4.clone(recorrido[0][Math.round(v*CANT_NIVELES)].elementos);
         // console.log(vectorModelado);
         
@@ -58,7 +60,19 @@ function SuperficieBarrido(forma, recorrido) {
     }
 
     this.getNormal=function(u,v){
-        return [0,1,0];
+        var orig = this.getPosicion(u,v);
+        var delta1 = this.getPosicion(u+.01,v);
+        var delta2 = this.getPosicion(u,v+.01);
+        
+        var sup1 = vec3.create();
+        var sup2 = vec3.create();
+        vec3.sub(sup1, delta1, orig);
+        vec3.sub(sup2, delta2, orig);
+
+        var normal = vec3.create();
+        vec3.cross(normal, sup1, sup2);
+
+        return normal;
     }
 
     this.getCoordenadasTextura=function(u,v){

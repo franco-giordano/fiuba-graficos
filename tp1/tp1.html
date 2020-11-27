@@ -10,6 +10,8 @@
     <script src="controlHelicoptero.js"></script>
     <script src="modulo-obj3d.js"></script>
     <script src="modulo-helicoptero.js"></script>
+    <script src="modulo-planeta.js"></script>
+
 
 <style>
         html{
@@ -82,7 +84,7 @@
         var matrizVista = mat4.create();            
         var matrizModelado = mat4.create();
         
-        var objetosEscena = [];
+        var planeta = null;
 
         function initGL(canvas) {
 
@@ -238,9 +240,7 @@
 
             setMatrixUniforms();
 
-            for (const objeto of objetosEscena) {
-                objeto.dibujar(matrizModelado);
-            }
+            planeta.dibujar(matrizModelado);
             
         }
         
@@ -249,9 +249,9 @@
             time+=1/60;
             rotAccum+= velocidadAngular*0.03;
 
-            var nuevaPos = objetosEscena[0].actualizar();
+            planeta.actualizarControles();
 
-            $("#display").html(objetosEscena[0].infoHeli());
+            $("#display").html(planeta.infoHeli());
 
             // Definimos la ubicación de la camara                        
             
@@ -261,13 +261,7 @@
             //     vec3.fromValues(0,1,0)
             // );
 
-            mat4.lookAt(matrizVista,
-                vec3.fromValues(0, alturaCamara, distanciaCamara),
-                vec3.fromValues(0,0,0),
-                vec3.fromValues(0,1,0)
-            );
-
-            mat4.rotate(matrizVista, matrizVista, rotAccum, [0,1,0]);
+            matrizVista = planeta.generarVista(alturaCamara, distanciaCamara, rotAccum);
 
             drawScene();
         }
@@ -281,34 +275,12 @@
             
         }
 
-        function getRandomIntInclusive(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
-        }
-
         function webGLStart() {
             var canvas = document.getElementById("myCanvas");
             initGL(canvas);
             initShaders();
 
-            var heli = new Helicoptero();
-            objetosEscena.push(heli);
-
-
-            // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
-            controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
-            
-            // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
-            controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-            
-            for (let i = 0; i < 30; i++) {
-                var curvita = new Objeto3D(crearGeometria(controlF, controlR));
-                posx = getRandomIntInclusive(-100, 100);
-                posz = getRandomIntInclusive(-100, 100);
-                curvita.setPosicion(posx, 0, posz);
-                objetosEscena.push(curvita);
-            }
+            planeta = new Planeta();
 
             gl.clearColor(66.2, 0.2, 0.2, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT);

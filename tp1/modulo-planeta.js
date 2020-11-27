@@ -17,7 +17,8 @@ class Planeta {
             this.objetosEscena.push(curvita);
         }
 
-        this.camara = new CamaraGiratoria();
+        this.numCamaraActual = 1;
+        this.camara = Camara.crearConNumero(this.numCamaraActual);
 
     }
 
@@ -42,7 +43,13 @@ class Planeta {
     }
 
     actualizar() {
-        this.heli.actualizar();
+        var numeroCamara = this.heli.actualizar();
+
+        if (numeroCamara != this.numCamaraActual) {
+            this.camara = Camara.crearConNumero(numeroCamara);
+            this.numCamaraActual = numeroCamara;
+        }
+
         this.camara.actualizar();
     }
 

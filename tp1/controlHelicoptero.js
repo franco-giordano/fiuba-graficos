@@ -39,6 +39,7 @@ function ControlHelicoptero(){
     var altitudeTarget=minAltitude;
     var speedTarget=0;
 
+    var NUMERO_CAMARA = 1;
 
 
     $("body").keydown(function(e){
@@ -60,7 +61,15 @@ function ControlHelicoptero(){
                 break;                
             case "q":
                 yArrow=-1;
-                break;                
+                break;
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+                NUMERO_CAMARA=e.key*1;
+                break;        
         }
     });
 
@@ -119,6 +128,8 @@ function ControlHelicoptero(){
         positionX+=+directionX;
         positionZ+=+directionZ;        
         positionY=altitude;
+
+        return NUMERO_CAMARA;
    
     }
 

@@ -38,7 +38,7 @@ class Helicoptero {
     }
 
     actualizar() {
-        this.controlHelicoptero.update();
+        var numeroCamara = this.controlHelicoptero.update();
 
         var p = this.posicion;
         var {roll, yaw, pitch} = this.controlHelicoptero.getRotaciones();
@@ -46,7 +46,7 @@ class Helicoptero {
         this.mover(p.x, p.y, p.z);
         this.rotar(roll,yaw,pitch);
 
-        return p;
+        return numeroCamara;
     }
 
     get posicion() {

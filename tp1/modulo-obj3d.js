@@ -4,8 +4,6 @@ class Objeto3D {
     static COLOR_UNIFORM = null;
 
     constructor(bufferWebGL, colorArray) {
-        // this.vertexBuffer=bufferWebGL.webgl_position_buffer;
-        // this.indexBuffer=bufferWebGL.webgl_index_buffer;
         this.mallaTriangulos = bufferWebGL;
         this.matrizModelado=mat4.create();
         this.posicion=vec3.fromValues(0,0,0);
@@ -33,15 +31,16 @@ class Objeto3D {
         
         mat4.multiply(mat,matPadre,this.matrizModelado);
         
-        if(this.mallaTriangulos) {
+        if (this.mallaTriangulos) {
             gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_UNIFORM, false, mat);
             gl.uniform3fv(Objeto3D.COLOR_UNIFORM, this.color);
             dibujarMalla(this.mallaTriangulos);
         }
-            
-        for(var i=0;i<this.hijos.length;i++) {
-            this.hijos[i].dibujar(mat);
+
+        for (const hijo of this.hijos) {
+            hijo.dibujar(mat);
         }
+
     }
     
     agregarHijos(...hs) {

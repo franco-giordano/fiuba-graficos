@@ -195,12 +195,11 @@ function generarSuperficie(superficie,filas,columnas){
     webgl_normal_buffer.itemSize = 3;
     webgl_normal_buffer.numItems = normalBuffer.length / 3;
 
-    webgl_uvs_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, webgl_uvs_buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvBuffer), gl.STATIC_DRAW);
-    webgl_uvs_buffer.itemSize = 2;
-    webgl_uvs_buffer.numItems = uvBuffer.length / 2;
-
+    // webgl_uvs_buffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, webgl_uvs_buffer);
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvBuffer), gl.STATIC_DRAW);
+    // webgl_uvs_buffer.itemSize = 2;
+    // webgl_uvs_buffer.numItems = uvBuffer.length / 2;
 
     webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webgl_index_buffer);
@@ -211,7 +210,6 @@ function generarSuperficie(superficie,filas,columnas){
     return {
         webgl_position_buffer,
         webgl_normal_buffer,
-        webgl_uvs_buffer,
         webgl_index_buffer
     }
 }
@@ -222,8 +220,8 @@ function dibujarMalla(mallaDeTriangulos){
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_position_buffer);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, mallaDeTriangulos.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_uvs_buffer);
-    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, mallaDeTriangulos.webgl_uvs_buffer.itemSize, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_uvs_buffer);
+    // gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, mallaDeTriangulos.webgl_uvs_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_normal_buffer);
     gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, mallaDeTriangulos.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -232,12 +230,10 @@ function dibujarMalla(mallaDeTriangulos){
 
 
     if (modo!="wireframe"){
-        gl.uniform1i(shaderProgram.useLightingUniform,(lighting=="true"));
         gl.drawElements(gl.TRIANGLE_STRIP, mallaDeTriangulos.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
     
     if (modo!="smooth") {
-        gl.uniform1i(shaderProgram.useLightingUniform,false);
         gl.drawElements(gl.LINE_STRIP, mallaDeTriangulos.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
  

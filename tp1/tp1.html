@@ -12,6 +12,7 @@
     <script src="modulo-helicoptero.js"></script>
     <script src="modulo-camara.js"></script>
     <script src="modulo-planeta.js"></script>
+    <script src="modulo-init-webgl.js"></script>
 
 
 <style>
@@ -56,7 +57,6 @@
     
     <script>
 
-        var vertexShaderFile="vertex-shader.glsl";
         var modo="smooth"; // wireframe, smooth, edges
         var shaderProgram;
         var time=0;
@@ -71,78 +71,12 @@
 
         var distanciaCamara=15;
         var alturaCamara=2;
-        var velocidadAngular=0.15;
-        var rotAccum = 0;
-
-        var lighting="true";
-
-        var vertexShaderSource;
-        var fragmentShaderSource;
 
         var matrizProyeccion = mat4.create();            
         var matrizVista = mat4.create();            
         var matrizModelado = mat4.create();
         
         var planeta = null;
-
-        function initGL(canvas) {
-
-            try {
-                gl = canvas.getContext("webgl");
-                gl.canvas.width=$canvas.width();
-                gl.canvas.height=$canvas.height();                
-            } catch (e) {
-                console.error(e);
-            }
-            if (!gl) {
-                alert("Could not initialise WebGL, sorry :-(");
-            }
-        }
-
-        function loadShaders(){
-
-            $.when(loadVS(), loadFS()).done(function(res1,res2){
-                //this code is executed when all ajax calls are done     
-                webGLStart();
-            });
-
-            function loadVS() {
-                return  $.ajax({
-                    url: "shaders/"+vertexShaderFile,
-                    success: function(result){
-                        vertexShaderSource=result;
-                    }
-                });
-            }   
-
-            function loadFS() {
-                return  $.ajax({
-                    url: "shaders/fragment-shader.glsl",
-                    success: function(result){
-                        fragmentShaderSource=result;
-                    }
-                });
-            }
-        }
-        
-        function getShader(gl,code,type) {
-
-            var shader;
-
-            if (type == "fragment") 
-                shader = gl.createShader(gl.FRAGMENT_SHADER);
-            else // "vertex"
-                shader = gl.createShader(gl.VERTEX_SHADER);
-            
-            gl.shaderSource(shader, code);
-            gl.compileShader(shader);
-    
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error(gl.getShaderInfoLog(shader));
-                return null;
-            }    
-            return shader;
-        }
         
         function onResize(){
             gl.canvas.width=$canvas.width();
@@ -150,12 +84,6 @@
             aspect=$canvas.width()/$canvas.height();
         }
 
-        function getShaderSource(url) {
-            var req = new XMLHttpRequest();
-            req.open("GET", url, false);
-            req.send(null);
-            return (req.status == 200) ? req.responseText : null;
-        }; 
 
         function initShaders() {
     
@@ -176,8 +104,8 @@
             shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aPosition");
             gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
     
-            shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aUv");
-            gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+            // shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aUv");
+            // gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
     
             shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aNormal");
             gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
@@ -186,12 +114,6 @@
             shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
             shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
             shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
-            shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-            shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-            shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-            shaderProgram.frameUniform = gl.getUniformLocation(shaderProgram, "time");
-            shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
-            shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
 
             Objeto3D.MODEL_MATRIX_SHADER_UNIFORM = shaderProgram.mMatrixUniform;
         }
@@ -207,7 +129,7 @@
             mat3.fromMat4(normalMatrix,matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
     
             mat3.invert(normalMatrix, normalMatrix);
-            mat3.transpose(normalMatrix,normalMatrix);
+            mat3.transpose(normalMatrix, normalMatrix);
 
             gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
         }
@@ -225,17 +147,6 @@
             // Se configura la matriz de proyección
             mat4.identity(matrizProyeccion);
             mat4.perspective(matrizProyeccion, 45, aspect, 0.1, 100000.0);
-            // mat4.scale(matrizProyeccion,matrizProyeccion,[1,-1,1]); // parche para hacer un flip de Y, parece haber un bug en glmatrix
-               
-            // Se inicializan las variables asociadas con la Iluminación
-            
-            gl.uniform1f(shaderProgram.frameUniform, time/10.0 );
-            gl.uniform3f(shaderProgram.ambientColorUniform, 0.6, 0.6, 0.6 );
-            gl.uniform3f(shaderProgram.directionalColorUniform, 1.2, 1.1, 0.7);
-            gl.uniform1i(shaderProgram.useLightingUniform,(lighting=="true"));
-
-            var lightPosition = [10.0,0.0, 3.0];  
-            gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);            
 
             setMatrixUniforms();
 
@@ -251,14 +162,6 @@
 
             $("#display").html(planeta.infoHeli());
 
-            // Definimos la ubicación de la camara                        
-            
-            // mat4.lookAt(matrizVista,
-            //     vec3.fromValues(nuevaPos.x+15, nuevaPos.y+15, nuevaPos.z+15),
-            //     vec3.fromValues(nuevaPos.x, nuevaPos.y, nuevaPos.z),
-            //     vec3.fromValues(0,1,0)
-            // );
-
             matrizVista = planeta.generarVista(alturaCamara, distanciaCamara);
 
             drawScene();
@@ -269,7 +172,7 @@
             gui.add(window, "distanciaCamara",1,20).step(0.01);
             gui.add(window, "alturaCamara",-10,10).step(0.01);;
             gui.add(window, "modo",["wireframe","smooth","edges"]);
-            gui.add(window, "velocidadAngular",0, 1).step(0.01);
+            // gui.add(window, "velocidadAngular",0, 1).step(0.01);
             
         }
 
@@ -288,10 +191,14 @@
             initMenu();
             tick();
         }
+
+        function main() {
+            loadShaders(webGLStart);
+        }
     
         // cuando el documento HTML esta completo, iniciamos la aplicación
         $(document).ready(function(){
-            loadShaders();
+            main();
         })
 
     </script>

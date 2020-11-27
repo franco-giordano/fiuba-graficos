@@ -10,8 +10,8 @@ function ControlHelicoptero(){
 
 
     var altitudeInertia=0.01;
-    var speedInertia=0.1;
-    var angleInertia=0.02;
+    var speedInertia=1;
+    var angleInertia=0.08;
 
     var deltaAltitude=1;
     var deltaSpeed=0.01;
@@ -104,7 +104,7 @@ function ControlHelicoptero(){
             altitudeTarget=Math.max(minAltitude,Math.min(maxAltitude,altitudeTarget));
         }
         
-        roll=-(angleTarget-angle)*0.4;
+        roll=-(angleTarget-angle)*1.6;
         pitch=-Math.max(-0.5,Math.min(0.5,speed));
 
         speed+=(speedTarget-speed)*speedInertia;
@@ -143,7 +143,11 @@ function ControlHelicoptero(){
     }
 
     this.getRotaciones=function() {
-        return [roll,angle,pitch];
+        return {
+            roll: roll,
+            yaw: angle,
+            pitch: pitch
+        };
     }
 
     this.getSpeed=function(){

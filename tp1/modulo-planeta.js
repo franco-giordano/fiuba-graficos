@@ -17,6 +17,8 @@ class Planeta {
             this.objetosEscena.push(curvita);
         }
 
+        this.camara = new CamaraGiratoria();
+
     }
 
     _getRandomIntInclusive(min, max) {
@@ -33,22 +35,15 @@ class Planeta {
         }
     }
 
-    generarVista(alturaCamara, distanciaCamara, rotAccum) {
-        var matrizVista = mat4.create();
+    generarVista(alturaCamara, distanciaCamara) {
 
-        mat4.lookAt(matrizVista,
-            vec3.fromValues(0, alturaCamara, distanciaCamara),
-            vec3.fromValues(0,0,0),
-            vec3.fromValues(0,1,0)
-        );
+        return this.camara.generarVista(alturaCamara, distanciaCamara, this.heli.posicion);
 
-        mat4.rotate(matrizVista, matrizVista, rotAccum, [0,1,0]);
-        
-        return matrizVista;
     }
 
-    actualizarControles() {
+    actualizar() {
         this.heli.actualizar();
+        this.camara.actualizar();
     }
 
     infoHeli() {

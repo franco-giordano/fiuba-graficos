@@ -18,9 +18,9 @@ class Objeto3D {
     // método privado, usa posición, rotación y escala
     _actualizarMatrizModelado() {
         mat4.translate(this.matrizModelado, this.matrizModelado, this.posicion);
-        mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotX, [1,0,0]);
         mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotY, [0,1,0]);
         mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotZ, [0,0,1]);
+        mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotX, [1,0,0]);
         mat4.scale(this.matrizModelado, this.matrizModelado, this.escala);
     };
     
@@ -31,7 +31,7 @@ class Objeto3D {
         
         mat4.multiply(mat,matPadre,this.matrizModelado);
         
-        if(this.mallaTriangulos){
+        if(this.mallaTriangulos) {
             gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_SHADER_UNIFORM, false, mat);
             dibujarMalla(this.mallaTriangulos);
         }

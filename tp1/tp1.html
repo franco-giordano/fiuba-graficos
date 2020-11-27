@@ -10,6 +10,7 @@
     <script src="controlHelicoptero.js"></script>
     <script src="modulo-obj3d.js"></script>
     <script src="modulo-helicoptero.js"></script>
+    <script src="modulo-camara.js"></script>
     <script src="modulo-planeta.js"></script>
 
 
@@ -64,13 +65,11 @@
         var mat4=glMatrix.mat4;
         var mat3=glMatrix.mat3;
         var vec3=glMatrix.vec3;   
-        
-        var earth;
-            
+                    
         var $canvas=$("#myCanvas");
         var aspect=$canvas.width()/$canvas.height();
 
-        var distanciaCamara=5;
+        var distanciaCamara=15;
         var alturaCamara=2;
         var velocidadAngular=0.15;
         var rotAccum = 0;
@@ -247,9 +246,8 @@
         function tick() {
             requestAnimFrame(tick);
             time+=1/60;
-            rotAccum+= velocidadAngular*0.03;
 
-            planeta.actualizarControles();
+            planeta.actualizar();
 
             $("#display").html(planeta.infoHeli());
 
@@ -261,7 +259,7 @@
             //     vec3.fromValues(0,1,0)
             // );
 
-            matrizVista = planeta.generarVista(alturaCamara, distanciaCamara, rotAccum);
+            matrizVista = planeta.generarVista(alturaCamara, distanciaCamara);
 
             drawScene();
         }

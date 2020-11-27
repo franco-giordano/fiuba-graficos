@@ -38,13 +38,17 @@ class Helicoptero {
     actualizar() {
         this.controlHelicoptero.update();
 
-        var p = this.controlHelicoptero.getPosition();
-        var [rotX,rotY,rotZ] = this.controlHelicoptero.getRotaciones();
+        var p = this.posicion;
+        var {roll, yaw, pitch} = this.controlHelicoptero.getRotaciones();
  
         this.mover(p.x, p.y, p.z);
-        this.rotar(rotX,rotY,rotZ);
+        this.rotar(roll,yaw,pitch);
 
         return p;
+    }
+
+    get posicion() {
+        return Object.assign({}, this.controlHelicoptero.getPosition(), this.controlHelicoptero.getRotaciones());
     }
 
     dibujar(matriz) {

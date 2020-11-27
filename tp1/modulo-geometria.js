@@ -4,10 +4,10 @@ var vec4=glMatrix.vec4;
 var vec3=glMatrix.vec3;
 
 
-const CANT_NIVELES = 100;
-const CANT_VERTICES = 100;
+const CANT_NIVELES = 60;
+const CANT_VERTICES = 60;
 
-function crearGeometria(controlF, controlR){
+function crearGeometria(controlF, controlR) {
     
     var filas = CANT_NIVELES;
     var columnas = CANT_VERTICES;
@@ -62,6 +62,49 @@ function SuperficieBarrido(forma, recorrido) {
     }
 
     this.getCoordenadasTextura=function(u,v){
+        return [u,v];
+    }
+}
+
+
+function Plano(ancho,largo){
+
+    this.getPosicion=function(u,v){
+
+        var x=(u-0.5)*ancho;
+        var z=(v-0.5)*largo;
+        return [x,0,z];
+    }
+
+    this.getNormal=function(u,v){
+        return [0,1,0];
+    }
+
+    this.getCoordenadasTextura=function(u,v){
+        return [u,v];
+    }
+}
+
+
+function Esfera(radio) {
+
+    this.getPosicion=function(u,v) {
+        var x = radio*Math.cos(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var z = radio*Math.sin(2*Math.PI*u)*Math.sin(Math.PI*v);
+        var y = radio*Math.cos(Math.PI*v);
+        return [x,y,z];
+    }
+
+    this.getNormal=function(u,v) {
+        var coords = this.getPosicion(u,v);
+        var x = coords[0];
+        var y = coords[1];
+        var z = coords[2];
+        var norm = Math.sqrt([x,y,z].flatMap(x=>Math.pow(x,2)).reduce((a,b) => a+b, 0));
+        return [x/norm, y/norm, z/norm];
+    }
+
+    this.getCoordenadasTextura=function(u,v) {
         return [u,v];
     }
 }

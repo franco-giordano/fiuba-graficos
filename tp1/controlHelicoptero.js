@@ -42,7 +42,6 @@ function ControlHelicoptero(){
 
 
     $("body").keydown(function(e){
-        console.log(e.key)
         switch(e.key){
             case "w":
                 xArrow=1;
@@ -67,16 +66,16 @@ function ControlHelicoptero(){
 
     $("body").keyup(function(e){
         switch(e.key){
-            case "ArrowUp":
-            case "ArrowDown":
+            case "w":
+            case "s":
                 xArrow=0;
                 break;                
-            case "ArrowLeft":
-            case "ArrowRight":
+            case "a":
+            case "d":
                 zArrow=0;
                 break;
-            case "PageUp":                         
-            case "PageDown":
+            case "q":                         
+            case "e":
                 yArrow=0;
                 break;                
         }

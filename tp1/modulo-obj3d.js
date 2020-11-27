@@ -3,8 +3,8 @@ class Objeto3D {
     static MODEL_MATRIX_SHADER_UNIFORM = null;
 
     constructor(bufferWebGL) {
-        this.vertexBuffer=bufferWebGL.webgl_position_buffer;
-        this.indexBuffer=bufferWebGL.webgl_index_buffer;
+        // this.vertexBuffer=bufferWebGL.webgl_position_buffer;
+        // this.indexBuffer=bufferWebGL.webgl_index_buffer;
         this.mallaTriangulos = bufferWebGL;
         this.matrizModelado=mat4.create();
         this.posicion=vec3.fromValues(0,0,0);
@@ -41,8 +41,8 @@ class Objeto3D {
         }
     }
     
-    agregarHijo(h) {
-        this.hijos.push(h);
+    agregarHijos(...hs) {
+        hs.forEach(h => this.hijos.push(h));
     }
 
     // this.quitarHijo=function(h) { ... }

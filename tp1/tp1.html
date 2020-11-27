@@ -109,13 +109,15 @@
     
             shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aNormal");
             gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
-    
+            
             shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
             shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
             shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
             shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+            shaderProgram.colorUniform = gl.getUniformLocation(shaderProgram, "uColor");
 
-            Objeto3D.MODEL_MATRIX_SHADER_UNIFORM = shaderProgram.mMatrixUniform;
+            Objeto3D.MODEL_MATRIX_UNIFORM = shaderProgram.mMatrixUniform;
+            Objeto3D.COLOR_UNIFORM = shaderProgram.colorUniform;
         }
         
     
@@ -132,6 +134,8 @@
             mat3.transpose(normalMatrix, normalMatrix);
 
             gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+            // gl.uniform3f(Objeto3D.COLOR_UNIFORM, 1.0, 1.0, 0.0);
+
         }
               
         function drawScene() {

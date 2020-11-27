@@ -7,24 +7,14 @@ var vec3=glMatrix.vec3;
 const CANT_NIVELES = 60;
 const CANT_VERTICES = 60;
 
-function crearGeometria(controlF, controlR) {
-    
-    var filas = CANT_NIVELES;
-    var columnas = CANT_VERTICES;
+function crearGeometria(controlF, controlR, cantNiveles = CANT_NIVELES, cantVertices = CANT_VERTICES) {
 
     var supp = new SuperficieDiscretizada(controlF, controlR);
     var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido);
-    return generarSuperficie(superficie3D,filas,columnas);
+    return generarSuperficie(superficie3D,cantNiveles,cantVertices);
 
 }
 
-// function dibujarGeometria(){
-
-//     for (const malla of mallasDeTriangulos) {
-//         dibujarMalla(malla);
-//     }
-
-// }
 
 function SuperficieBarrido(forma, recorrido) {
 
@@ -75,9 +65,9 @@ function SuperficieBarrido(forma, recorrido) {
         return normal;
     }
 
-    this.getCoordenadasTextura=function(u,v){
-        return [u,v];
-    }
+    // this.getCoordenadasTextura=function(u,v){
+    //     return [u,v];
+    // }
 }
 
 
@@ -128,7 +118,7 @@ function generarSuperficie(superficie,filas,columnas){
     
     positionBuffer = [];
     normalBuffer = [];
-    uvBuffer = [];
+    // uvBuffer = [];
 
     for (var i=0; i <= filas; i++) {
         for (var j=0; j <= columnas; j++) {
@@ -148,10 +138,10 @@ function generarSuperficie(superficie,filas,columnas){
             normalBuffer.push(nrm[1]);
             normalBuffer.push(nrm[2]);
 
-            var uvs=superficie.getCoordenadasTextura(u,v);
+            // var uvs=superficie.getCoordenadasTextura(u,v);
 
-            uvBuffer.push(uvs[0]);
-            uvBuffer.push(uvs[1]);
+            // uvBuffer.push(uvs[0]);
+            // uvBuffer.push(uvs[1]);
 
         }
     }

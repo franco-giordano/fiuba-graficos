@@ -11,6 +11,7 @@ uniform mat4 uMMatrix;     // matriz de modelado
 uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
 uniform mat3 uNMatrix;     // matriz de normales
+uniform vec3 uColor;      //color del modelo
                         
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
 // Es importante remarcar que no hay una relacion 1 a 1 entre un programa de vertices y uno de fragmentos
@@ -20,7 +21,8 @@ uniform mat3 uNMatrix;     // matriz de normales
 // del pixel a cada uno de los 3 vértices. Se realiza un promedio ponderado
 
 varying vec3 vWorldPosition;
-varying vec3 vNormal;                    
+varying vec3 vNormal;
+varying vec3 vColor;
 
 void main(void) {        
     
@@ -30,4 +32,5 @@ void main(void) {
 
     vWorldPosition=worldPos.xyz;              
     vNormal=normalize(uNMatrix * aNormal);
+    vColor = uColor;
 }

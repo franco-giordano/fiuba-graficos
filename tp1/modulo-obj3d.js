@@ -1,8 +1,9 @@
 class Objeto3D {
 
-    static MODEL_MATRIX_SHADER_UNIFORM = null;
+    static MODEL_MATRIX_UNIFORM = null;
+    static COLOR_UNIFORM = null;
 
-    constructor(bufferWebGL) {
+    constructor(bufferWebGL, colorArray) {
         // this.vertexBuffer=bufferWebGL.webgl_position_buffer;
         // this.indexBuffer=bufferWebGL.webgl_index_buffer;
         this.mallaTriangulos = bufferWebGL;
@@ -13,6 +14,7 @@ class Objeto3D {
         this.rotZ = 0;
         this.escala=vec3.fromValues(1,1,1);
         this.hijos=[];
+        this.color = colorArray ? colorArray : [1.0,0.0,0.0];
     }
 
     // método privado, usa posición, rotación y escala
@@ -32,7 +34,8 @@ class Objeto3D {
         mat4.multiply(mat,matPadre,this.matrizModelado);
         
         if(this.mallaTriangulos) {
-            gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_SHADER_UNIFORM, false, mat);
+            gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_UNIFORM, false, mat);
+            gl.uniform3fv(Objeto3D.COLOR_UNIFORM, this.color);
             dibujarMalla(this.mallaTriangulos);
         }
             

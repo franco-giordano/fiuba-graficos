@@ -1,28 +1,30 @@
 class Helicoptero {
     constructor() {
+            var color = [0.8, 0.8, 0.8];
+
             var controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
             var controlR = [[4,1,0], [-1,1,0], [-4,1,0], [-4,-1,0]];
 
-            var cabinaSup = new Objeto3D(crearGeometria(controlF, controlR));
+            var cabinaSup = new Objeto3D(crearGeometria(controlF, controlR), color);
             
             controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
             var controlR = [[-4,-1,0], [1,-1,0], [4,-1,0], [4,1,0]];
 
 
-            var cabinaInf = new Objeto3D(crearGeometria(controlF, controlR));
+            var cabinaInf = new Objeto3D(crearGeometria(controlF, controlR), color);
 
             //TODO: construir uniones con sup de revolucion!
 
             controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
             controlR = [[4.001,1,0], [4.001,1.001,0], [4.001,1.001,0], [4,1.001,0]];
 
-            var unionSup = new Objeto3D(crearGeometria(controlF, controlR));
+            var unionSup = new Objeto3D(crearGeometria(controlF, controlR), color);
 
 
             controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
             controlR = [[-4.001,-1,0], [-4.001,-1.001,0], [-4.001,-1.001,0], [-4,-1.001,0]];
 
-            var unionInf = new Objeto3D(crearGeometria(controlF, controlR));
+            var unionInf = new Objeto3D(crearGeometria(controlF, controlR), color);
 
             cabinaSup.setRotacion(0,Math.PI,0);
             cabinaInf.setRotacion(0,Math.PI,0);

@@ -6,9 +6,13 @@ varying vec3 vColor;
 
 void main(void) {
 
+    vec3 ambientColor = vec3(0.5,0.5,0.5);
+    vec3 directionalColor = vec3(1., 1., 1.);
     vec3 lightVec=normalize(vec3(0.0,30.0,0.0)-vWorldPosition);
-    vec3 diffColor=mix(vColor,vNormal,0.4);
-    vec3 ilumintion=dot(lightVec,vNormal)*diffColor+vec3(0.2,0.2,0.2);
 
-    gl_FragColor = vec4(mix(vColor,ilumintion, 0.5),1.0);
+    vec3 color=(ambientColor+directionalColor*max(dot(vNormal,lightVec), 0.0))*vColor.xyz;
+
+    gl_FragColor = vec4(color,1.0);
 }
+
+

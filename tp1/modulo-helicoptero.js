@@ -47,57 +47,60 @@ class Helicoptero {
 
 class ComponenteHelicoptero {
 
-    static crearTapaCabina() {
-        var tapa = new Objeto3D();
+    // static crearTapaCabina() {
+    //     var tapa = new Objeto3D();
 
-        var color = ColorRGB.BEIGE;
+    //     var color = ColorRGB.BEIGE;
 
-        var controlF = [[.8,0,0], [.1,0,0], [.1,0,0], [0,0,0]];
-        var controlR = [[4,1,0], [-1,1,0], [-4,1,0], [-4,-1,0]];
+    //     var controlF = [[.8,0,0], [.1,0,0], [.1,0,0], [0,0,0]];
+    //     var controlR = [[4,1,0], [-1,1,0], [-4,1,0], [-4,-1,0]];
 
-        var tapaSup = new Objeto3D(crearGeometria(controlF, controlR), color);
-        tapaSup.setRotacion(0,Math.PI,0);
+    //     var tapaSup = new Objeto3D(crearGeometria(controlF, controlR), color);
+    //     tapaSup.setRotacion(0,Math.PI,0);
 
-        var controlF = [[.8,0,0], [.1,0,0], [.1,0,0], [0,0,0]];
-        var controlR = [[-4,-1,0], [1,-1,0], [4,-1,0], [4,1,0]];
+    //     var controlF = [[.8,0,0], [.1,0,0], [.1,0,0], [0,0,0]];
+    //     var controlR = [[-4,-1,0], [1,-1,0], [4,-1,0], [4,1,0]];
 
-        var tapaInf = new Objeto3D(crearGeometria(controlF, controlR), color);
-        tapaInf.setRotacion(0,Math.PI,0);
+    //     var tapaInf = new Objeto3D(crearGeometria(controlF, controlR), color);
+    //     tapaInf.setRotacion(0,Math.PI,0);
 
-        tapa.agregarHijos(tapaInf,tapaSup);
+    //     tapa.agregarHijos(tapaInf,tapaSup);
 
-        return tapa;
-    }
+    //     return tapa;
+    // }
 
     static crearCabina() {
         // var tapaDer = ComponenteHelicoptero.crearTapaCabina(); 
         // tapaDer.setPosicion(0,0,2);
+
+        const cant_niveles = 30;
+        const cant_vert = 6;
         
         var color = ColorRGB.BEIGE;
 
         var controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
         var controlR = [[4,1,0], [-1,1,0], [-4,1,0], [-4,-1,0]];
 
-        var cabinaSup = new Objeto3D(crearGeometria(controlF, controlR), color);
+        var cabinaSup = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), color);
         
         var controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
         var controlR = [[-4,-1,0], [1,-1,0], [4,-1,0], [4,1,0]];
 
 
-        var cabinaInf = new Objeto3D(crearGeometria(controlF, controlR), color);
+        var cabinaInf = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), color);
 
         //TODO: construir uniones con sup de revolucion!
 
         var controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
         var controlR = [[4.001,1,0], [4.001,1.001,0], [4.001,1.001,0], [4,1.001,0]];
 
-        var unionSup = new Objeto3D(crearGeometria(controlF, controlR), color);
+        var unionSup = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), color);
 
 
         var controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
         var controlR = [[-4.001,-1,0], [-4.001,-1.001,0], [-4.001,-1.001,0], [-4,-1.001,0]];
 
-        var unionInf = new Objeto3D(crearGeometria(controlF, controlR), color);
+        var unionInf = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), color);
 
         cabinaSup.setRotacion(0,Math.PI,0);
         cabinaInf.setRotacion(0,Math.PI,0);
@@ -225,7 +228,7 @@ class ComponenteHelicoptero {
 
         var controlF = [[0,-1,0], [1.25,-1,0], [1.25,1,0], [0,1,0], [0,1,0], [-1.25,1,0], [-1.25,-1,0], [0,-1,0]];
         var controlR = [[-1.5,0,0], [0,0,0], [0,0,0], [1.5,0,0]];
-        var soporte = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_OSCURO);
+        var soporte = new Objeto3D(crearGeometria(controlF, controlR, true), ColorRGB.GRIS_OSCURO);
         soporte.setEscala(.7,.7,.7);
 
         brazo.agregarHijos(soporte, protector, helice);

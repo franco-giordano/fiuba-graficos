@@ -7,16 +7,16 @@ var vec3=glMatrix.vec3;
 const CANT_NIVELES = 60;
 const CANT_VERTICES = 60;
 
-function crearGeometria(controlF, controlR, cantNiveles = CANT_NIVELES, cantVertices = CANT_VERTICES) {
+function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES, cantVertices = CANT_VERTICES) {
 
     var supp = new SuperficieDiscretizada(controlF, controlR);
-    var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido);
+    var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido, conTapas);
     return generarSuperficie(superficie3D,cantNiveles,cantVertices);
 
 }
 
 
-function SuperficieBarrido(forma, recorrido) {
+function SuperficieBarrido(forma, recorrido, conTapas = false) {
 
     /* 
      * Parametros a recibir de la forma:
@@ -27,11 +27,17 @@ function SuperficieBarrido(forma, recorrido) {
     this.getPosicion=function(u,v){
         assert(CANT_NIVELES+1 == recorrido[0].length, "No coinciden los niveles esperados: " +(CANT_NIVELES+1) +" "+ recorrido[0].length);
         assert(CANT_VERTICES+1 == forma.length, "No coinciden los vertices esperados: " +(CANT_VERTICES+1) +" "+ forma.length);
-        if (u>1) u=1;
-        if (v>1) v=1;
+        // if (u>1) {console.log("uv",u, v); u=1; };
+        // if (v>1) {console.log("uv",u, v); v=1};
         
         var vectorModelado = vec4.clone(recorrido[0][Math.round(v*CANT_NIVELES)].elementos);
         // console.log(vectorModelado);
+
+        // colapsar ppio y final en el origen si quiero tapas
+        if (conTapas && (v==0 || v==1)) {
+            return vectorModelado;
+        }
+
         
         var matrizNormal = recorrido[1][Math.round(v*CANT_NIVELES)];
         // console.log(matrizNormal);
@@ -51,8 +57,10 @@ function SuperficieBarrido(forma, recorrido) {
 
     this.getNormal=function(u,v){
         var orig = this.getPosicion(u,v);
-        var delta1 = this.getPosicion(u+.01,v);
-        var delta2 = this.getPosicion(u,v+.01);
+        var deltaU = (u==1) ? -.01 : .01;
+        var deltaV = (v==1) ? -.01 : .01;
+        var delta1 = this.getPosicion(u+deltaU,v);
+        var delta2 = this.getPosicion(u,v+deltaV);
         
         var sup1 = vec3.create();
         var sup2 = vec3.create();
@@ -61,6 +69,11 @@ function SuperficieBarrido(forma, recorrido) {
 
         var normal = vec3.create();
         vec3.cross(normal, sup1, sup2);
+
+        // cambia el sentido si movi algun delta en negativo
+        if ((deltaU < 0 && deltaV > 0) || (deltaU > 0 && deltaV < 0)) {
+            vec3.scale(normal, normal, -1);
+        }
 
         return normal;
     }

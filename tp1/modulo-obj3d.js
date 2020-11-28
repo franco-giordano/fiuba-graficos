@@ -3,7 +3,10 @@ const ColorRGB = {
     AZUL: [0,0,1],
     VERDE: [0,1,0],
     BLANCO: [1,1,1],
-    GRIS_CLARO: [.8,.8,.8]
+    GRIS_CLARO: [.8,.8,.8],
+    GRIS_OSCURO: [.5,.5,.5],
+    BEIGE: [204/256, 185/256, 171/256],
+    NEGRO: [0,0,0]
  };
 
 class Objeto3D {
@@ -69,5 +72,9 @@ class Objeto3D {
     
     setEscala(x,y,z) { 
         this.escala = vec3.fromValues(x,y,z);
+    }
+
+    escalarPor(x,y,z) {
+        this.escala = vec3.fromValues(x*this.escala[0],y*this.escala[1],z*this.escala[2]);
     }
 }

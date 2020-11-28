@@ -1,3 +1,11 @@
+const ColorRGB = {
+    ROJO: [1,0,0],
+    AZUL: [0,0,1],
+    VERDE: [0,1,0],
+    BLANCO: [1,1,1],
+    GRIS_CLARO: [.8,.8,.8]
+ };
+
 class Objeto3D {
 
     static MODEL_MATRIX_UNIFORM = null;
@@ -12,7 +20,7 @@ class Objeto3D {
         this.rotZ = 0;
         this.escala=vec3.fromValues(1,1,1);
         this.hijos=[];
-        this.color = colorArray ? colorArray : [1.0,0.0,0.0];
+        this.color = colorArray ? colorArray : ColorRGB.AZUL;
     }
 
     // método privado, usa posición, rotación y escala

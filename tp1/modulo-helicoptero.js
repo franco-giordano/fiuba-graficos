@@ -2,10 +2,12 @@ class Helicoptero {
     constructor() {
 
             var cabina = ComponenteHelicoptero.crearCabina();
-            var helice = ComponenteHelicoptero.crearHelice();
+            var brazo = ComponenteHelicoptero.crearBrazoHelice();
+            var trenAterrizaje = ComponenteHelicoptero.crearTrenAterrizaje();
+            trenAterrizaje.setPosicion(0,-3,0);
 
             this.contenedor = new Objeto3D();
-            this.contenedor.agregarHijos(cabina, helice);
+            this.contenedor.agregarHijos(cabina,brazo, trenAterrizaje);
 
             this.controlHelicoptero = new ControlHelicoptero();
     }
@@ -45,7 +47,7 @@ class Helicoptero {
 
 class ComponenteHelicoptero {
     static crearCabina() {
-        var color = [0.8, 0.8, 0.8];
+        var color = ColorRGB.GRIS_CLARO;
 
         var controlF = [[0,-2,0], [-1,-2,0], [-1,2,0], [0,2,0]];
         var controlR = [[4,1,0], [-1,1,0], [-4,1,0], [-4,-1,0]];
@@ -83,36 +85,114 @@ class ComponenteHelicoptero {
     }
 
     static crearHelice() {
-        var aletaD = ComponenteHelicoptero.crearAleta();
-        var aletaI = ComponenteHelicoptero.crearAleta();
-        // aletaD.setPosicion(-0.5,0,0);
-        aletaD.setRotacion(0,1,0);
-
-        // aletaI.setPosicion(-6,0,0);
-        // aletaI.setRotacion(-1,0,0);
+        
+        var aletas = [];
+        for (let i = 0; i < 12; i++) {
+            aletas[i] = ComponenteHelicoptero.crearAleta();
+            aletas[i].setRotacion(1,2*Math.PI/10*i,0);
+        }
 
         var controlFsup = [[0,-1,0], [1.25,-1,0], [1.25,1,0], [0,1,0]];
         var controlFinf = [[0,1,0], [-1.25,1,0], [-1.25,-1,0], [0,-1,0]];
         var controlR = [[0,-1,0], [0,0,0], [0,0,0], [0,1,0]];
 
-        var ejeSup = new Objeto3D(crearGeometria(controlFsup, controlR));
-        var ejeInf = new Objeto3D(crearGeometria(controlFinf, controlR));
+        var ejeSup = new Objeto3D(crearGeometria(controlFsup, controlR), ColorRGB.BLANCO);
+        ejeSup.setEscala(.7,1,.7);
+        var ejeInf = new Objeto3D(crearGeometria(controlFinf, controlR), ColorRGB.BLANCO);
+        ejeInf.setEscala(.7,1,.7);
         var eje = new Objeto3D();
         eje.agregarHijos(ejeSup, ejeInf);
-        eje.setPosicion(0,3,0);
+
+        eje.agregarHijos(...aletas);
 
         return eje;
     }
 
+    static crearUnSoporteAterrizaje() {
+
+        var unTren = new Objeto3D();
+    
+        var controlF = [[0,-1,0], [1.25,-1,0], [1.25,1,0], [0,1,0], [0,1,0], [-1.25,1,0], [-1.25,-1,0], [0,-1,0]];
+        var controlR = [[27,2,0], [25,0,0], [26,0,0], [-26,0,0], [-25,0,0], [-27,2,0]];
+        
+        var base = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_CLARO);
+
+
+        var controlF = [[0,-1,0], [1.25,-1,0], [1.25,1,0], [0,1,0], [0,1,0], [-1.25,1,0], [-1.25,-1,0], [0,-1,0]];
+        var controlR = [[14,0,0], [14,1,0], [14,2,0], [14,20,0]];
+        var soporteFrente = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_CLARO);
+        soporteFrente.setRotacion(Math.PI/12,0,0);
+
+        var controlF = [[0,-1,0], [1.25,-1,0], [1.25,1,0], [0,1,0], [0,1,0], [-1.25,1,0], [-1.25,-1,0], [0,-1,0]];
+        var controlR = [[-14,0,0], [-14,1,0], [-14,2,0], [-14,20,0]];
+        var soporteDetras = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_CLARO);
+        soporteDetras.setRotacion(Math.PI/12,0,0);
+
+        soporteFrente.setEscala(.3,.3,.3); 
+        soporteDetras.setEscala(.3,.3,.3); 
+        base.setEscala(.3,.3,.3); 
+        unTren.agregarHijos(soporteFrente, base, soporteDetras);
+
+        return unTren;
+    }
+
+    static crearTrenAterrizaje() {
+        var tren = new Objeto3D();
+        const SCALE = .4;
+
+        var trenDer = ComponenteHelicoptero.crearUnSoporteAterrizaje();
+        trenDer.setPosicion(0,0,-2);
+        trenDer.setEscala(SCALE, SCALE, SCALE);
+
+        var trenIzq = ComponenteHelicoptero.crearUnSoporteAterrizaje();
+        trenIzq.setPosicion(0,0,2);
+        trenIzq.setRotacion(0,Math.PI,0);
+        trenIzq.setEscala(SCALE, SCALE, SCALE);
+
+        tren.agregarHijos(trenIzq, trenDer);
+
+        return tren;
+    }
+    
+    static crearProtector() {
+        
+        var protector = new Objeto3D();
+        
+        var controlFsup = [[-.7,0,0], [-.7,5,0], [-.7,4,0], [.7,4,0], [.7,5,0], [.7,0,0]];
+        var controlFinf = [[.7,0,0], [.7,-5,0], [.7,-4,0], [-.7,-4,0], [-.7,-5,0], [-.7,0,0]];
+        var controlRIzq = [[0,-5,0], [6.25,-5,0], [6.25,5,0], [0,5,0]];
+        var controlRDer = [[0,5,0], [-6.25,5,0], [-6.25,-5,0], [0,-5,0]];
+        
+        var protectorSupIzq = new Objeto3D(crearGeometria(controlFsup, controlRIzq), ColorRGB.ROJO);
+        var protectorInfIzq = new Objeto3D(crearGeometria(controlFinf, controlRIzq), ColorRGB.ROJO);
+        
+        var protectorSupDer = new Objeto3D(crearGeometria(controlFsup, controlRDer), ColorRGB.ROJO);
+        var protectorInfDer = new Objeto3D(crearGeometria(controlFinf, controlRDer), ColorRGB.ROJO);
+        
+        protector.agregarHijos(protectorSupIzq, protectorInfIzq, protectorSupDer, protectorInfDer);
+
+        protector.setRotacion(Math.PI/2,0,0);
+        protector.setEscala(.7,.7,.3);
+        
+        return protector;
+    }
+
     static crearAleta() {
-
-        var color = [0.8, 0.8, 0.8];
-
+        
         var controlF = [[0,-0.5,0], [0,0,0], [0,0,0], [0,.5,0]];
         var controlR = [[3,0,0], [2,0,0], [1,0,0], [0,0,0]];
-
-        var aleta = new Objeto3D(crearGeometria(controlF, controlR), color);
-
+        
+        var aleta = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_CLARO);
+        
         return aleta;
+    }
+
+    static crearBrazoHelice() {
+        var brazo = new Objeto3D();
+        var helice = ComponenteHelicoptero.crearHelice();
+        var protector = ComponenteHelicoptero.crearProtector();
+        brazo.agregarHijos(protector, helice);
+
+        return brazo;
     }
 }

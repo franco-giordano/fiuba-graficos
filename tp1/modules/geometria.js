@@ -4,19 +4,19 @@ var vec4=glMatrix.vec4;
 var vec3=glMatrix.vec3;
 
 
-const CANT_NIVELES = 60;
-const CANT_VERTICES = 60;
+const CANT_NIVELES_GEO = 60;
+const CANT_VERTICES_GEO = 60;
 
-function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES, cantVertices = CANT_VERTICES) {
+function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO) {
 
-    var supp = new SuperficieDiscretizada(controlF, controlR);
+    var supp = new SuperficieDiscretizada(controlF, controlR, cantNiveles, cantVertices);
     var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido, conTapas);
     return generarSuperficie(superficie3D,cantNiveles,cantVertices);
 
 }
 
 
-function SuperficieBarrido(forma, recorrido, conTapas = false) {
+function SuperficieBarrido(forma, recorrido, conTapas) {
 
     /* 
      * Parametros a recibir de la forma:
@@ -24,25 +24,28 @@ function SuperficieBarrido(forma, recorrido, conTapas = false) {
      * recorrido = [[modelado1, modelado2, ...], [matNormal1, ...]]
      */
 
+    this.cantNiveles = recorrido[0].length-1;
+    this.cantVertices = forma.length-1;
+
+    // peor precision si tengo pocas dimensiones, sino aproxima mal
+    this.deltaNorm = (this.cantNiveles < 40 || this.cantVertices < 40) ? .1 : .01;
+
     this.getPosicion=function(u,v){
-        assert(CANT_NIVELES+1 == recorrido[0].length, "No coinciden los niveles esperados: " +(CANT_NIVELES+1) +" "+ recorrido[0].length);
-        assert(CANT_VERTICES+1 == forma.length, "No coinciden los vertices esperados: " +(CANT_VERTICES+1) +" "+ forma.length);
-        // if (u>1) {console.log("uv",u, v); u=1; };
-        // if (v>1) {console.log("uv",u, v); v=1};
+        if (u>=1) u=1;
+        if (v>=1) v=1;
         
-        var vectorModelado = vec4.clone(recorrido[0][Math.round(v*CANT_NIVELES)].elementos);
+        var vectorModelado = vec4.clone(recorrido[0][Math.round(v*this.cantNiveles)].elementos);
         // console.log(vectorModelado);
 
         // colapsar ppio y final en el origen si quiero tapas
         if (conTapas && (v==0 || v==1)) {
             return vectorModelado;
         }
-
         
-        var matrizNormal = recorrido[1][Math.round(v*CANT_NIVELES)];
+        var matrizNormal = recorrido[1][Math.round(v*this.cantNiveles)];
         // console.log(matrizNormal);
 
-        var vertice = vec4.clone(Vector.extender3Da4H(forma[Math.round(u*CANT_VERTICES)]).elementos);
+        var vertice = vec4.clone(Vector.extender3Da4H(forma[Math.round(u*this.cantVertices)]).elementos);
         // console.log(vertice);
 
         var nuevoVertice = vec4.create();
@@ -57,8 +60,8 @@ function SuperficieBarrido(forma, recorrido, conTapas = false) {
 
     this.getNormal=function(u,v){
         var orig = this.getPosicion(u,v);
-        var deltaU = (u==1) ? -.01 : .01;
-        var deltaV = (v==1) ? -.01 : .01;
+        var deltaU = (u==1) ? -this.deltaNorm : this.deltaNorm;
+        var deltaV = (v==1) ? -this.deltaNorm : this.deltaNorm;
         var delta1 = this.getPosicion(u+deltaU,v);
         var delta2 = this.getPosicion(u,v+deltaV);
         
@@ -67,6 +70,7 @@ function SuperficieBarrido(forma, recorrido, conTapas = false) {
         vec3.sub(sup1, delta1, orig);
         vec3.sub(sup2, delta2, orig);
 
+        // if (vec3.equals(delta1,orig)) console.log(delta1);
         var normal = vec3.create();
         vec3.cross(normal, sup1, sup2);
 
@@ -74,6 +78,7 @@ function SuperficieBarrido(forma, recorrido, conTapas = false) {
         if ((deltaU < 0 && deltaV > 0) || (deltaU > 0 && deltaV < 0)) {
             vec3.scale(normal, normal, -1);
         }
+
 
         return normal;
     }

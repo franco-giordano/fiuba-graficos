@@ -23,21 +23,21 @@ function discretizarMatrizNormales(curva, cantPasos) {
 // }
 
 class SuperficieDiscretizada {
-	constructor(controlForma, controlRecorrido) {
+	constructor(controlForma, controlRecorrido, cantNiveles, cantVertices) {
 				
 		var forma = new CurvaBezier(controlForma);
 
-		this.formaDiscreta = discretizadorDeCurvas(forma, CANT_VERTICES);
+		this.formaDiscreta = discretizadorDeCurvas(forma, cantVertices);
 
 		var recorrido = new CurvaBezier(controlRecorrido);
 
-		this.recorridoDiscreto = discretizadorDeCurvas(recorrido, CANT_NIVELES);
+		this.recorridoDiscreto = discretizadorDeCurvas(recorrido, cantNiveles);
 
 		for (let w = 0; w < this.recorridoDiscreto.length; w++) {
 			this.recorridoDiscreto[w] = Vector.extender3Da4H(this.recorridoDiscreto[w]);
 		};
 
-		this.matricesDiscretas = discretizarMatrizNormales(recorrido, CANT_NIVELES);
+		this.matricesDiscretas = discretizarMatrizNormales(recorrido, cantNiveles);
 
 	}
 

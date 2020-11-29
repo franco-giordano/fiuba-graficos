@@ -52,9 +52,4 @@ class Planeta {
 
         this.camara.actualizar();
     }
-
-    infoHeli() {
-        return this.heli.infoHeli();
-    }
-
 }

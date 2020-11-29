@@ -31,19 +31,6 @@
             overflow: hidden;
         }
 
-        #display{
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            border: 1px solid white;
-            padding: 10px;
-            color: white;
-            background-color:rgba(0,0,0,0.3);
-            min-height: 300px;
-            min-width: 400px;;
-            text-align: left;
-}
-
     </style>
 
 </head>
@@ -163,8 +150,6 @@
             time+=1/60;
 
             planeta.actualizar();
-
-            $("#display").html(planeta.infoHeli());
 
             matrizVista = planeta.generarVista(alturaCamara, distanciaCamara);
 

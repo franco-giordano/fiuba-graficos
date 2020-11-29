@@ -40,9 +40,6 @@ class Helicoptero {
         this.contenedor.setRotacion(radX, radY, radZ);
     }
 
-    infoHeli() {
-        this.controlHelicoptero.getInfo();
-    }
 }
 
 class ComponenteHelicoptero {

@@ -13,7 +13,7 @@ class Camara {
     static crearConNumero(num) {
         switch (num) {
             case 1:
-                return new CamaraGiratoria();
+                return new CamaraInteractuableRaton();
             case 2:
                 return new CamaraTrasera();
             case 3:
@@ -63,6 +63,96 @@ class CamaraGiratoria extends Camara {
         this.rotAccum += this.VELOCIDAD_ANGULAR;
     }
 }
+
+
+
+class CamaraInteractuableRaton extends Camara {
+
+    constructor() {
+        super();
+        this.control = new ControlRaton();
+    }
+
+    generarVista(alturaCamara, distanciaCamara, posHeli) {
+
+        var posObserver = this.control.obtener_posicion();
+
+        var matrizVista = mat4.create();
+
+        var ojo = vec3.fromValues(posHeli.x + posObserver.x, posHeli.y + posObserver.y, posHeli.z + posObserver.z);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
+
+        mat4.lookAt(matrizVista,
+            ojo,
+            centro,
+            vec3.fromValues(0,1,0)
+        );
+        
+        return matrizVista;
+    }
+
+    actualizar() {
+        this.control.actualizar();
+    }
+}
+
+function ControlRaton() {
+    
+    var MOUSE = {x: 0, y: 0};
+    var PREV_MOUSE = {x: 0, y: 0};
+
+    var IS_MOUSE_DOWN = false;
+    var ALFA = Math.PI/4;
+    var BETA = Math.PI/2;
+
+    const FACTOR_VELOCIDAD = 0.01;
+    const RADIO = 15;
+
+    
+    // seteo handlers del raton
+    $("body").mousemove(function(e){ 
+		MOUSE.x = e.clientX || e.pageX; 
+		MOUSE.y = e.clientY || e.pageY 
+	});
+	
+    $('body').mousedown(function(event){		
+        IS_MOUSE_DOWN = true;        
+    });
+
+    $('body').mouseup(function(event){
+		IS_MOUSE_DOWN = false;		
+    });
+
+    this.obtener_posicion = function() {
+        return {
+            x: RADIO * Math.sin(ALFA) * Math.sin(BETA),
+            y: RADIO * Math.cos(BETA),
+            z: RADIO * Math.cos(ALFA) * Math.sin(BETA)
+        }
+    };
+
+    this.actualizar = function() {
+        if (!IS_MOUSE_DOWN) return;
+
+        var deltaX=0;
+        var deltaY=0;
+
+        if (PREV_MOUSE.x) deltaX = MOUSE.x - PREV_MOUSE.x;
+        if (PREV_MOUSE.y) deltaY = MOUSE.y - PREV_MOUSE.y;
+
+        PREV_MOUSE.x = MOUSE.x;
+        PREV_MOUSE.y = MOUSE.y;
+
+        ALFA = ALFA + deltaX * FACTOR_VELOCIDAD;
+        BETA = BETA + deltaY * FACTOR_VELOCIDAD;
+
+		if (BETA<=0) BETA=0.001;
+        if (BETA>Math.PI) BETA=Math.PI - 0.001;
+        
+    }
+
+}
+
 
 
 class CamaraLateral extends Camara {

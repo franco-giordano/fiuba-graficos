@@ -15,6 +15,9 @@ class TexturedSphere {
         this.webgl_index_buffer = null;
 
         this.texture = null;
+
+        this.modelMatrix = mat4.create();
+        mat4.scale(this.modelMatrix, this.modelMatrix, vec3.fromValues(1, 1, 1));
     }
 
     initTexture(texture_file) {
@@ -39,16 +42,10 @@ class TexturedSphere {
 
         var latNumber;
         var longNumber;
-        var lado = 15;
+        var lado = 30;
 
         for (latNumber = 0; latNumber <= this.latitudeBands; latNumber += 1) {
-
-
-
             for (longNumber = 0; longNumber <= this.longitudeBands; longNumber += 1) {
-
-
-
 
                 var x = (-0.5 + (latNumber / this.latitudeBands)) * lado;
                 var z = (-0.5 + (longNumber / this.longitudeBands)) * lado;
@@ -116,7 +113,7 @@ class TexturedSphere {
         this.webgl_index_buffer.numItems = this.index_buffer.length;
     };
 
-    draw(program) {
+    dibujar(program) {
 
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -128,6 +125,8 @@ class TexturedSphere {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         gl.uniform1i(program.unifs.sampler, 0);
+
+        gl.uniformMatrix4fv(program.unifs.modelMatrix, false, this.modelMatrix);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 

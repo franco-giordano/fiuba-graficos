@@ -7,7 +7,7 @@ class Planeta {
 
         this.mountains = new TexturedSphere(128, 128);
         this.mountains.initBuffers();
-        this.mountains.initTexture("img/heightmap.png");
+        this.mountains.initTexture("img/heightmap3.png");
 
         this.numCamaraActual = 1;
         this.camara = Camara.crearConNumero(this.numCamaraActual);
@@ -25,7 +25,7 @@ class Planeta {
         this.heli.dibujar(matrizModelado);
 
         Planeta.TERRAIN_SHADER.setearParametros(matrizModelado);
-        this.mountains.draw(Planeta.TERRAIN_SHADER);
+        this.mountains.dibujar(Planeta.TERRAIN_SHADER);
     }
 
     generarVista(alturaCamara, distanciaCamara) {

@@ -62,9 +62,4 @@ class TerrainProgram extends ShaderProgram {
 
         this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
     }
-
-    setearParametros() {
-        super.setearParametros();
-        gl.uniformMatrix4fv(this.unifs.modelMatrix, false, matrizModelado);
-    }
 }

@@ -1,4 +1,7 @@
 class Planeta {
+    static MAIN_SHADER = null;
+    static TERRAIN_SHADER = null;
+
     constructor() {
         this.heli = new Helicoptero();
 
@@ -17,12 +20,12 @@ class Planeta {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    dibujar(matrizModelado, main_shader, terrain_shader) {
-        main_shader.setearParametros();
+    dibujar(matrizModelado) {
+        Planeta.MAIN_SHADER.setearParametros();
         this.heli.dibujar(matrizModelado);
 
-        terrain_shader.setearParametros(matrizModelado);
-        this.mountains.draw();
+        Planeta.TERRAIN_SHADER.setearParametros(matrizModelado);
+        this.mountains.draw(Planeta.TERRAIN_SHADER);
     }
 
     generarVista(alturaCamara, distanciaCamara) {

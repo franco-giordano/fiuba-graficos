@@ -1,6 +1,4 @@
 var modo = "smooth"; // wireframe, smooth, edges
-var MAIN_SHADER_PROGRAM;
-var TERRAIN_SHADER_PROGRAM;
 var time = 0;
 
 var gl;
@@ -38,7 +36,7 @@ function drawScene() {
     mat4.identity(matrizProyeccion);
     mat4.perspective(matrizProyeccion, 45, aspect, 0.1, 100000.0);
 
-    planeta.dibujar(matrizModelado, MAIN_SHADER_PROGRAM, TERRAIN_SHADER_PROGRAM);
+    planeta.dibujar(matrizModelado);
 
 }
 
@@ -66,12 +64,16 @@ function webGLStart() {
     var canvas = document.getElementById("myCanvas");
     initGL(canvas);
 
-    MAIN_SHADER_PROGRAM = new MainProgram();
-    TERRAIN_SHADER_PROGRAM = new TerrainProgram();
+    var MAIN_SHADER_PROGRAM = new MainProgram();
+    var TERRAIN_SHADER_PROGRAM = new TerrainProgram();
 
     Objeto3D.MODEL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.modelMatrix;
     Objeto3D.NORMAL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.normalMatrix;
     Objeto3D.COLOR_UNIFORM = MAIN_SHADER_PROGRAM.unifs.color;
+    dibujarMalla.MAIN_SHADER = MAIN_SHADER_PROGRAM;
+
+    Planeta.MAIN_SHADER = MAIN_SHADER_PROGRAM;
+    Planeta.TERRAIN_SHADER = TERRAIN_SHADER_PROGRAM;
 
     planeta = new Planeta();
 

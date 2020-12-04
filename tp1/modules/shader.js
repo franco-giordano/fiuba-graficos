@@ -29,31 +29,57 @@ class ShaderProgram {
 
     }
 
-    static crearMain() {
-        var prog = new ShaderProgram(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
+    setearParametros() {};
+
+}
+
+
+class MainProgram extends ShaderProgram {
+    constructor() {
+        super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
 
         // setear attribs y unifs particulares de este shader
-        prog.attribs.normal = gl.getAttribLocation(prog.program, "aNormal");
-        gl.enableVertexAttribArray(prog.attribs.normal);
+        this.attribs.normal = gl.getAttribLocation(this.program, "aNormal");
+        gl.enableVertexAttribArray(this.attribs.normal);
 
-        prog.unifs.normalMatrix = gl.getUniformLocation(prog.program, "uNMatrix");
-        prog.unifs.color = gl.getUniformLocation(prog.program, "uColor");
-
-        return prog;
+        this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
+        this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
 
-    static crearTerrain() {
-        var prog = new ShaderProgram(TERRAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
+    setearParametros() {
+        gl.useProgram(this.program);
+        
+        // la matModelado la setea cada obj3d a dibujar
+        // gl.uniformMatrix4fv(this.unifs.matrizModelado, false, matrizModelado);
+        gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
+        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
 
-        // setear attribs y unifs particulares de este shader
+        var normalMatrix = mat3.create();
+        mat3.fromMat4(normalMatrix, matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
 
-        prog.attribs.texCoord = gl.getAttribLocation(prog.program, "aUv");
-        gl.enableVertexAttribArray(prog.attribs.texCoord);
+        mat3.invert(normalMatrix, normalMatrix);
+        mat3.transpose(normalMatrix, normalMatrix);
 
-        prog.unifs.sampler = gl.getUniformLocation(prog.program, "uSampler");
+        gl.uniformMatrix3fv(this.unifs.normalMatrix, false, normalMatrix);
+    }
+}
 
-        return prog;
+
+class TerrainProgram extends ShaderProgram {
+    constructor() {
+        super(TERRAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
+
+        this.attribs.texCoord = gl.getAttribLocation(this.program, "aUv");
+        gl.enableVertexAttribArray(this.attribs.texCoord);
+
+        this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
     }
 
+    setearParametros() {
+        gl.useProgram(this.program);
 
+        gl.uniformMatrix4fv(this.unifs.modelMatrix, false, matrizModelado);
+        gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
+        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
+    }
 }

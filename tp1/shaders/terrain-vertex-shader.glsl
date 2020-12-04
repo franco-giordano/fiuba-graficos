@@ -9,7 +9,6 @@ attribute vec2 aUv;         //coordenadas de texture (x,y)  x e y (en este caso)
 uniform mat4 uMMatrix;     // matriz de modelado
 uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
-                
 uniform sampler2D uSampler;         // sampler de textura de la tierra
 
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
@@ -21,7 +20,6 @@ uniform sampler2D uSampler;         // sampler de textura de la tierra
 
 varying vec3 vWorldPosition;
 varying vec3 vNormal;
-varying vec2 vUv;
 varying vec3 vColor;
 
 
@@ -84,6 +82,5 @@ void main(void) {
     
     vWorldPosition=worldPos.xyz;
     vNormal=cross(tan1,tan2);
-    vUv=uv;	
-    vColor = vec3(1.);
+    vColor = vec3(center);
 }

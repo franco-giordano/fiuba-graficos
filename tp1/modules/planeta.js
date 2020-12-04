@@ -1,31 +1,6 @@
 class Planeta {
     constructor() {
         this.heli = new Helicoptero();
-        this.objetosEscena = [];
-
-        // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
-        var controlF = [
-            [0, -0.5, 0],
-            [-1, 1, 0],
-            [1, 1, 0],
-            [0, -0.5, 0]
-        ];
-
-        // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
-        var controlR = [
-            [3, 0, 0],
-            [3, 0, 3],
-            [0, 0, 3],
-            [0, 0, 0]
-        ];
-
-        for (let i = 0; i < 30; i += 1) {
-            var curvita = new Objeto3D(crearGeometria(controlF, controlR));
-            var posx = this._getRandomIntInclusive(-100, 100);
-            var posz = this._getRandomIntInclusive(-100, 100);
-            curvita.setPosicion(posx, 0, posz);
-            this.objetosEscena.push(curvita);
-        }
 
         this.numCamaraActual = 1;
         this.camara = Camara.crearConNumero(this.numCamaraActual);
@@ -41,9 +16,7 @@ class Planeta {
     dibujar(matrizModelado) {
         this.heli.dibujar(matrizModelado);
 
-        for (const obj of this.objetosEscena) {
-            obj.dibujar(matrizModelado);
-        }
+
     }
 
     generarVista(alturaCamara, distanciaCamara) {

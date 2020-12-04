@@ -12,7 +12,7 @@ uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
 uniform mat3 uNMatrix;     // matriz de normales
 uniform vec3 uColor;      //color del modelo
-                        
+
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
 // Es importante remarcar que no hay una relacion 1 a 1 entre un programa de vertices y uno de fragmentos
 // ya que por ejemplo 1 triangulo puede generar millones de pixeles (dependiendo de su tamaño en pantalla)

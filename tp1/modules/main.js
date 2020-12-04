@@ -1,6 +1,6 @@
 var modo="smooth"; // wireframe, smooth, edges
-var MAIN_SHADER;
-var TERRAIN_SHADER;
+var shaderProgram;
+var terrain_shaderProgram;
 var time=0;
 
 var gl;
@@ -8,8 +8,6 @@ var mat4=glMatrix.mat4;
 var mat3=glMatrix.mat3;
 var vec3=glMatrix.vec3;   
             
-var $canvas=$("#myCanvas");
-var aspect=$canvas.width()/$canvas.height();
 
 var distanciaCamara=15;
 var alturaCamara=2;
@@ -21,12 +19,6 @@ var matrizModelado = mat4.create();
 var planeta = null;
 var mountains = null;
 
-
-function main() {
-    loadShaders(webGLStart);
-}
-
-
 function onResize(){
     gl.canvas.width=$canvas.width();
     gl.canvas.height=$canvas.height();
@@ -36,9 +28,17 @@ function onResize(){
 
 function setMatrixUniforms(prog) {
     
+    // gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, matrizModelado);
     gl.uniformMatrix4fv(prog.unifs.viewMatrix, false, matrizVista);
     gl.uniformMatrix4fv(prog.unifs.proyMatrix, false, matrizProyeccion);
-    gl.uniformMatrix4fv(prog.unifs.modelMatrix, false, matrizModelado);
+
+    var normalMatrix = mat3.create();
+    mat3.fromMat4(normalMatrix,matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
+
+    mat3.invert(normalMatrix, normalMatrix);
+    mat3.transpose(normalMatrix, normalMatrix);
+
+    gl.uniformMatrix3fv(prog.unifs.normalMatrix, false, normalMatrix);
 
 }
       
@@ -57,22 +57,15 @@ function drawScene() {
     mat4.perspective(matrizProyeccion, 45, aspect, 0.1, 100000.0);
 
     
-        gl.useProgram(MAIN_SHADER.program);
-        setMatrixUniforms(MAIN_SHADER);
-    
-        var normalMatrix = mat3.create();
-        mat3.fromMat4(normalMatrix,matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
-    
-        mat3.invert(normalMatrix, normalMatrix);
-        mat3.transpose(normalMatrix, normalMatrix);
-    
-        gl.uniformMatrix3fv(MAIN_SHADER.unifs.normalMatrix, false, normalMatrix);
-        planeta.dibujar(matrizModelado);
-        
-    
-    gl.useProgram(TERRAIN_SHADER.program);
-    setMatrixUniforms(TERRAIN_SHADER);
+    gl.useProgram(terrain_shaderProgram.program);
+    setMatrixUniforms(terrain_shaderProgram);
+    gl.uniformMatrix4fv(terrain_shaderProgram.unifs.modelMatrix, false, matrizModelado);
     mountains.draw();
+
+    gl.useProgram(shaderProgram.program);
+    setMatrixUniforms(shaderProgram);
+    planeta.dibujar(matrizModelado);
+    
 }
 
 function tick() {
@@ -96,14 +89,16 @@ function initMenu(){
 }
 
 function webGLStart() {
+
     var canvas = document.getElementById("myCanvas");
     initGL(canvas);
 
-    TERRAIN_SHADER = ShaderProgram.crearTerrain();
-    MAIN_SHADER = ShaderProgram.crearMain();
+    shaderProgram = ShaderProgram.crearMain();
+    terrain_shaderProgram = ShaderProgram.crearTerrain();
 
-    Objeto3D.MODEL_MATRIX_UNIFORM = MAIN_SHADER.unifs.modelMatrix;
-    Objeto3D.COLOR_UNIFORM = MAIN_SHADER.unifs.color;
+    Objeto3D.MODEL_MATRIX_UNIFORM = shaderProgram.unifs.modelMatrix;
+    Objeto3D.COLOR_UNIFORM = shaderProgram.unifs.color;
+
 
     planeta = new Planeta();
 
@@ -118,6 +113,10 @@ function webGLStart() {
     $(window).on("resize",onResize);
     initMenu();
     tick();
+}
+
+function main() {
+    loadShaders(webGLStart);
 }
 
 
@@ -244,14 +243,14 @@ function TexturedSphere(latitude_bands, longitude_bands){
 
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(TERRAIN_SHADER.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(terrain_shaderProgram.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-        gl.vertexAttribPointer(TERRAIN_SHADER.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(terrain_shaderProgram.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.uniform1i(TERRAIN_SHADER.unifs.sampler, 0);
+        gl.uniform1i(terrain_shaderProgram.unifs.sampler, 0);
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
@@ -280,4 +279,3 @@ function onTextureLoaded() {
 
     gl.bindTexture(gl.TEXTURE_2D, null);
 }
-

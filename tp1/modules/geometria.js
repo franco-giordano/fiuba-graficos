@@ -28,11 +28,15 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     this.cantVertices = forma.length-1;
 
     // peor precision si tengo pocas dimensiones, sino aproxima mal
-    this.deltaNorm = (this.cantNiveles < 40 || this.cantVertices < 40) ? .1 : .01;
+    this.deltaNorm = (this.cantNiveles < 40 || this.cantVertices < 40) ? 0.1 : 0.01;
 
     this.getPosicion=function(u,v){
-        if (u>=1) u=1;
-        if (v>=1) v=1;
+        if (u>=1) {
+            u=1;
+        }
+        if (v>=1) {
+            v=1;
+        }
         
         var vectorModelado = vec4.clone(recorrido[0][Math.round(v*this.cantNiveles)].elementos);
         // console.log(vectorModelado);
@@ -138,8 +142,8 @@ function generarSuperficie(superficie,filas,columnas){
     normalBuffer = [];
     // uvBuffer = [];
 
-    for (var i=0; i <= filas; i++) {
-        for (var j=0; j <= columnas; j++) {
+    for (var i=0; i <= filas; i += 1) {
+        for (var j=0; j <= columnas; j += 1) {
 
             var u=j/columnas;
             var v=i/filas;
@@ -171,8 +175,8 @@ function generarSuperficie(superficie,filas,columnas){
     
     indexBuffer=[];
     
-    for (i=0; i < filas; i++) {
-        for (j=0; j < columnas; j++) {
+    for (i=0; i < filas; i += 1) {
+        for (j=0; j < columnas; j += 1) {
             indexBuffer.push(i*columnasReales + j);
             indexBuffer.push((i+1)*columnasReales + j);
         }

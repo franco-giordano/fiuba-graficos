@@ -82,10 +82,9 @@ function tick() {
 function initMenu(){
     var gui = new dat.GUI();
     gui.add(window, "distanciaCamara",1,20).step(0.01);
-    gui.add(window, "alturaCamara",-10,10).step(0.01);;
-    gui.add(window, "modo",["wireframe","smooth","edges"]);
+    gui.add(window, "alturaCamara",-10,10).step(0.01);
     // gui.add(window, "velocidadAngular",0, 1).step(0.01);
-    
+    gui.add(window, "modo",["wireframe","smooth","edges"]);
 }
 
 function webGLStart() {
@@ -164,11 +163,11 @@ function TexturedSphere(latitude_bands, longitude_bands){
         var longNumber;
         var lado=15;
 
-        for (latNumber=0; latNumber <= this.latitudeBands; latNumber++) {
+        for (latNumber=0; latNumber <= this.latitudeBands; latNumber += 1) {
 
 
 
-            for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
+            for (longNumber=0; longNumber <= this.longitudeBands; longNumber += 1) {
 
 
 
@@ -196,8 +195,8 @@ function TexturedSphere(latitude_bands, longitude_bands){
         // Buffer de indices de los triangulos
         this.index_buffer = [];
       
-        for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
-            for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
+        for (latNumber=0; latNumber < this.latitudeBands; latNumber += 1) {
+            for (longNumber=0; longNumber < this.longitudeBands; longNumber += 1) {
 
                 var first = (latNumber * (this.longitudeBands + 1)) + longNumber;
                 var second = first + this.longitudeBands + 1;

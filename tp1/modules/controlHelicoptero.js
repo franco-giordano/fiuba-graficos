@@ -106,7 +106,9 @@ function ControlHelicoptero(){
         speedTarget=Math.max(-maxAltitude,Math.min(maxSpeed,speedTarget));
 
         var speedSign=1;
-        if (speed<0) speedSign=-1
+        if (speed<0) {
+            speedSign=-1;
+        }
 
         if (zArrow!=0) {            
             angleTarget+=zArrow*deltaAngle*speedSign;            

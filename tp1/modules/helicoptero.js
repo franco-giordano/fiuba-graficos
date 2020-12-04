@@ -32,7 +32,7 @@ class Helicoptero {
         this.contenedor.dibujar(matriz);
     }
 
-    mover(x,y,z) {
+    mover(x, y, z) {
         this.contenedor.setPosicion(x,y,z);
     }
 
@@ -113,7 +113,7 @@ class ComponenteHelicoptero {
     static crearHelice() {
         
         var aletas = [];
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 12; i += 1) {
             aletas[i] = ComponenteHelicoptero.crearAleta();
             aletas[i].setRotacion(1,2*Math.PI/10*i,0);
         }
@@ -123,9 +123,9 @@ class ComponenteHelicoptero {
         var controlR = [[0,-1,0], [0,0,0], [0,0,0], [0,1,0]];
 
         var ejeSup = new Objeto3D(crearGeometria(controlFsup, controlR), ColorRGB.BLANCO);
-        ejeSup.setEscala(.7,1,.7);
+        ejeSup.setEscala(0.7,1,0.7);
         var ejeInf = new Objeto3D(crearGeometria(controlFinf, controlR), ColorRGB.BLANCO);
-        ejeInf.setEscala(.7,1,.7);
+        ejeInf.setEscala(0.7,1,0.7);
         var eje = new Objeto3D();
         eje.agregarHijos(ejeSup, ejeInf);
 
@@ -154,9 +154,9 @@ class ComponenteHelicoptero {
         var soporteDetras = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.NEGRO);
         soporteDetras.setRotacion(Math.PI/12,0,0);
 
-        soporteFrente.setEscala(.3,.3,.3); 
-        soporteDetras.setEscala(.3,.3,.3); 
-        base.setEscala(.3,.3,.3); 
+        soporteFrente.setEscala(0.3,0.3,0.3); 
+        soporteDetras.setEscala(0.3,0.3,0.3); 
+        base.setEscala(0.3,0.3,0.3); 
         unTren.agregarHijos(soporteFrente, base, soporteDetras);
 
         return unTren;
@@ -164,7 +164,7 @@ class ComponenteHelicoptero {
 
     static crearTrenAterrizaje() {
         var tren = new Objeto3D();
-        const SCALE = .4;
+        const SCALE = 0.4;
 
         var trenDer = ComponenteHelicoptero.crearUnSoporteAterrizaje();
         trenDer.setPosicion(0,0,-2);
@@ -184,8 +184,8 @@ class ComponenteHelicoptero {
         
         var protector = new Objeto3D();
         
-        var controlFsup = [[-.7,0,0], [-.7,5,0], [-.7,4,0], [.7,4,0], [.7,5,0], [.7,0,0]];
-        var controlFinf = [[.7,0,0], [.7,-5,0], [.7,-4,0], [-.7,-4,0], [-.7,-5,0], [-.7,0,0]];
+        var controlFsup = [[-0.7,0,0], [-0.7,5,0], [-0.7,4,0], [0.7,4,0], [0.7,5,0], [0.7,0,0]];
+        var controlFinf = [[0.7,0,0], [0.7,-5,0], [0.7,-4,0], [-0.7,-4,0], [-0.7,-5,0], [-0.7,0,0]];
         var controlRIzq = [[0,-5,0], [6.25,-5,0], [6.25,5,0], [0,5,0]];
         var controlRDer = [[0,5,0], [-6.25,5,0], [-6.25,-5,0], [0,-5,0]];
         
@@ -198,14 +198,14 @@ class ComponenteHelicoptero {
         protector.agregarHijos(protectorSupIzq, protectorInfIzq, protectorSupDer, protectorInfDer);
 
         protector.setRotacion(Math.PI/2,0,0);
-        protector.setEscala(.7,.7,.3);
+        protector.setEscala(0.7,0.7,0.3);
         
         return protector;
     }
 
     static crearAleta() {
         
-        var controlF = [[0,-0.5,0], [0,0,0], [0,0,0], [0,.5,0]];
+        var controlF = [[0,-0.5,0], [0,0,0], [0,0,0], [0,0.5,0]];
         var controlR = [[3,0,0], [2,0,0], [1,0,0], [0,0,0]];
         
         var aleta = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_OSCURO);
@@ -217,8 +217,8 @@ class ComponenteHelicoptero {
         var brazo = new Objeto3D();
         var helice = ComponenteHelicoptero.crearHelice();
         var protector = ComponenteHelicoptero.crearProtector();
-        protector.escalarPor(.5,.5,.5);
-        helice.escalarPor(.5,.5,.5);
+        protector.escalarPor(0.5,0.5,0.5);
+        helice.escalarPor(0.5,0.5,0.5);
 
         protector.setPosicion(0,0,6);
         helice.setPosicion(0,0,6);
@@ -226,10 +226,10 @@ class ComponenteHelicoptero {
         var controlF = [[0,-1,0], [1.25,-1,0], [1.25,1,0], [0,1,0], [0,1,0], [-1.25,1,0], [-1.25,-1,0], [0,-1,0]];
         var controlR = [[-1.5,0,0], [0,0,0], [0,0,0], [1.5,0,0]];
         var soporte = new Objeto3D(crearGeometria(controlF, controlR, true), ColorRGB.GRIS_OSCURO);
-        soporte.setEscala(.7,.7,.7);
+        soporte.setEscala(0.7,0.7,0.7);
 
         brazo.agregarHijos(soporte, protector, helice);
-        brazo.setEscala(.7,.7,.7);
+        brazo.setEscala(0.7,0.7,0.7);
 
         return brazo;
     }

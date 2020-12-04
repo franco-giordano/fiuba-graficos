@@ -29,7 +29,7 @@ function getShaderSource(url) {
     req.open("GET", url, false);
     req.send(null);
     return (req.status == 200) ? req.responseText : null;
-}; 
+}
 
 function loadShaders(onDone){
 
@@ -67,15 +67,17 @@ function loadShaders(onDone){
 }
 
 
-        
+
 function buildShader(gl,code,type) {
 
     var shader;
 
-    if (type == "fragment") 
+    if (type == "fragment") {
+        // "vertex"
         shader = gl.createShader(gl.FRAGMENT_SHADER);
-    else // "vertex"
+    } else {
         shader = gl.createShader(gl.VERTEX_SHADER);
+    }
     
     gl.shaderSource(shader, code);
     gl.compileShader(shader);

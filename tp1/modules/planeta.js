@@ -9,7 +9,7 @@ class Planeta {
         // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
         var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
         
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 30; i += 1) {
             var curvita = new Objeto3D(crearGeometria(controlF, controlR));
             var posx = this._getRandomIntInclusive(-100, 100);
             var posz = this._getRandomIntInclusive(-100, 100);

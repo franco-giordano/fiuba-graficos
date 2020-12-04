@@ -24,7 +24,7 @@ class Camara {
                 return new CamaraHombro();
             case 6:
                 return new CamaraFija();
-        
+
             default:
                 return new CamaraGiratoria();
         }
@@ -44,18 +44,18 @@ class CamaraGiratoria extends Camara {
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
-        var centro = vec3.fromValues(posHeli.x,posHeli.y,posHeli.z);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
         var ojo = vec3.fromValues(posHeli.x, posHeli.y + alturaCamara, posHeli.z + distanciaCamara);
-        
+
         vec3.rotateY(ojo, ojo, centro, this.rotAccum);
-        
+
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-            
-        
+
+
         return matrizVista;
     }
 
@@ -85,9 +85,9 @@ class CamaraInteractuableRaton extends Camara {
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-        
+
         return matrizVista;
     }
 
@@ -97,33 +97,39 @@ class CamaraInteractuableRaton extends Camara {
 }
 
 function ControlRaton() {
-    
-    var MOUSE = {x: 0, y: 0};
-    var PREV_MOUSE = {x: 0, y: 0};
+
+    var MOUSE = {
+        x: 0,
+        y: 0
+    };
+    var PREV_MOUSE = {
+        x: 0,
+        y: 0
+    };
 
     var IS_MOUSE_DOWN = false;
-    var ALFA = Math.PI/4;
-    var BETA = Math.PI/2;
+    var ALFA = Math.PI / 4;
+    var BETA = Math.PI / 2;
 
     const FACTOR_VELOCIDAD = 0.01;
     const RADIO = 15;
 
-    
+
     // seteo handlers del raton
-    $("body").mousemove(function(e){ 
-		MOUSE.x = e.clientX || e.pageX; 
-		MOUSE.y = e.clientY || e.pageY 
-	});
-	
-    $('body').mousedown(function(event){		
-        IS_MOUSE_DOWN = true;        
+    $("body").mousemove(function (e) {
+        MOUSE.x = e.clientX || e.pageX;
+        MOUSE.y = e.clientY || e.pageY
     });
 
-    $('body').mouseup(function(event){
-		IS_MOUSE_DOWN = false;		
+    $('body').mousedown(function (event) {
+        IS_MOUSE_DOWN = true;
     });
 
-    this.obtener_posicion = function() {
+    $('body').mouseup(function (event) {
+        IS_MOUSE_DOWN = false;
+    });
+
+    this.obtener_posicion = function () {
         return {
             x: RADIO * Math.sin(ALFA) * Math.sin(BETA),
             y: RADIO * Math.cos(BETA),
@@ -131,14 +137,20 @@ function ControlRaton() {
         }
     };
 
-    this.actualizar = function() {
-        if (!IS_MOUSE_DOWN) return;
+    this.actualizar = function () {
+        if (!IS_MOUSE_DOWN) {
+            return;
+        }
 
-        var deltaX=0;
-        var deltaY=0;
+        var deltaX = 0;
+        var deltaY = 0;
 
-        if (PREV_MOUSE.x) deltaX = MOUSE.x - PREV_MOUSE.x;
-        if (PREV_MOUSE.y) deltaY = MOUSE.y - PREV_MOUSE.y;
+        if (PREV_MOUSE.x) {
+            deltaX = MOUSE.x - PREV_MOUSE.x;
+        }
+        if (PREV_MOUSE.y) {
+            deltaY = MOUSE.y - PREV_MOUSE.y;
+        }
 
         PREV_MOUSE.x = MOUSE.x;
         PREV_MOUSE.y = MOUSE.y;
@@ -146,9 +158,13 @@ function ControlRaton() {
         ALFA = ALFA + deltaX * FACTOR_VELOCIDAD;
         BETA = BETA + deltaY * FACTOR_VELOCIDAD;
 
-		if (BETA<=0) BETA=0.001;
-        if (BETA>Math.PI) BETA=Math.PI - 0.001;
-        
+        if (BETA <= 0) {
+            BETA = 0.001;
+        }
+        if (BETA > Math.PI) {
+            BETA = Math.PI - 0.001;
+        }
+
     }
 
 }
@@ -162,18 +178,18 @@ class CamaraLateral extends Camara {
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
-        var ojo = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z+30);
-        var centro = vec3.fromValues(posHeli.x,posHeli.y,posHeli.z);
-        
+        var ojo = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z + 30);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
+
         vec3.rotateY(ojo, ojo, centro, posHeli.yaw);
 
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-            
-        
+
+
         return matrizVista;
     }
 }
@@ -185,18 +201,18 @@ class CamaraTrasera extends Camara {
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
-        var ojo = vec3.fromValues(posHeli.x-30, posHeli.y, posHeli.z);
-        var centro = vec3.fromValues(posHeli.x,posHeli.y,posHeli.z);
-        
+        var ojo = vec3.fromValues(posHeli.x - 30, posHeli.y, posHeli.z);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
+
         vec3.rotateY(ojo, ojo, centro, posHeli.yaw);
 
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-            
-        
+
+
         return matrizVista;
     }
 }
@@ -208,18 +224,18 @@ class CamaraSuperior extends Camara {
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
-        var ojo = vec3.fromValues(posHeli.x-1, posHeli.y+30, posHeli.z);
-        var centro = vec3.fromValues(posHeli.x,posHeli.y,posHeli.z);
-        
+        var ojo = vec3.fromValues(posHeli.x - 1, posHeli.y + 30, posHeli.z);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
+
         vec3.rotateY(ojo, ojo, centro, posHeli.yaw);
 
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-            
-        
+
+
         return matrizVista;
     }
 }
@@ -231,18 +247,18 @@ class CamaraHombro extends Camara {
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
-        var ojo = vec3.fromValues(posHeli.x-20, posHeli.y+15, posHeli.z);
-        var centro = vec3.fromValues(posHeli.x,posHeli.y+7,posHeli.z);
-        
+        var ojo = vec3.fromValues(posHeli.x - 20, posHeli.y + 15, posHeli.z);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y + 7, posHeli.z);
+
         vec3.rotateY(ojo, ojo, centro, posHeli.yaw);
 
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-            
-        
+
+
         return matrizVista;
     }
 }
@@ -256,18 +272,18 @@ class CamaraFija extends Camara {
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
-        var ojo = vec3.fromValues(posHeli.x-60, posHeli.y+60, posHeli.z-60);
-        var centro = vec3.fromValues(posHeli.x,posHeli.y,posHeli.z);
-        
+        var ojo = vec3.fromValues(posHeli.x - 60, posHeli.y + 60, posHeli.z - 60);
+        var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
+
         // vec3.rotateY(ojo, ojo, centro, posHeli.rotY);
 
         mat4.lookAt(matrizVista,
             ojo,
             centro,
-            vec3.fromValues(0,1,0)
+            vec3.fromValues(0, 1, 0)
         );
-            
-        
+
+
         return matrizVista;
     }
 }

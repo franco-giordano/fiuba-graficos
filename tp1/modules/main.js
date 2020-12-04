@@ -92,6 +92,7 @@ function webGLStart() {
     TERRAIN_SHADER_PROGRAM = new TerrainProgram();
 
     Objeto3D.MODEL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.modelMatrix;
+    Objeto3D.NORMAL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.normalMatrix;
     Objeto3D.COLOR_UNIFORM = MAIN_SHADER_PROGRAM.unifs.color;
 
     planeta = new Planeta();
@@ -112,4 +113,3 @@ function webGLStart() {
 function main() {
     loadShaders(webGLStart);
 }
-

@@ -13,6 +13,7 @@ class Objeto3D {
 
     static MODEL_MATRIX_UNIFORM = null;
     static COLOR_UNIFORM = null;
+    static NORMAL_MATRIX_UNIFORM = null;
 
     constructor(bufferWebGL, colorArray) {
         this.mallaTriangulos = bufferWebGL;
@@ -45,6 +46,15 @@ class Objeto3D {
         if (this.mallaTriangulos) {
             gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_UNIFORM, false, mat);
             gl.uniform3fv(Objeto3D.COLOR_UNIFORM, this.color);
+
+            var normalMatrix = mat3.create();
+            mat3.fromMat4(normalMatrix, mat); // normalMatrix= (inversa(traspuesta(matrizModelado)));
+
+            mat3.invert(normalMatrix, normalMatrix);
+            mat3.transpose(normalMatrix, normalMatrix);
+
+            gl.uniformMatrix3fv(Objeto3D.NORMAL_MATRIX_UNIFORM, false, normalMatrix);
+
             dibujarMalla(this.mallaTriangulos);
         }
 

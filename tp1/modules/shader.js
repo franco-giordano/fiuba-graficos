@@ -49,18 +49,10 @@ class MainProgram extends ShaderProgram {
     setearParametros() {
         gl.useProgram(this.program);
         
-        // la matModelado la setea cada obj3d a dibujar
+        // la matModelado la setea cada obj3d al dibujarse
         // gl.uniformMatrix4fv(this.unifs.matrizModelado, false, matrizModelado);
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
         gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
-
-        var normalMatrix = mat3.create();
-        mat3.fromMat4(normalMatrix, matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
-
-        mat3.invert(normalMatrix, normalMatrix);
-        mat3.transpose(normalMatrix, normalMatrix);
-
-        gl.uniformMatrix3fv(this.unifs.normalMatrix, false, normalMatrix);
     }
 }
 

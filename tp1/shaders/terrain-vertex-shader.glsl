@@ -10,8 +10,6 @@ uniform mat4 uMMatrix;     // matriz de modelado
 uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
                 
-// uniform float time;                 // tiempo en segundos
-
 uniform sampler2D uSampler;         // sampler de textura de la tierra
 
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
@@ -36,7 +34,6 @@ const float amplitud=4.0;
 void main(void) {
             
     vec3 position = aPosition;		
-    // vec3 normal = aNormal;	
     vec2 uv = aUv;
                             
     vec4 center = texture2D(uSampler, vec2(uv.s, uv.t));                     
@@ -46,7 +43,6 @@ void main(void) {
     vec4 menosU = texture2D(uSampler, vec2(uv.s-epsilon, uv.t));  
     vec4 menosV = texture2D(uSampler, vec2(uv.s, uv.t-epsilon));  
 
-
     // elevamos la coordenada Y
     position.y+=center.x*amplitud;
 
@@ -54,7 +50,6 @@ void main(void) {
 
     gl_Position = uPMatrix*uVMatrix*worldPos;
 
-    vWorldPosition=worldPos.xyz;              
     /*
         hay que calcular la normal ya que el valor original es la normal del plano
         pero luego de elevar Y, el valor original no tiene sentido
@@ -87,7 +82,8 @@ void main(void) {
     vec3 tan1=(gradV1+gradV2)/2.0;
     vec3 tan2=(gradU1+gradU2)/2.0;
     
+    vWorldPosition=worldPos.xyz;
     vNormal=cross(tan1,tan2);
     vUv=uv;	
-    vColor = vec3(.9);
+    vColor = vec3(1.);
 }

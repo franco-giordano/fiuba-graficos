@@ -1,6 +1,6 @@
 var modo = "smooth"; // wireframe, smooth, edges
-var shaderProgram;
-var terrain_shaderProgram;
+var MAIN_SHADER_PROGRAM;
+var TERRAIN_SHADER_PROGRAM;
 var time = 0;
 
 var gl;
@@ -28,7 +28,7 @@ function onResize() {
 
 function setMatrixUniforms(prog) {
 
-    // gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, matrizModelado);
+    // gl.uniformMatrix4fv(MAIN_SHADER_PROGRAM.mMatrixUniform, false, matrizModelado);
     gl.uniformMatrix4fv(prog.unifs.viewMatrix, false, matrizVista);
     gl.uniformMatrix4fv(prog.unifs.proyMatrix, false, matrizProyeccion);
 
@@ -57,13 +57,13 @@ function drawScene() {
     mat4.perspective(matrizProyeccion, 45, aspect, 0.1, 100000.0);
 
 
-    gl.useProgram(terrain_shaderProgram.program);
-    setMatrixUniforms(terrain_shaderProgram);
-    gl.uniformMatrix4fv(terrain_shaderProgram.unifs.modelMatrix, false, matrizModelado);
+    gl.useProgram(TERRAIN_SHADER_PROGRAM.program);
+    setMatrixUniforms(TERRAIN_SHADER_PROGRAM);
+    gl.uniformMatrix4fv(TERRAIN_SHADER_PROGRAM.unifs.modelMatrix, false, matrizModelado);
     mountains.draw();
 
-    gl.useProgram(shaderProgram.program);
-    setMatrixUniforms(shaderProgram);
+    gl.useProgram(MAIN_SHADER_PROGRAM.program);
+    setMatrixUniforms(MAIN_SHADER_PROGRAM);
     planeta.dibujar(matrizModelado);
 
 }
@@ -92,11 +92,11 @@ function webGLStart() {
     var canvas = document.getElementById("myCanvas");
     initGL(canvas);
 
-    shaderProgram = ShaderProgram.crearMain();
-    terrain_shaderProgram = ShaderProgram.crearTerrain();
+    MAIN_SHADER_PROGRAM = ShaderProgram.crearMain();
+    TERRAIN_SHADER_PROGRAM = ShaderProgram.crearTerrain();
 
-    Objeto3D.MODEL_MATRIX_UNIFORM = shaderProgram.unifs.modelMatrix;
-    Objeto3D.COLOR_UNIFORM = shaderProgram.unifs.color;
+    Objeto3D.MODEL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.modelMatrix;
+    Objeto3D.COLOR_UNIFORM = MAIN_SHADER_PROGRAM.unifs.color;
 
 
     planeta = new Planeta();
@@ -242,14 +242,14 @@ function TexturedSphere(latitude_bands, longitude_bands) {
 
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(terrain_shaderProgram.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(TERRAIN_SHADER_PROGRAM.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-        gl.vertexAttribPointer(terrain_shaderProgram.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(TERRAIN_SHADER_PROGRAM.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.uniform1i(terrain_shaderProgram.unifs.sampler, 0);
+        gl.uniform1i(TERRAIN_SHADER_PROGRAM.unifs.sampler, 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 

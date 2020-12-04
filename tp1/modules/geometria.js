@@ -229,13 +229,13 @@ function dibujarMalla(mallaDeTriangulos) {
 
     // Se configuran los buffers que alimentaron el pipeline
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_position_buffer);
-    gl.vertexAttribPointer(shaderProgram.attribs.vertexPos, mallaDeTriangulos.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(MAIN_SHADER_PROGRAM.attribs.vertexPos, mallaDeTriangulos.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     // gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_uvs_buffer);
-    // gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, mallaDeTriangulos.webgl_uvs_buffer.itemSize, gl.FLOAT, false, 0, 0);
+    // gl.vertexAttribPointer(MAIN_SHADER_PROGRAM.textureCoordAttribute, mallaDeTriangulos.webgl_uvs_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_normal_buffer);
-    gl.vertexAttribPointer(shaderProgram.attribs.normal, mallaDeTriangulos.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(MAIN_SHADER_PROGRAM.attribs.normal, mallaDeTriangulos.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mallaDeTriangulos.webgl_index_buffer);
 

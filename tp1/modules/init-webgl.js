@@ -1,10 +1,12 @@
 
-var vertexShaderFile="vertex-shader.glsl";
-var fragmentShaderFile="fragment-shader.glsl";
+const vertexShaderFile="vertex-shader.glsl";
+const terrainVertexShaderFile="terrain-vertex-shader.glsl";
+const fragmentShaderFile="fragment-shader.glsl";
 
 
-var vertexShaderSource;
-var fragmentShaderSource;
+var MAIN_VRTXSHADER_SRC;
+var TERRAIN_VRTXSHADER_SRC;
+var FRAGMENT_SHADER_SRC;
 
 
 function initGL(canvas) {
@@ -31,7 +33,7 @@ function getShaderSource(url) {
 
 function loadShaders(onDone){
 
-    $.when(loadVS(), loadFS()).done(function(res1,res2){
+    $.when(loadVS(), loadTerrainVS(),loadFS()).done(function(res1,res2,res3){
         //this code is executed when all ajax calls are done     
         onDone();
     });
@@ -40,7 +42,16 @@ function loadShaders(onDone){
         return  $.ajax({
             url: "shaders/"+vertexShaderFile,
             success: function(result){
-                vertexShaderSource=result;
+                MAIN_VRTXSHADER_SRC=result;
+            }
+        });
+    }
+
+    function loadTerrainVS() {
+        return  $.ajax({
+            url: "shaders/"+terrainVertexShaderFile,
+            success: function(result){
+                TERRAIN_VRTXSHADER_SRC=result;
             }
         });
     }   
@@ -49,7 +60,7 @@ function loadShaders(onDone){
         return  $.ajax({
             url: "shaders/"+fragmentShaderFile,
             success: function(result){
-                fragmentShaderSource=result;
+                FRAGMENT_SHADER_SRC=result;
             }
         });
     }
@@ -57,7 +68,7 @@ function loadShaders(onDone){
 
 
         
-function getShader(gl,code,type) {
+function buildShader(gl,code,type) {
 
     var shader;
 

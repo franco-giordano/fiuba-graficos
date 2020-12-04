@@ -17,30 +17,12 @@ var matrizVista = mat4.create();
 var matrizModelado = mat4.create();
 
 var planeta = null;
-var mountains = null;
 
 function onResize() {
     gl.canvas.width = $canvas.width();
     gl.canvas.height = $canvas.height();
     aspect = $canvas.width() / $canvas.height();
 }
-
-
-// function setMatrixUniforms(prog) {
-
-//     // gl.uniformMatrix4fv(MAIN_SHADER_PROGRAM.mMatrixUniform, false, matrizModelado);
-//     gl.uniformMatrix4fv(prog.unifs.viewMatrix, false, matrizVista);
-//     gl.uniformMatrix4fv(prog.unifs.proyMatrix, false, matrizProyeccion);
-
-//     var normalMatrix = mat3.create();
-//     mat3.fromMat4(normalMatrix, matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
-
-//     mat3.invert(normalMatrix, normalMatrix);
-//     mat3.transpose(normalMatrix, normalMatrix);
-
-//     gl.uniformMatrix3fv(prog.unifs.normalMatrix, false, normalMatrix);
-
-// }
 
 function drawScene() {
 
@@ -56,11 +38,7 @@ function drawScene() {
     mat4.identity(matrizProyeccion);
     mat4.perspective(matrizProyeccion, 45, aspect, 0.1, 100000.0);
 
-    MAIN_SHADER_PROGRAM.setearParametros();
-    planeta.dibujar(matrizModelado);
-
-    TERRAIN_SHADER_PROGRAM.setearParametros();
-    mountains.draw();
+    planeta.dibujar(matrizModelado, MAIN_SHADER_PROGRAM, TERRAIN_SHADER_PROGRAM);
 
 }
 
@@ -96,10 +74,6 @@ function webGLStart() {
     Objeto3D.COLOR_UNIFORM = MAIN_SHADER_PROGRAM.unifs.color;
 
     planeta = new Planeta();
-
-    mountains = new TexturedSphere(128, 128);
-    mountains.initBuffers();
-    mountains.initTexture("img/heightmap.png");
 
     gl.clearColor(0.2, 0.2, 0.2, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);

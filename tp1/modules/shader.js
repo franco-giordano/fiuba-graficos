@@ -29,8 +29,12 @@ class ShaderProgram {
 
     }
 
-    setearParametros() {};
-
+    setearParametros() {
+        gl.useProgram(this.program);
+        
+        gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
+        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
+    }
 }
 
 
@@ -46,14 +50,6 @@ class MainProgram extends ShaderProgram {
         this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
 
-    setearParametros() {
-        gl.useProgram(this.program);
-        
-        // la matModelado la setea cada obj3d al dibujarse
-        // gl.uniformMatrix4fv(this.unifs.matrizModelado, false, matrizModelado);
-        gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
-        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
-    }
 }
 
 
@@ -68,10 +64,7 @@ class TerrainProgram extends ShaderProgram {
     }
 
     setearParametros() {
-        gl.useProgram(this.program);
-
+        super.setearParametros();
         gl.uniformMatrix4fv(this.unifs.modelMatrix, false, matrizModelado);
-        gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
-        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
     }
 }

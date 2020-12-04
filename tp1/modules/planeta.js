@@ -2,6 +2,10 @@ class Planeta {
     constructor() {
         this.heli = new Helicoptero();
 
+        this.mountains = new TexturedSphere(128, 128);
+        this.mountains.initBuffers();
+        this.mountains.initTexture("img/heightmap.png");
+
         this.numCamaraActual = 1;
         this.camara = Camara.crearConNumero(this.numCamaraActual);
 
@@ -13,10 +17,12 @@ class Planeta {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    dibujar(matrizModelado) {
+    dibujar(matrizModelado, main_shader, terrain_shader) {
+        main_shader.setearParametros();
         this.heli.dibujar(matrizModelado);
 
-
+        terrain_shader.setearParametros(matrizModelado);
+        this.mountains.draw();
     }
 
     generarVista(alturaCamara, distanciaCamara) {

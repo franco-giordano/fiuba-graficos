@@ -4,11 +4,21 @@ class Planeta {
         this.objetosEscena = [];
 
         // var controlF = [[-0.5,0,0], [-0.5,1,0], [0.5,1,0], [0.5,0,0]];
-        var controlF = [[0,-0.5,0], [-1,1,0], [1,1,0], [0,-0.5,0]];
-        
+        var controlF = [
+            [0, -0.5, 0],
+            [-1, 1, 0],
+            [1, 1, 0],
+            [0, -0.5, 0]
+        ];
+
         // var controlR = [[0,0,0], [0,0,3], [3,0,3], [3,0,0]];
-        var controlR = [[3,0,0], [3,0,3], [0,0,3], [0,0,0]];
-        
+        var controlR = [
+            [3, 0, 0],
+            [3, 0, 3],
+            [0, 0, 3],
+            [0, 0, 0]
+        ];
+
         for (let i = 0; i < 30; i += 1) {
             var curvita = new Objeto3D(crearGeometria(controlF, controlR));
             var posx = this._getRandomIntInclusive(-100, 100);

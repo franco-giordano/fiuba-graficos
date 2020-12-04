@@ -1,39 +1,39 @@
-var modo="smooth"; // wireframe, smooth, edges
+var modo = "smooth"; // wireframe, smooth, edges
 var shaderProgram;
 var terrain_shaderProgram;
-var time=0;
+var time = 0;
 
 var gl;
-var mat4=glMatrix.mat4;
-var mat3=glMatrix.mat3;
-var vec3=glMatrix.vec3;   
-            
+var mat4 = glMatrix.mat4;
+var mat3 = glMatrix.mat3;
+var vec3 = glMatrix.vec3;
 
-var distanciaCamara=15;
-var alturaCamara=2;
 
-var matrizProyeccion = mat4.create();            
-var matrizVista = mat4.create();            
+var distanciaCamara = 15;
+var alturaCamara = 2;
+
+var matrizProyeccion = mat4.create();
+var matrizVista = mat4.create();
 var matrizModelado = mat4.create();
 
 var planeta = null;
 var mountains = null;
 
-function onResize(){
-    gl.canvas.width=$canvas.width();
-    gl.canvas.height=$canvas.height();
-    aspect=$canvas.width()/$canvas.height();
+function onResize() {
+    gl.canvas.width = $canvas.width();
+    gl.canvas.height = $canvas.height();
+    aspect = $canvas.width() / $canvas.height();
 }
 
 
 function setMatrixUniforms(prog) {
-    
+
     // gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, matrizModelado);
     gl.uniformMatrix4fv(prog.unifs.viewMatrix, false, matrizVista);
     gl.uniformMatrix4fv(prog.unifs.proyMatrix, false, matrizProyeccion);
 
     var normalMatrix = mat3.create();
-    mat3.fromMat4(normalMatrix,matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
+    mat3.fromMat4(normalMatrix, matrizModelado); // normalMatrix= (inversa(traspuesta(matrizModelado)));
 
     mat3.invert(normalMatrix, normalMatrix);
     mat3.transpose(normalMatrix, normalMatrix);
@@ -41,22 +41,22 @@ function setMatrixUniforms(prog) {
     gl.uniformMatrix3fv(prog.unifs.normalMatrix, false, normalMatrix);
 
 }
-      
+
 function drawScene() {
 
     // Se configura el viewport dentro del "canvas". 
     // En este caso se utiliza toda el área disponible
     gl.viewport(0, 0, $canvas.width(), $canvas.height());
-    
+
     // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
-    gl.clearColor(0.53,0.81,0.92,1);
+    gl.clearColor(0.53, 0.81, 0.92, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Se configura la matriz de proyección
     mat4.identity(matrizProyeccion);
     mat4.perspective(matrizProyeccion, 45, aspect, 0.1, 100000.0);
 
-    
+
     gl.useProgram(terrain_shaderProgram.program);
     setMatrixUniforms(terrain_shaderProgram);
     gl.uniformMatrix4fv(terrain_shaderProgram.unifs.modelMatrix, false, matrizModelado);
@@ -65,12 +65,12 @@ function drawScene() {
     gl.useProgram(shaderProgram.program);
     setMatrixUniforms(shaderProgram);
     planeta.dibujar(matrizModelado);
-    
+
 }
 
 function tick() {
     requestAnimFrame(tick);
-    time+=1/60;
+    time += 1 / 60;
 
     planeta.actualizar();
 
@@ -78,13 +78,13 @@ function tick() {
 
     drawScene();
 }
-    
-function initMenu(){
+
+function initMenu() {
     var gui = new dat.GUI();
-    gui.add(window, "distanciaCamara",1,20).step(0.01);
-    gui.add(window, "alturaCamara",-10,10).step(0.01);
+    gui.add(window, "distanciaCamara", 1, 20).step(0.01);
+    gui.add(window, "alturaCamara", -10, 10).step(0.01);
     // gui.add(window, "velocidadAngular",0, 1).step(0.01);
-    gui.add(window, "modo",["wireframe","smooth","edges"]);
+    gui.add(window, "modo", ["wireframe", "smooth", "edges"]);
 }
 
 function webGLStart() {
@@ -109,7 +109,7 @@ function webGLStart() {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
 
-    $(window).on("resize",onResize);
+    $(window).on("resize", onResize);
     initMenu();
     tick();
 }
@@ -119,11 +119,11 @@ function main() {
 }
 
 
-function TexturedSphere(latitude_bands, longitude_bands){
+function TexturedSphere(latitude_bands, longitude_bands) {
 
     this.latitudeBands = latitude_bands;
     this.longitudeBands = longitude_bands;
-    
+
     this.position_buffer = null;
     this.normal_buffer = null;
     this.texture_coord_buffer = null;
@@ -133,16 +133,16 @@ function TexturedSphere(latitude_bands, longitude_bands){
     this.webgl_normal_buffer = null;
     this.webgl_texture_coord_buffer = null;
     this.webgl_index_buffer = null;
-    
+
     this.texture = null;
 
-    this.initTexture = function(texture_file){
-        
+    this.initTexture = function (texture_file) {
+
         this.texture = gl.createTexture();
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               onTextureLoaded()
+            onTextureLoaded()
         }
         this.texture.image.src = texture_file;
     }
@@ -152,8 +152,8 @@ function TexturedSphere(latitude_bands, longitude_bands){
     // Y también la información de las normales y coordenadas de textura para cada vertice de la esfera
     // La esfera se renderizara utilizando triangulos, para ello se arma un buffer de índices 
     // a todos los triángulos de la esfera
-    
-    this.initBuffers = function(){
+
+    this.initBuffers = function () {
 
         this.position_buffer = [];
         this.normal_buffer = [];
@@ -161,23 +161,23 @@ function TexturedSphere(latitude_bands, longitude_bands){
 
         var latNumber;
         var longNumber;
-        var lado=15;
+        var lado = 15;
 
-        for (latNumber=0; latNumber <= this.latitudeBands; latNumber += 1) {
-
-
-
-            for (longNumber=0; longNumber <= this.longitudeBands; longNumber += 1) {
+        for (latNumber = 0; latNumber <= this.latitudeBands; latNumber += 1) {
 
 
 
+            for (longNumber = 0; longNumber <= this.longitudeBands; longNumber += 1) {
 
-                var x = (-0.5+(latNumber/this.latitudeBands))*lado;
-                var z = (-0.5+(longNumber/this.longitudeBands))*lado;
+
+
+
+                var x = (-0.5 + (latNumber / this.latitudeBands)) * lado;
+                var z = (-0.5 + (longNumber / this.longitudeBands)) * lado;
                 var y = 0;
 
-                var u =  (longNumber / this.longitudeBands);
-                var v = 1-(latNumber / this.latitudeBands);
+                var u = (longNumber / this.longitudeBands);
+                var v = 1 - (latNumber / this.latitudeBands);
 
                 this.normal_buffer.push(0);
                 this.normal_buffer.push(1);
@@ -185,7 +185,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
 
                 this.texture_coord_buffer.push(u);
                 this.texture_coord_buffer.push(v);
-                
+
                 this.position_buffer.push(x);
                 this.position_buffer.push(y);
                 this.position_buffer.push(z);
@@ -194,9 +194,9 @@ function TexturedSphere(latitude_bands, longitude_bands){
 
         // Buffer de indices de los triangulos
         this.index_buffer = [];
-      
-        for (latNumber=0; latNumber < this.latitudeBands; latNumber += 1) {
-            for (longNumber=0; longNumber < this.longitudeBands; longNumber += 1) {
+
+        for (latNumber = 0; latNumber < this.latitudeBands; latNumber += 1) {
+            for (longNumber = 0; longNumber < this.longitudeBands; longNumber += 1) {
 
                 var first = (latNumber * (this.longitudeBands + 1)) + longNumber;
                 var second = first + this.longitudeBands + 1;
@@ -208,7 +208,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
                 this.index_buffer.push(second);
                 this.index_buffer.push(second + 1);
                 this.index_buffer.push(first + 1);
-                
+
             }
         }
 
@@ -238,7 +238,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
         this.webgl_index_buffer.numItems = this.index_buffer.length;
     }
 
-    this.draw = function(){
+    this.draw = function () {
 
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -250,21 +250,21 @@ function TexturedSphere(latitude_bands, longitude_bands){
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         gl.uniform1i(terrain_shaderProgram.unifs.sampler, 0);
-        
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-        if (modo!="wireframe"){
+        if (modo != "wireframe") {
             gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         }
-        
-        if (modo!="smooth") {
+
+        if (modo != "smooth") {
             gl.drawElements(gl.LINE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         }
-        
-        
+
+
         /////////////////////////////////
     }
-    
+
 }
 
 function onTextureLoaded() {

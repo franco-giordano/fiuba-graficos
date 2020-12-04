@@ -1,7 +1,6 @@
-
-const vertexShaderFile="vertex-shader.glsl";
-const terrainVertexShaderFile="terrain-vertex-shader.glsl";
-const fragmentShaderFile="fragment-shader.glsl";
+const vertexShaderFile = "vertex-shader.glsl";
+const terrainVertexShaderFile = "terrain-vertex-shader.glsl";
+const fragmentShaderFile = "fragment-shader.glsl";
 
 
 var MAIN_VRTXSHADER_SRC;
@@ -13,8 +12,8 @@ function initGL(canvas) {
 
     try {
         gl = canvas.getContext("webgl");
-        gl.canvas.width=$canvas.width();
-        gl.canvas.height=$canvas.height();                
+        gl.canvas.width = $canvas.width();
+        gl.canvas.height = $canvas.height();
     } catch (e) {
         console.error(e);
     }
@@ -31,36 +30,36 @@ function getShaderSource(url) {
     return (req.status == 200) ? req.responseText : null;
 }
 
-function loadShaders(onDone){
+function loadShaders(onDone) {
 
-    $.when(loadVS(), loadTerrainVS(),loadFS()).done(function(res1,res2,res3){
+    $.when(loadVS(), loadTerrainVS(), loadFS()).done(function (res1, res2, res3) {
         //this code is executed when all ajax calls are done     
         onDone();
     });
 
     function loadVS() {
-        return  $.ajax({
-            url: "shaders/"+vertexShaderFile,
-            success: function(result){
-                MAIN_VRTXSHADER_SRC=result;
+        return $.ajax({
+            url: "shaders/" + vertexShaderFile,
+            success: function (result) {
+                MAIN_VRTXSHADER_SRC = result;
             }
         });
     }
 
     function loadTerrainVS() {
-        return  $.ajax({
-            url: "shaders/"+terrainVertexShaderFile,
-            success: function(result){
-                TERRAIN_VRTXSHADER_SRC=result;
+        return $.ajax({
+            url: "shaders/" + terrainVertexShaderFile,
+            success: function (result) {
+                TERRAIN_VRTXSHADER_SRC = result;
             }
         });
-    }   
+    }
 
     function loadFS() {
-        return  $.ajax({
-            url: "shaders/"+fragmentShaderFile,
-            success: function(result){
-                FRAGMENT_SHADER_SRC=result;
+        return $.ajax({
+            url: "shaders/" + fragmentShaderFile,
+            success: function (result) {
+                FRAGMENT_SHADER_SRC = result;
             }
         });
     }
@@ -68,7 +67,7 @@ function loadShaders(onDone){
 
 
 
-function buildShader(gl,code,type) {
+function buildShader(gl, code, type) {
 
     var shader;
 
@@ -78,13 +77,13 @@ function buildShader(gl,code,type) {
     } else {
         shader = gl.createShader(gl.VERTEX_SHADER);
     }
-    
+
     gl.shaderSource(shader, code);
     gl.compileShader(shader);
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         console.error(gl.getShaderInfoLog(shader));
         return null;
-    }    
+    }
     return shader;
 }

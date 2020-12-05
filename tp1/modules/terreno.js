@@ -3,7 +3,7 @@ class Terreno {
     static ESCALA = 1;
 
     constructor() {
-        this.textura = new TexturedSphere("img/heightmap.png");
+        this.textura = new Textura("img/heightmap.png");
 
         const LONG_LADO_TOTAL = 1500;
         Terreno.ESCALA = LONG_LADO_TOTAL / 30;

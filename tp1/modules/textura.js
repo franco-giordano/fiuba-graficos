@@ -1,4 +1,4 @@
-class TexturedSphere {
+class Textura {
     constructor(texture_file) {
 
         this.texture = null;

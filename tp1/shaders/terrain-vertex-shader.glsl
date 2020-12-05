@@ -1,3 +1,4 @@
+precision highp float;
 
 // atributos del vértice (cada uno se alimenta de un ARRAY_BUFFER distinto)
 
@@ -25,7 +26,7 @@ varying vec3 vColor;
 
 // constantes
 
-const float epsilon=0.01;
+const float epsilon=0.001;
 
 const float amplitud=4.0;
 

@@ -33,12 +33,10 @@ class TexturedSphere {
         this.position_buffer = [];
         this.texture_coord_buffer = [];
 
-        var latNumber;
-        var longNumber;
         var lado = 30;
 
-        for (latNumber = 0; latNumber <= this.latitudeBands; latNumber += 1) {
-            for (longNumber = 0; longNumber <= this.longitudeBands; longNumber += 1) {
+        for (var latNumber = 0; latNumber <= this.latitudeBands; latNumber += 1) {
+            for (var longNumber = 0; longNumber <= this.longitudeBands; longNumber += 1) {
 
                 var x = (-0.5 + (latNumber / this.latitudeBands)) * lado;
                 var z = (-0.5 + (longNumber / this.longitudeBands)) * lado;
@@ -59,8 +57,8 @@ class TexturedSphere {
         // Buffer de indices de los triangulos
         this.index_buffer = [];
 
-        for (latNumber = 0; latNumber < this.latitudeBands; latNumber += 1) {
-            for (longNumber = 0; longNumber < this.longitudeBands; longNumber += 1) {
+        for (var latNumber = 0; latNumber < this.latitudeBands; latNumber += 1) {
+            for (var longNumber = 0; longNumber < this.longitudeBands; longNumber += 1) {
 
                 var first = (latNumber * (this.longitudeBands + 1)) + longNumber;
                 var second = first + this.longitudeBands + 1;

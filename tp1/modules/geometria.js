@@ -6,9 +6,9 @@ var vec3 = glMatrix.vec3;
 const CANT_NIVELES_GEO = 30;
 const CANT_VERTICES_GEO = 30;
 
-function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO) {
+function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO, escalado = null) {
 
-    var supp = new SuperficieDiscretizada(controlF, controlR, cantNiveles, cantVertices);
+    var supp = new SuperficieDiscretizada(controlF, controlR, cantNiveles, cantVertices, escalado);
     var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido, conTapas);
     return generarSuperficie(superficie3D, cantNiveles, cantVertices);
 
@@ -30,12 +30,6 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     this.deltaNorm = (this.cantNiveles < 40 || this.cantVertices < 40) ? 0.1 : 0.01;
 
     this.getPosicion = function (u, v) {
-        if (u >= 1) {
-            u = 1;
-        }
-        if (v >= 1) {
-            v = 1;
-        }
 
         var vectorModelado = vec4.clone(recorrido[0][Math.round(v * this.cantNiveles)].elementos);
         // console.log(vectorModelado);
@@ -48,7 +42,8 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         var matrizNormal = recorrido[1][Math.round(v * this.cantNiveles)];
         // console.log(matrizNormal);
 
-        var vertice = vec4.clone(Vector.extender3Da4H(forma[Math.round(u * this.cantVertices)]).elementos);
+        var vec = forma[Math.round(u * this.cantVertices)];
+        var vertice = vec4.clone(Vector.extender3Da4H(vec).elementos);
         // console.log(vertice);
 
         var nuevoVertice = vec4.create();
@@ -56,15 +51,13 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         vec4.add(nuevoVertice, nuevoVertice, vectorModelado);
 
         return nuevoVertice;
-
-        // forma[u]
-        // recorrido[v]
     }
 
     this.getNormal = function (u, v) {
+
         var orig = this.getPosicion(u, v);
-        var deltaU = (u == 1) ? -this.deltaNorm : this.deltaNorm;
-        var deltaV = (v == 1) ? -this.deltaNorm : this.deltaNorm;
+        var deltaU = (u + this.deltaNorm >= 1) ? -this.deltaNorm : this.deltaNorm;
+        var deltaV = (v + this.deltaNorm >= 1) ? -this.deltaNorm : this.deltaNorm;
         var delta1 = this.getPosicion(u + deltaU, v);
         var delta2 = this.getPosicion(u, v + deltaV);
 
@@ -86,9 +79,6 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         return normal;
     }
 
-    // this.getCoordenadasTextura=function(u,v){
-    //     return [u,v];
-    // }
 }
 
 
@@ -158,11 +148,6 @@ function generarSuperficie(superficie, filas, columnas) {
             normalBuffer.push(nrm[0]);
             normalBuffer.push(nrm[1]);
             normalBuffer.push(nrm[2]);
-
-            // var uvs=superficie.getCoordenadasTextura(u,v);
-
-            // uvBuffer.push(uvs[0]);
-            // uvBuffer.push(uvs[1]);
 
         }
     }

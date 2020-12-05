@@ -1,18 +1,18 @@
 class Textura {
     constructor(texture_file) {
 
-        this.texture = null;
+        this.gl_tex = null;
 
         this.initTexture(texture_file);
     }
 
     initTexture(texture_file) {
 
-        this.texture = gl.createTexture();
-        this.texture.image = new Image();
+        this.gl_tex = gl.createTexture();
+        this.gl_tex.image = new Image();
 
-        this.texture.image.onload = () => this.onTextureLoaded(this.texture);
-        this.texture.image.src = texture_file;
+        this.gl_tex.image.onload = () => this.onTextureLoaded(this.gl_tex);
+        this.gl_tex.image.src = texture_file;
     };
 
     onTextureLoaded(tex) {

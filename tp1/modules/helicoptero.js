@@ -8,7 +8,7 @@ class Helicoptero {
 
         this.contenedor = new Objeto3D();
         this.contenedor.agregarHijos(cabina, brazos, trenAterrizaje);
-        
+
         this.controlHelicoptero = new ControlHelicoptero();
     }
 
@@ -48,31 +48,7 @@ class Helicoptero {
 
 class ComponenteHelicoptero {
 
-    // static crearTapaCabina() {
-    //     var tapa = new Objeto3D();
-
-    //     var color = ColorRGB.BEIGE;
-
-    //     var controlF = [[.8,0,0], [.1,0,0], [.1,0,0], [0,0,0]];
-    //     var controlR = [[4,1,0], [-1,1,0], [-4,1,0], [-4,-1,0]];
-
-    //     var tapaSup = new Objeto3D(crearGeometria(controlF, controlR), color);
-    //     tapaSup.setRotacion(0,Math.PI,0);
-
-    //     var controlF = [[.8,0,0], [.1,0,0], [.1,0,0], [0,0,0]];
-    //     var controlR = [[-4,-1,0], [1,-1,0], [4,-1,0], [4,1,0]];
-
-    //     var tapaInf = new Objeto3D(crearGeometria(controlF, controlR), color);
-    //     tapaInf.setRotacion(0,Math.PI,0);
-
-    //     tapa.agregarHijos(tapaInf,tapaSup);
-
-    //     return tapa;
-    // }
-
     static crearCabina() {
-        // var tapaDer = ComponenteHelicoptero.crearTapaCabina(); 
-        // tapaDer.setPosicion(0,0,2);
 
         const cant_niveles = 7;
         const cant_vert = 30;
@@ -96,18 +72,25 @@ class ComponenteHelicoptero {
         );
 
         var controlR = [
-            [0, 0, -2],
             [0, 0, 0],
-            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 1],
             [0, 0, 2]
         ];
 
-        var cabinaCompletaInf = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
+        var cabinaDer = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
 
-        // var cabinaCompletaSup = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
+        var controlR = [
+            [0, 0, -2],
+            [0, 0, -1],
+            [0, 0, -1],
+            [0, 0, 0]
+        ];
+
+        var cabinaIzq = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
 
         var cabina = new Objeto3D();
-        cabina.agregarHijos(cabinaCompletaInf); //Sup, cabinaInf, unionInf, unionSup); //, tapaDer);
+        cabina.agregarHijos(cabinaDer, cabinaIzq);
 
         return cabina;
     }
@@ -337,7 +320,32 @@ class ComponenteHelicoptero {
         var soporte = new Objeto3D(crearGeometria(controlF, controlR, true), ColorRGB.GRIS_OSCURO);
         soporte.setEscala(0.7, 0.7, 0.7);
 
-        brazo.agregarHijos(soporte, protector, helice);
+        var controlF = [
+            [0, -1, 0],
+            [1.25, -1, 0],
+            [1.25, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [-1.25, 1, 0],
+            [-1.25, -1, 0],
+            [0, -1, 0]
+        ];
+        var controlR = [
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 1],
+            [0, 0, 6]
+        ];
+
+        var escalado = {
+            inicio: .75,
+            fin: 0.4
+        };
+
+        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BLANCO);
+        conector.setEscala(1, .7, .7);
+
+        brazo.agregarHijos(soporte, protector, helice, conector);
         brazo.setEscala(0.7, 0.7, 0.7);
 
         return brazo;

@@ -6,24 +6,17 @@ function discretizadorDeCurvas(curva, cantPasos) {
 	return curvaDiscreta;
 }
 
-function discretizarMatrizNormales(curva, cantPasos) {
+function discretizarMatrizNormales(curva, cantPasos, escalado = null) {
 	var arrayMatrices = [];
 	for (var i = 0; i <= cantPasos; i += 1) {
-		arrayMatrices.push(curva.matrizNormal(i / cantPasos));
+		arrayMatrices.push(curva.matrizNormal(i / cantPasos, escalado));
 	}
 	return arrayMatrices;
 }
 
-// function discretizadorNormal(curva, deltaU) {
-// 	var normales = [];
-// 	for (var i = 0; i <= 1; i += deltaU) {
-// 		normales.push(curva.normal(i));
-// 	}
-// 	return normales;
-// }
 
 class SuperficieDiscretizada {
-	constructor(controlForma, controlRecorrido, cantNiveles, cantVertices) {
+	constructor(controlForma, controlRecorrido, cantNiveles, cantVertices, escalado = null) {
 
 		var forma = new CurvaBezier(controlForma);
 
@@ -37,7 +30,7 @@ class SuperficieDiscretizada {
 			this.recorridoDiscreto[w] = Vector.extender3Da4H(this.recorridoDiscreto[w]);
 		};
 
-		this.matricesDiscretas = discretizarMatrizNormales(recorrido, cantNiveles);
+		this.matricesDiscretas = discretizarMatrizNormales(recorrido, cantNiveles, escalado);
 
 	}
 
@@ -165,7 +158,12 @@ class CurvaBezier {
 		return this._prodVectorialNormal(normal, tangente);
 	}
 
-	matrizNormal(t) {
+	matrizNormal(t, escalado = null) {
+
+		var escala = 1;
+		if (escalado) {
+			escala = escalado.inicio * (1 - t) + escalado.fin * t;
+		}
 
 		var tgn = this.tangente(t);
 		var normal = this.normal(t);
@@ -178,6 +176,8 @@ class CurvaBezier {
 		var ultimaCol = [0, 0, 0, 1];
 
 		var matriz4D = mat4.fromValues(...normal, ...binormal, ...tgn, ...ultimaCol);
+
+		mat4.scale(matriz4D, matriz4D, [escala, escala, escala]);
 
 		return matriz4D;
 	}

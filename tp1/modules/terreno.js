@@ -26,7 +26,7 @@ class Terreno {
 
     dibujar(posHeli) {
         for (const parcela of this.parcelas) {
-            parcela.dibujarSiEnRango(posHeli, this.textura.texture);
+            parcela.dibujarSiEnRango(posHeli, this.textura);
         }
     }
 }
@@ -149,7 +149,7 @@ class Parcela {
         gl.vertexAttribPointer(Parcela.TERRAIN_SHADER.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, textura);
+        gl.bindTexture(gl.TEXTURE_2D, textura.gl_tex);
         gl.uniform1i(Parcela.TERRAIN_SHADER.unifs.sampler, 0);
 
         gl.uniformMatrix4fv(Parcela.TERRAIN_SHADER.unifs.modelMatrix, false, this.modelMatrix);

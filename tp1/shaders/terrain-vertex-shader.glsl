@@ -82,5 +82,5 @@ void main(void) {
     
     vWorldPosition=worldPos.xyz;
     vNormal=cross(tan1,tan2);
-    vColor = vec3(center);
+    vColor = vec3(0.39,0.29,0.21);
 }

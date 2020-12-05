@@ -5,9 +5,9 @@ class Planeta {
     constructor() {
         this.heli = new Helicoptero();
 
-        this.mountains = new TexturedSphere(128, 128);
+        this.mountains = new TexturedSphere(128);
         this.mountains.initBuffers();
-        this.mountains.initTexture("img/heightmap3.png");
+        this.mountains.initTexture("img/heightmap-aconcagua.png");
 
         this.numCamaraActual = 1;
         this.camara = Camara.crearConNumero(this.numCamaraActual);

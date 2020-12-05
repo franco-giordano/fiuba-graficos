@@ -2,22 +2,21 @@ class TexturedSphere {
     constructor(latitude_bands, longitude_bands) {
 
         this.latitudeBands = latitude_bands;
-        this.longitudeBands = longitude_bands;
+        this.longitudeBands = longitude_bands ? longitude_bands : latitude_bands;
 
         this.position_buffer = null;
-        this.normal_buffer = null;
         this.texture_coord_buffer = null;
         this.index_buffer = null;
 
         this.webgl_position_buffer = null;
-        this.webgl_normal_buffer = null;
         this.webgl_texture_coord_buffer = null;
         this.webgl_index_buffer = null;
 
         this.texture = null;
 
         this.modelMatrix = mat4.create();
-        mat4.scale(this.modelMatrix, this.modelMatrix, vec3.fromValues(1, 1, 1));
+        const SCALE = 50;
+        mat4.scale(this.modelMatrix, this.modelMatrix, vec3.fromValues(SCALE, SCALE, SCALE));
     }
 
     initTexture(texture_file) {
@@ -29,15 +28,9 @@ class TexturedSphere {
         this.texture.image.src = texture_file;
     };
 
-
-    // Se generan los vertices para la esfera, calculando los datos para una esfera de radio 1
-    // Y también la información de las normales y coordenadas de textura para cada vertice de la esfera
-    // La esfera se renderizara utilizando triangulos, para ello se arma un buffer de índices 
-    // a todos los triángulos de la esfera
     initBuffers() {
 
         this.position_buffer = [];
-        this.normal_buffer = [];
         this.texture_coord_buffer = [];
 
         var latNumber;
@@ -52,11 +45,7 @@ class TexturedSphere {
                 var y = 0;
 
                 var u = (longNumber / this.longitudeBands);
-                var v = 1 - (latNumber / this.latitudeBands);
-
-                this.normal_buffer.push(0);
-                this.normal_buffer.push(1);
-                this.normal_buffer.push(0);
+                var v = (latNumber / this.latitudeBands);
 
                 this.texture_coord_buffer.push(u);
                 this.texture_coord_buffer.push(v);
@@ -87,12 +76,6 @@ class TexturedSphere {
             }
         }
 
-        // Creación e Inicialización de los buffers a nivel de OpenGL
-        this.webgl_normal_buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
-        this.webgl_normal_buffer.itemSize = 3;
-        this.webgl_normal_buffer.numItems = this.normal_buffer.length / 3;
 
         this.webgl_texture_coord_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);

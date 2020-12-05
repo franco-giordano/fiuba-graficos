@@ -1,3 +1,4 @@
+        precision highp float;
 
         // atributos del vértice (cada uno se alimenta de un ARRAY_BUFFER distinto)
 
@@ -30,7 +31,7 @@
         // constantes
         
         const float PI=3.141592653;
-        const float epsilon=0.01;
+        const float epsilon=0.05;
 
         const float amplitud=4.0;
 

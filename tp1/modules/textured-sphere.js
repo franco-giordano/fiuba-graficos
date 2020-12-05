@@ -16,6 +16,7 @@ class TexturedSphere {
 
         this.modelMatrix = mat4.create();
         const SCALE = 50;
+        mat4.translate(this.modelMatrix, this.modelMatrix, vec3.fromValues(0,-150,0));
         mat4.scale(this.modelMatrix, this.modelMatrix, vec3.fromValues(SCALE, SCALE, SCALE));
     }
 
@@ -89,7 +90,7 @@ class TexturedSphere {
 
         this.webgl_index_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(this.index_buffer), gl.STATIC_DRAW);
         this.webgl_index_buffer.itemSize = 1;
         this.webgl_index_buffer.numItems = this.index_buffer.length;
     };
@@ -112,11 +113,11 @@ class TexturedSphere {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
         if (modo != "wireframe") {
-            gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_INT, 0);
         }
 
         if (modo != "smooth") {
-            gl.drawElements(gl.LINE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.LINE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_INT, 0);
         }
 
     };

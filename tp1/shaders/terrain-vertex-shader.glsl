@@ -26,7 +26,7 @@ varying vec3 vColor;
 
 // constantes
 
-const float epsilon=0.001;
+const float epsilon=0.05;
 
 const float amplitud=4.0;
 

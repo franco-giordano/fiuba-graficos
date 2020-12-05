@@ -8,7 +8,7 @@ void main(void) {
 
     vec3 ambientColor = vec3(0.5,0.5,0.5);
     vec3 directionalColor = vec3(1., 1., 1.);
-    vec3 lightVec=normalize(vec3(0.0,400.0,0.0)-vWorldPosition);
+    vec3 lightVec=normalize(vec3(0.0,250.0,0.0)-vWorldPosition);
 
     vec3 color=(ambientColor+directionalColor*max(dot(vNormal,lightVec), 0.0))*vColor.xyz;
 

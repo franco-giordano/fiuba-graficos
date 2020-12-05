@@ -47,10 +47,10 @@
         var $canvas=$("#myCanvas");
         var aspect=$canvas.width()/$canvas.height();
 
-        var distanciaCamara=10;
-        var alturaCamara=10;
+        var distanciaCamara=3;
+        var alturaCamara=4.62;
         var velocidadAngular=0.15;
-        var segmentos=128;
+        var segmentos=255;
         var lighting="true";
 
         var vertexShaderSource;
@@ -65,7 +65,9 @@
             try {
                 gl = canvas.getContext("webgl");
                 gl.canvas.width=$canvas.width();
-                gl.canvas.height=$canvas.height();                
+                gl.canvas.height=$canvas.height(); 
+                var ext = gl.getExtension('OES_element_index_uint');
+               
             } catch (e) {
                 console.error(e);
             }
@@ -313,7 +315,7 @@
     
                 this.webgl_index_buffer = gl.createBuffer();
                 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(this.index_buffer), gl.STATIC_DRAW);
                 this.webgl_index_buffer.itemSize = 1;
                 this.webgl_index_buffer.numItems = this.index_buffer.length;
             }
@@ -338,12 +340,12 @@
 
                 if (modo!="wireframe"){
                     gl.uniform1i(shaderProgram.useLightingUniform,(lighting=="true"));                    
-                    gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_INT, 0);
                 }
                 
                 if (modo!="smooth") {
                     gl.uniform1i(shaderProgram.useLightingUniform,false);
-                    gl.drawElements(gl.LINE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.LINE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_INT, 0);
                 }
                 
                 

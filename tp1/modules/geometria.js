@@ -3,8 +3,8 @@ var vec4 = glMatrix.vec4;
 var vec3 = glMatrix.vec3;
 
 
-const CANT_NIVELES_GEO = 60;
-const CANT_VERTICES_GEO = 60;
+const CANT_NIVELES_GEO = 30;
+const CANT_VERTICES_GEO = 30;
 
 function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO) {
 
@@ -75,7 +75,7 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
         // if (vec3.equals(delta1,orig)) console.log(delta1);
         var normal = vec3.create();
-        vec3.cross(normal, sup1, sup2);
+        vec3.cross(normal, sup2, sup1);
 
         // cambia el sentido si movi algun delta en negativo
         if ((deltaU < 0 && deltaV > 0) || (deltaU > 0 && deltaV < 0)) {

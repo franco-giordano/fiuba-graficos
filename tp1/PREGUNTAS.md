@@ -6,3 +6,16 @@
 
 aprender pilinomios de bspline y bezier
 aprender deducciones matrices proyeccion ortografica, etc
+
+
+
+TODO:
+- Parcelas
+- Completar heli -> variar escala en bezier, tapas
+- Movimiento componentes heli al volar:
+    - Helices girando
+    - Helices orientan para delante/atras
+    - Cola rota segun orientacion
+    - Brazos de Helices se retraen/extienden con tecla H para aterrizar
+- Pista de despegue/aterrizaje
+- Superficie revolucion?

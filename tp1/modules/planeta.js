@@ -5,7 +5,7 @@ class Planeta {
     constructor() {
         this.heli = new Helicoptero();
 
-        this.mountains = new TexturedSphere(255);
+        this.mountains = new TexturedSphere(1024);
         this.mountains.initBuffers();
         this.mountains.initTexture("img/heightmap-aconcagua.png");
 

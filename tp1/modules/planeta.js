@@ -5,9 +5,9 @@ class Planeta {
     constructor() {
         this.heli = new Helicoptero();
 
-        this.mountains = new TexturedSphere(1024);
-        this.mountains.initBuffers();
-        this.mountains.initTexture("img/heightmap-aconcagua.png");
+        this.terreno = new Terreno();
+
+        // this.mountains = new TexturedSphere("img/heightmap-aconcagua.png", 512);
 
         this.numCamaraActual = 1;
         this.camara = Camara.crearConNumero(this.numCamaraActual);
@@ -24,8 +24,9 @@ class Planeta {
         Planeta.MAIN_SHADER.setearParametros();
         this.heli.dibujar(matrizModelado);
 
-        Planeta.TERRAIN_SHADER.setearParametros(matrizModelado);
-        this.mountains.dibujar(Planeta.TERRAIN_SHADER);
+        Planeta.TERRAIN_SHADER.setearParametros();
+        // this.mountains.dibujar(Planeta.TERRAIN_SHADER);
+        this.terreno.dibujar(this.heli.posicion);
     }
 
     generarVista(alturaCamara, distanciaCamara) {

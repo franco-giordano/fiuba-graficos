@@ -10,7 +10,7 @@ aprender deducciones matrices proyeccion ortografica, etc
 
 
 TODO:
-- Parcelas
+- ~~Parcelas~~
 - Completar heli -> variar escala en bezier, tapas
 - Movimiento componentes heli al volar:
     - Helices girando

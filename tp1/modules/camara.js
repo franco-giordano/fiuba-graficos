@@ -112,7 +112,7 @@ function ControlRaton() {
     var BETA = Math.PI / 2;
 
     const FACTOR_VELOCIDAD = 0.01;
-    const RADIO = 15;
+    const RADIO = 20;
 
 
     // seteo handlers del raton

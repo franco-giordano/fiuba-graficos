@@ -9,13 +9,21 @@ const ColorRGB = {
     NEGRO: [0, 0, 0]
 };
 
-class Objeto3D {
+
+class IDibujable {
+    dibujar(matrizModelado) {
+        throw new Error("Esto es una interfaz, debe ser implementada!");
+    }
+}
+
+class Objeto3D extends IDibujable {
 
     static MODEL_MATRIX_UNIFORM = null;
     static COLOR_UNIFORM = null;
     static NORMAL_MATRIX_UNIFORM = null;
 
     constructor(bufferWebGL, colorArray) {
+        super();
         this.mallaTriangulos = bufferWebGL;
         this.matrizModelado = mat4.create();
         this.posicion = vec3.fromValues(0, 0, 0);
@@ -30,9 +38,9 @@ class Objeto3D {
     // método privado, usa posición, rotación y escala
     _actualizarMatrizModelado() {
         mat4.translate(this.matrizModelado, this.matrizModelado, this.posicion);
-        mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotY, [0, 1, 0]);
-        mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotZ, [0, 0, 1]);
-        mat4.rotate(this.matrizModelado, this.matrizModelado, this.rotX, [1, 0, 0]);
+        mat4.rotateY(this.matrizModelado, this.matrizModelado, this.rotY);
+        mat4.rotateZ(this.matrizModelado, this.matrizModelado, this.rotZ);
+        mat4.rotateX(this.matrizModelado, this.matrizModelado, this.rotX);
         mat4.scale(this.matrizModelado, this.matrizModelado, this.escala);
     };
 
@@ -65,6 +73,7 @@ class Objeto3D {
     }
 
     agregarHijos(...hs) {
+        // cada hijo implementa IDibujable
         hs.forEach(h => this.hijos.push(h));
     }
 
@@ -77,6 +86,10 @@ class Objeto3D {
     setRotacion(radX, radY, radZ) {
         this.rotX = radX;
         this.rotY = radY;
+        this.rotZ = radZ;
+    }
+
+    setRotacionZ(radZ) {
         this.rotZ = radZ;
     }
 

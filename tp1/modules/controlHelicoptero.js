@@ -118,7 +118,7 @@ function ControlHelicoptero() {
         }
 
         roll = -(angleTarget - angle) * 1.6;
-        pitch = -Math.max(-0.5, Math.min(0.5, speed));
+        pitch = -Math.max(-0.3, Math.min(0.3, speed));
 
         speed += (speedTarget - speed) * speedInertia;
         altitude += (altitudeTarget - altitude) * altitudeInertia;

@@ -162,7 +162,7 @@ class CurvaBezier {
 
 		var escala = 1;
 		if (escalado) {
-			escala = escalado.inicio * (1 - t) + escalado.fin * t;
+			escala = escalado.en(t);
 		}
 
 		var tgn = this.tangente(t);
@@ -182,4 +182,14 @@ class CurvaBezier {
 		return matriz4D;
 	}
 
+}
+
+class Escalado {
+	constructor(puntosControl) {
+		this.scaler = new CurvaBezier(puntosControl);
+	}
+
+	en(t) {
+		return this.scaler.posicionEn(t)[1];
+	}
 }

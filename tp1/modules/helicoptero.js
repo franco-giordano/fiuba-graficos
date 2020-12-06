@@ -72,25 +72,27 @@ class ComponenteHelicoptero {
         );
 
         var controlR = [
-            [0, 0, 0],
-            [0, 0, 1],
+            [0, 0, -2],
+            [0, 0, -1],
             [0, 0, 1],
             [0, 0, 2]
         ];
 
-        var cabinaDer = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
+        var escalado = new Escalado([[0,1.35,0], [0.5, 1.7,0], [1,1.35,0]]);
 
-        var controlR = [
-            [0, 0, -2],
-            [0, 0, -1],
-            [0, 0, -1],
-            [0, 0, 0]
-        ];
+        var cabina = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), color);
 
-        var cabinaIzq = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
+        // var controlR = [
+        //     [0, 0, -2],
+        //     [0, 0, -1],
+        //     [0, 0, -1],
+        //     [0, 0, 0]
+        // ];
 
-        var cabina = new Objeto3D();
-        cabina.agregarHijos(cabinaDer, cabinaIzq);
+        // var cabinaIzq = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
+
+        // var cabina = new Objeto3D();
+        // cabina.agregarHijos(cabina, cabinaIzq);
 
         return cabina;
     }
@@ -337,10 +339,12 @@ class ComponenteHelicoptero {
             [0, 0, 6]
         ];
 
-        var escalado = {
-            inicio: .75,
-            fin: 0.4
-        };
+        // var escalado = {
+        //     inicio: .75,
+        //     fin: 0.4
+        // };
+
+        var escalado = new Escalado([[0,0.75,0], [1,0.4,0]]);
 
         var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BLANCO);
         conector.setEscala(1, .7, .7);

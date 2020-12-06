@@ -11,7 +11,9 @@ aprender deducciones matrices proyeccion ortografica, etc
 
 TODO:
 - ~~Parcelas~~
-- Completar heli -> variar escala en bezier, tapas
+- Completar heli:
+    - ~~variar escala en bezier, tapas~~
+    - terminar cola
 - Movimiento componentes heli al volar:
     - Helices girando
     - Helices orientan para delante/atras

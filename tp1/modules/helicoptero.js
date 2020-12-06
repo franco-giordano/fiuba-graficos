@@ -5,9 +5,10 @@ class Helicoptero {
         var brazos = ComponenteHelicoptero.crearBrazosHelices();
         var trenAterrizaje = ComponenteHelicoptero.crearTrenAterrizaje();
         trenAterrizaje.setPosicion(0, -3, 0);
+        var cola = ComponenteHelicoptero.crearCola();
 
         this.contenedor = new Objeto3D();
-        this.contenedor.agregarHijos(cabina, brazos, trenAterrizaje);
+        this.contenedor.agregarHijos(cabina, brazos, trenAterrizaje, cola);
 
         this.controlHelicoptero = new ControlHelicoptero();
     }
@@ -72,13 +73,17 @@ class ComponenteHelicoptero {
         );
 
         var controlR = [
-            [0, 0, -2],
+            [0, 0, -2.25],
             [0, 0, -1],
             [0, 0, 1],
-            [0, 0, 2]
+            [0, 0, 2.25]
         ];
 
-        var escalado = new Escalado([[0,1.35,0], [0.5, 1.7,0], [1,1.35,0]]);
+        var escalado = new Escalado([
+            [0, 1.35, 0],
+            [0.5, 1.7, 0],
+            [1, 1.35, 0]
+        ]);
 
         var cabina = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), color);
 
@@ -344,7 +349,10 @@ class ComponenteHelicoptero {
         //     fin: 0.4
         // };
 
-        var escalado = new Escalado([[0,0.75,0], [1,0.4,0]]);
+        var escalado = new Escalado([
+            [0, 0.75, 0],
+            [1, 0.4, 0]
+        ]);
 
         var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BLANCO);
         conector.setEscala(1, .7, .7);
@@ -375,5 +383,73 @@ class ComponenteHelicoptero {
         brazos.agregarHijos(brazoFder, brazoFizq, brazoDder, brazoDizq);
 
         return brazos;
+    }
+
+    static crearCola() {
+        var conectorI = ComponenteHelicoptero.crearConectorCola();
+        conectorI.setPosicion(0, 0, -1);
+        var conectorD = ComponenteHelicoptero.crearConectorCola()
+        conectorD.setPosicion(0, 0, 1);
+
+        var controlF = [
+            [0, -1, 0],
+            [1.25, -1, 0],
+            [1.25, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [-1.25, 1, 0],
+            [-1.25, -1, 0],
+            [0, -1, 0]
+        ];
+
+        var controlR = [
+            [0, 0, 2],
+            [0, 0, -2]
+        ];
+
+        var union = new Objeto3D(crearGeometria(controlF, controlR, true, 10, 30), ColorRGB.BEIGE);
+        union.setEscala(.2, .2, 1);
+        union.setPosicion(-7.7,1.65,0);
+
+        var cola = new Objeto3D();
+        cola.agregarHijos(conectorI, conectorD, union);
+
+        cola.setPosicion(-3.5, 0, 0);
+
+        return cola;
+
+    }
+
+    static crearAletaCola() {
+        
+    }
+
+    static crearConectorCola() {
+        var controlF = [
+            [0, -1, 0],
+            [1.25, -1, 0],
+            [1.25, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [-1.25, 1, 0],
+            [-1.25, -1, 0],
+            [0, -1, 0]
+        ];
+
+        var controlR = [
+            [0, 0, 0],
+            [-8, 0, 0]
+        ];
+
+        var escalado = new Escalado([
+            [0, 0.75, 0],
+            [1, 0.25, 0]
+        ]);
+
+        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BEIGE);
+        conector.setEscala(1, 1, .15);
+        conector.setRotacion(0, 0, -Math.PI / 15);
+
+        return conector;
     }
 }

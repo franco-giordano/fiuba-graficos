@@ -9,13 +9,13 @@ const CANT_VERTICES_GEO = 30;
 function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO, escalado = null) {
 
     var supp = new SuperficieDiscretizada(controlF, controlR, cantNiveles, cantVertices, escalado);
-    var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido);
-    return generarSuperficie(superficie3D, cantNiveles, cantVertices, conTapas);
+    var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido, conTapas);
+    return generarSuperficie(superficie3D, cantNiveles, cantVertices);
 
 }
 
 
-function SuperficieBarrido(forma, recorrido) {
+function SuperficieBarrido(forma, recorrido, conTapas) {
 
     /* 
      * Parametros a recibir de la forma:
@@ -29,13 +29,13 @@ function SuperficieBarrido(forma, recorrido) {
     // peor precision si tengo pocas dimensiones, sino aproxima mal
     this.deltaNorm = (this.cantNiveles < 40 || this.cantVertices < 40) ? 0.1 : 0.01;
 
-    this.getPosicion = function (u, v, colapsar = false) {
+    this.getPosicion = function (u, v) {
 
         var vectorModelado = vec4.clone(recorrido[0][Math.round(v * this.cantNiveles)].elementos);
         // console.log(vectorModelado);
 
         // colapsar ppio y final en el origen si quiero tapas
-        if (colapsar) {
+        if (conTapas && (v == 0 || v == 1)) {
             return vectorModelado;
         }
 
@@ -125,13 +125,11 @@ function Esfera(radio) {
 }
 
 
-function generarSuperficie(superficie, filas, columnas, conTapas = false) {
+function generarSuperficie(superficie, filas, columnas) {
 
     positionBuffer = [];
     normalBuffer = [];
-
-    //filas==cantniveles
-    //columnas==cantvertices
+    // uvBuffer = [];
 
     for (var i = 0; i <= filas; i += 1) {
         for (var j = 0; j <= columnas; j += 1) {
@@ -155,6 +153,7 @@ function generarSuperficie(superficie, filas, columnas, conTapas = false) {
     }
 
     // Buffer de indices de los triángulos
+
     var filasReales = filas + 1;
     var columnasReales = columnas + 1;
 

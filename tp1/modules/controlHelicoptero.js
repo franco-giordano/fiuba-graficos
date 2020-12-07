@@ -38,6 +38,7 @@ function ControlHelicoptero(long_terreno) {
     var speedTarget = 0;
 
     var NUMERO_CAMARA = 1;
+    var H_ACTIVADA = false;
 
 
     $("body").keydown(function (e) {
@@ -59,6 +60,9 @@ function ControlHelicoptero(long_terreno) {
                 break;
             case "q":
                 yArrow = -1;
+                break;
+            case "h":
+                H_ACTIVADA = !H_ACTIVADA;
                 break;
             case "1":
             case "2":
@@ -133,8 +137,7 @@ function ControlHelicoptero(long_terreno) {
         positionZ += +directionZ;
         positionY = altitude;
 
-        return NUMERO_CAMARA;
-
+        return [ NUMERO_CAMARA, H_ACTIVADA ];
     }
 
     this.getPosition = function () {

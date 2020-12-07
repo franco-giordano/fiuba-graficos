@@ -93,6 +93,11 @@ class Objeto3D extends IDibujable {
         this.rotZ = radZ;
     }
 
+    setRotacionX(radX) {
+        this.rotX = radX;
+    }
+
+
     setEscala(x, y, z) {
         this.escala = vec3.fromValues(x, y, z);
     }

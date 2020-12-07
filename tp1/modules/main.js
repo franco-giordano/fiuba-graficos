@@ -83,7 +83,7 @@ function webGLStart() {
     gl.enable(gl.DEPTH_TEST);
 
     $(window).on("resize", onResize);
-    initMenu();
+    // initMenu();
     tick();
 }
 

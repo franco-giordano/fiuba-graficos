@@ -15,11 +15,11 @@ class Helicoptero {
     }
 
     actualizar() {
-        var numeroCamara = this.controlHelicoptero.update();
+        var [ numeroCamara, brazosRetraidos ] =  this.controlHelicoptero.update();
 
         var p = this.posicion;
 
-        this.brazos.actualizar(p);
+        this.brazos.actualizar(p, brazosRetraidos);
 
         this.mover(p.x, p.y, p.z);
         this.rotar(p.roll, p.yaw, p.pitch);
@@ -71,19 +71,23 @@ class ColeccionDeBrazosHelice extends IDibujable {
         this.brazos.dibujar(matrizPadre);
     }
 
-    actualizar(posHeli) {
-        this.brazos.hijos.forEach(b => b.actualizar(posHeli));
+    actualizar(posHeli, brazosRetraidos) {
+        this.brazos.hijos.forEach(b => b.actualizar(posHeli, brazosRetraidos));
     }
 }
 
 class BrazoHelice extends IDibujable {
+
+    static VELOCIDAD_RETRACCION = 0.06;
+
     constructor(lado) {
         super();
 
-        this.brazo = new Objeto3D();
+        this.contenedorBrazo = new Objeto3D();
         this.helice = new Helice(lado);
 
         this.estaRetraido = false;
+        this.anguloRotacion = 0;
 
         var controlF = [
             [0, -1, 0],
@@ -129,27 +133,41 @@ class BrazoHelice extends IDibujable {
         var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BLANCO);
         conector.setEscala(1, .7, .7);
 
-        this.brazo.agregarHijos(soporte, this.helice, conector);
-        this.brazo.setEscala(0.7, 0.7, 0.7);
+        this.contenedorBrazo.agregarHijos(soporte, this.helice, conector);
+        this.contenedorBrazo.setEscala(0.7, 0.7, 0.7);
 
     }
 
-    actualizar(posHeli) {
-        this.helice.actualizar(posHeli);
+    actualizar(posHeli, brazoRetraido) {
+        this.estaRetraido = brazoRetraido;
+        
+        this.helice.actualizar(posHeli, this.estaRetraido);
+        
+        this._actualizarRetraccion();
+    }
+
+    _actualizarRetraccion() {
+
+        var delta = this.estaRetraido ? -BrazoHelice.VELOCIDAD_RETRACCION : BrazoHelice.VELOCIDAD_RETRACCION;
+        if (this.anguloRotacion+delta <= 0 && this.anguloRotacion+delta >= -Math.PI / 2) {
+            this.anguloRotacion += delta;
+        }
+
+        this.contenedorBrazo.setRotacionX(this.anguloRotacion);
     }
 
     // para ubicar brazo der, izq etc
     setPosicion(x, y, z) {
-        this.brazo.setPosicion(x, y, z);
+        this.contenedorBrazo.setPosicion(x, y, z);
     }
 
     // para ubicar brazo der, izq etc
     setRotacion(x, y, z) {
-        this.brazo.setRotacion(x, y, z);
+        this.contenedorBrazo.setRotacion(x, y, z);
     }
 
     dibujar(matrizPadre) {
-        this.brazo.dibujar(matrizPadre);
+        this.contenedorBrazo.dibujar(matrizPadre);
     }
 }
 
@@ -170,7 +188,7 @@ class Helice extends IDibujable {
 
         this.helice = ComponenteHelicoptero.crearHelice();
         this.protector = ComponenteHelicoptero.crearProtector();
-        
+
         this.conjunto.escalarPor(0.5, 0.5, 0.5);
         this.conjunto.setPosicion(0, 0, 6);
 
@@ -179,7 +197,15 @@ class Helice extends IDibujable {
         this.rotacionHelice = 0;
     }
 
-    actualizar(posHeli) {
+    actualizar(posHeli, estaRetraido) {
+        if (estaRetraido) {
+            this.helice.setRotacion(0, 0, 0);
+
+            this.conjunto.setRotacionZ(0);
+            
+            return;
+        }
+
         this.rotacionHelice += Helice.VEL_ROT_HELICE;
 
         this.helice.setRotacion(0, this.rotacionHelice, 0);

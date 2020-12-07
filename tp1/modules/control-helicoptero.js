@@ -104,6 +104,8 @@ function ControlHelicoptero(long_terreno, yInicial) {
             xArrow = 0;
             yArrow = 0;
             zArrow = 0;
+
+            altitudeTarget = positionY-10;
         }
 
         if (xArrow != 0) {

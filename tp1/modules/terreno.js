@@ -12,6 +12,8 @@ class Terreno {
         this.parcelas = this._crearParcelas(long_lado_total);
 
         var parcelaCentro = Math.floor(Terreno.CANTIDAD_PARCELAS * Terreno.CANTIDAD_PARCELAS / 2);
+
+        //TODO: dibuja la base siempre en 0,0. No soporta terreno infinito
         var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 47.22, long_lado_total/2);
         this.parcelas[parcelaCentro].agregarObjeto(base);
 

@@ -3,9 +3,11 @@ class Planeta {
     static TERRAIN_SHADER = null;
 
     constructor() {
-        this.heli = new Helicoptero();
+        const LONG_TERRENO = 1500;
 
-        this.terreno = new Terreno();
+        this.heli = new Helicoptero(LONG_TERRENO);
+
+        this.terreno = new Terreno(LONG_TERRENO);
 
         // this.mountains = new TexturedSphere("img/heightmap-aconcagua.png", 512);
 

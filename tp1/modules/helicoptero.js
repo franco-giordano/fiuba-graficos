@@ -1,5 +1,5 @@
 class Helicoptero {
-    constructor() {
+    constructor(long_terreno) {
 
         var cabina = ComponenteHelicoptero.crearCabina();
         this.brazos = new ColeccionDeBrazosHelice();
@@ -10,7 +10,8 @@ class Helicoptero {
         this.contenedor = new Objeto3D();
         this.contenedor.agregarHijos(cabina, this.brazos, trenAterrizaje, cola);
 
-        this.controlHelicoptero = new ControlHelicoptero();
+        // spawnear heli en el centro del terreno
+        this.controlHelicoptero = new ControlHelicoptero(long_terreno);
     }
 
     actualizar() {

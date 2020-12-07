@@ -1,4 +1,4 @@
-function ControlHelicoptero() {
+function ControlHelicoptero(long_terreno) {
 
     $body = $("body");
 
@@ -20,9 +20,9 @@ function ControlHelicoptero() {
     var maxAltitude = 300;
     var minAltitude = 0;
 
-    var positionX = 0;
+    var positionX = long_terreno / 2;
     var positionY = 0;
-    var positionZ = 0;
+    var positionZ = long_terreno / 2;
 
     //var umbral=0.01;
 

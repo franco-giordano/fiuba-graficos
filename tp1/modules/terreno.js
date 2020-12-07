@@ -2,13 +2,17 @@ class Terreno {
     static CANTIDAD_PARCELAS = 10;
     static ESCALA = 1;
 
-    constructor() {
+    constructor(long_lado_total) {
         this.textura = new Textura("img/heightmap.png");
 
-        const LONG_LADO_TOTAL = 1500;
-        Terreno.ESCALA = LONG_LADO_TOTAL / 30;
+        Terreno.ESCALA = long_lado_total / 30;
 
-        this.parcelas = this._crearParcelas(LONG_LADO_TOTAL);
+        this.parcelas = this._crearParcelas(long_lado_total);
+
+        this.matrizModelado = mat4.create();
+        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(0, -200, 0));
+        mat4.scale(this.matrizModelado, this.matrizModelado, vec3.fromValues(1, Terreno.ESCALA, 1));
+
     }
 
     _crearParcelas(long_lado_total) {
@@ -25,9 +29,15 @@ class Terreno {
     }
 
     dibujar(posHeli) {
+        // this._reposicionarMatrizModelado(posHeli);
+
         for (const parcela of this.parcelas) {
-            parcela.dibujarSiEnRango(posHeli, this.textura);
+            parcela.dibujarSiEnRango(posHeli, this.textura, this.matrizModelado);
         }
+    }
+
+    _reposicionarMatrizModelado(posHeli) {
+
     }
 }
 
@@ -47,10 +57,6 @@ class Parcela {
         this.webgl_texture_coord_buffer = null;
         this.webgl_position_buffer = null;
         this.webgl_texture_coord_buffer = null;
-
-        this.modelMatrix = mat4.create();
-        mat4.translate(this.modelMatrix, this.modelMatrix, vec3.fromValues(0, 0, 0));
-        mat4.scale(this.modelMatrix, this.modelMatrix, vec3.fromValues(1, Terreno.ESCALA, 1));
 
         this.crearBuffers();
     }
@@ -120,9 +126,9 @@ class Parcela {
     };
 
 
-    dibujarSiEnRango(posHeli, texturaTerreno) {
+    dibujarSiEnRango(posHeli, texturaTerreno, matrizModelado) {
         if (this.estaEnRango(posHeli)) {
-            this.dibujar(texturaTerreno);
+            this.dibujar(texturaTerreno, matrizModelado);
         }
     }
 
@@ -139,7 +145,7 @@ class Parcela {
         return (x >= xInicio && x < xFinal) && (z >= zInicio && z < zFinal);
     }
 
-    dibujar(textura) {
+    dibujar(textura, matrizModelado) {
 
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -152,7 +158,7 @@ class Parcela {
         gl.bindTexture(gl.TEXTURE_2D, textura.gl_tex);
         gl.uniform1i(Parcela.TERRAIN_SHADER.unifs.sampler, 0);
 
-        gl.uniformMatrix4fv(Parcela.TERRAIN_SHADER.unifs.modelMatrix, false, this.modelMatrix);
+        gl.uniformMatrix4fv(Parcela.TERRAIN_SHADER.unifs.modelMatrix, false, matrizModelado);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 

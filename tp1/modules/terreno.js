@@ -10,10 +10,7 @@ class Terreno {
 
         this.parcelas = this._crearParcelas(long_lado_total);
 
-        this.matrizModelado = mat4.create();
-        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(0, -200, 0));
-        mat4.scale(this.matrizModelado, this.matrizModelado, vec3.fromValues(1, Terreno.ESCALA, 1));
-
+        this._crearMatrizModeladoEn(0, -200, 0);
     }
 
     _crearParcelas(long_lado_total) {
@@ -41,10 +38,15 @@ class Terreno {
         var deltaX = Math.floor(posHeli.x / this.long_lado_total) * this.long_lado_total;
         var deltaZ = Math.floor(posHeli.z / this.long_lado_total) * this.long_lado_total;
 
+
+        this._crearMatrizModeladoEn(deltaX, -200, deltaZ);
+    }
+
+
+    _crearMatrizModeladoEn(x, y, z) {
         this.matrizModelado = mat4.create();
 
-        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(deltaX, 0, deltaZ));
-        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(0, -200, 0));
+        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(x, y, z));
         mat4.scale(this.matrizModelado, this.matrizModelado, vec3.fromValues(1, Terreno.ESCALA, 1));
     }
 }

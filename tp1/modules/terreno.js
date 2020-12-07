@@ -5,6 +5,7 @@ class Terreno {
     constructor(long_lado_total) {
         this.textura = new Textura("img/heightmap.png");
 
+        this.long_lado_total = long_lado_total;
         Terreno.ESCALA = long_lado_total / 30;
 
         this.parcelas = this._crearParcelas(long_lado_total);
@@ -29,7 +30,7 @@ class Terreno {
     }
 
     dibujar(posHeli) {
-        // this._reposicionarMatrizModelado(posHeli);
+        this._reposicionarMatrizModelado(posHeli);
 
         for (const parcela of this.parcelas) {
             parcela.dibujarSiEnRango(posHeli, this.textura, this.matrizModelado);
@@ -37,7 +38,14 @@ class Terreno {
     }
 
     _reposicionarMatrizModelado(posHeli) {
+        var deltaX = Math.floor(posHeli.x / this.long_lado_total) * this.long_lado_total;
+        var deltaZ = Math.floor(posHeli.z / this.long_lado_total) * this.long_lado_total;
 
+        this.matrizModelado = mat4.create();
+
+        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(deltaX, 0, deltaZ));
+        mat4.translate(this.matrizModelado, this.matrizModelado, vec3.fromValues(0, -200, 0));
+        mat4.scale(this.matrizModelado, this.matrizModelado, vec3.fromValues(1, Terreno.ESCALA, 1));
     }
 }
 
@@ -133,8 +141,8 @@ class Parcela {
     }
 
     estaEnRango(posHeli) {
-        var x = posHeli.x;
-        var z = posHeli.z;
+        var x = posHeli.x % (this.long_parcela * this.cant_parcelas);
+        var z = posHeli.z % (this.long_parcela * this.cant_parcelas);
 
         var xInicio = (this.posX - 1) * this.long_parcela;
         var xFinal = (this.posX + 2) * this.long_parcela;

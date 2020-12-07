@@ -1,15 +1,19 @@
 class Terreno {
-    static CANTIDAD_PARCELAS = 10;
+    static CANTIDAD_PARCELAS = 3;
     static ESCALA = null;
-    static ALTURA_TERRENO = -100;
+    static ALTURA_TERRENO = -50;
 
     constructor(long_lado_total) {
-        this.textura = new Textura("img/heightmap-aconcaguav2.png");
+        this.textura = new Textura("img/heightmap-aconcagua.png");
 
         this.long_lado_total = long_lado_total;
         Terreno.ESCALA = long_lado_total / 30;
 
         this.parcelas = this._crearParcelas(long_lado_total);
+
+        var parcelaCentro = Math.floor(Terreno.CANTIDAD_PARCELAS * Terreno.CANTIDAD_PARCELAS / 2);
+        var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 47.22, long_lado_total/2);
+        this.parcelas[parcelaCentro].agregarObjeto(base);
 
         this._crearMatrizModeladoEn(0, Terreno.ALTURA_TERRENO, 0);
     }
@@ -67,6 +71,8 @@ class Parcela {
         this.webgl_texture_coord_buffer = null;
         this.webgl_position_buffer = null;
         this.webgl_texture_coord_buffer = null;
+
+        this.objetos3Dextra = [];
 
         this.crearBuffers();
     }
@@ -157,6 +163,14 @@ class Parcela {
 
     dibujar(textura, matrizModelado) {
 
+        Planeta.MAIN_SHADER.setearParametros();
+        var identidad = mat4.create();
+        for (const objeto of this.objetos3Dextra) {
+            objeto.dibujar(identidad);
+        }
+
+        Planeta.TERRAIN_SHADER.setearParametros();
+
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(Parcela.TERRAIN_SHADER.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -182,6 +196,8 @@ class Parcela {
 
     };
 
-
+    agregarObjeto(obj) {
+        this.objetos3Dextra.push(obj);
+    }
 
 }

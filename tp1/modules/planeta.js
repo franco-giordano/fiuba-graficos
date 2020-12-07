@@ -21,10 +21,7 @@ class Planeta {
     }
 
     dibujar(matrizModelado) {
-        Planeta.MAIN_SHADER.setearParametros();
         this.heli.dibujar(matrizModelado);
-
-        Planeta.TERRAIN_SHADER.setearParametros();
         this.terreno.dibujar(this.heli.posicion);
     }
 

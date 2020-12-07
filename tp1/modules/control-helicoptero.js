@@ -1,4 +1,4 @@
-function ControlHelicoptero(long_terreno) {
+function ControlHelicoptero(long_terreno, yInicial) {
 
     $body = $("body");
 
@@ -27,14 +27,14 @@ function ControlHelicoptero(long_terreno) {
     //var umbral=0.01;
 
     var speed = 0;
-    var altitude = minAltitude;
+    var altitude = yInicial;
     var angle = 0;
 
     var pitch = 0;
     var roll = 0;
 
     var angleTarget = 0;
-    var altitudeTarget = minAltitude;
+    var altitudeTarget = yInicial;
     var speedTarget = 0;
 
     var NUMERO_CAMARA = 1;

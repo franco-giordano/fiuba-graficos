@@ -5,15 +5,15 @@ class Helicoptero {
         this.cola = new ColaHelicoptero();
         this.brazos = new ColeccionDeBrazosHelice();
 
-        var cabina = ComponenteHelicoptero.crearCabina();
-        var trenAterrizaje = ComponenteHelicoptero.crearTrenAterrizaje();
+        var cabina = ComponenteFactory.crearCabina();
+        var trenAterrizaje = ComponenteFactory.crearTrenAterrizaje();
         trenAterrizaje.setPosicion(0, -3, 0);
 
         this.contenedor = new Objeto3D();
         this.contenedor.agregarHijos(cabina, this.brazos, trenAterrizaje, this.cola);
 
         // spawnear heli en el centro del terreno
-        this.controlHelicoptero = new ControlHelicoptero(long_terreno);
+        this.controlHelicoptero = new ControlHelicoptero(long_terreno, 50);
     }
 
     actualizar() {
@@ -35,6 +35,7 @@ class Helicoptero {
     }
 
     dibujar(matriz) {
+        Planeta.MAIN_SHADER.setearParametros();
         this.contenedor.dibujar(matriz);
     }
 
@@ -189,8 +190,8 @@ class Helice extends IDibujable {
 
         this.conjunto = new Objeto3D();
 
-        this.helice = ComponenteHelicoptero.crearHelice();
-        this.protector = ComponenteHelicoptero.crearProtector();
+        this.helice = ComponenteFactory.crearHelice();
+        this.protector = ComponenteFactory.crearProtector();
 
         this.conjunto.escalarPor(0.5, 0.5, 0.5);
         this.conjunto.setPosicion(0, 0, 6);
@@ -226,7 +227,7 @@ class ColaHelicoptero extends IDibujable {
         super();
         this.contenedor = new Objeto3D();
 
-        this.soporteCola = ComponenteHelicoptero.crearSoporteCola();
+        this.soporteCola = ComponenteFactory.crearSoporteCola();
         this.aletas = new ColeccionAletas();
 
         this.contenedor.agregarHijos(this.soporteCola, this.aletas);
@@ -246,8 +247,8 @@ class ColeccionAletas extends IDibujable {
     constructor() {
         super();
 
-        this.aletaI = ComponenteHelicoptero.crearAletaCola();
-        this.aletaD = ComponenteHelicoptero.crearAletaCola();
+        this.aletaI = ComponenteFactory.crearAletaCola();
+        this.aletaD = ComponenteFactory.crearAletaCola();
         this.aletaI.setPosicion(-7.7, 1.65, -1.7);
         this.aletaD.setPosicion(-7.7, 1.65, 1.7);
     }

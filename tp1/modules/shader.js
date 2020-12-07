@@ -30,6 +30,10 @@ class ShaderProgram {
     }
 
     setearParametros() {
+        // if (gl.CURRENT_PROGRAM == this.program) {
+        //     return;
+        // }
+
         gl.useProgram(this.program);
         
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);

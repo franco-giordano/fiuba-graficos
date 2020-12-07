@@ -1,4 +1,4 @@
-class ComponenteHelicoptero {
+class ComponenteFactory {
 
     static crearCabina() {
 
@@ -45,7 +45,7 @@ class ComponenteHelicoptero {
 
         var aletas = [];
         for (let i = 0; i < 12; i += 1) {
-            aletas[i] = ComponenteHelicoptero.crearAleta();
+            aletas[i] = ComponenteFactory.crearAleta();
             aletas[i].setRotacion(1, 2 * Math.PI / 10 * i, 0);
         }
 
@@ -156,11 +156,11 @@ class ComponenteHelicoptero {
         var tren = new Objeto3D();
         const SCALE = 0.4;
 
-        var trenDer = ComponenteHelicoptero.crearUnSoporteAterrizaje();
+        var trenDer = ComponenteFactory.crearUnSoporteAterrizaje();
         trenDer.setPosicion(0, 0, -2);
         trenDer.setEscala(SCALE, SCALE, SCALE);
 
-        var trenIzq = ComponenteHelicoptero.crearUnSoporteAterrizaje();
+        var trenIzq = ComponenteFactory.crearUnSoporteAterrizaje();
         trenIzq.setPosicion(0, 0, 2);
         trenIzq.setRotacion(0, Math.PI, 0);
         trenIzq.setEscala(SCALE, SCALE, SCALE);
@@ -315,9 +315,9 @@ class ComponenteHelicoptero {
 
         var todo = new Objeto3D();
 
-        var conectorI = ComponenteHelicoptero.crearConectorCola();
+        var conectorI = ComponenteFactory.crearConectorCola();
         conectorI.setPosicion(0, 0, -1);
-        var conectorD = ComponenteHelicoptero.crearConectorCola()
+        var conectorD = ComponenteFactory.crearConectorCola()
         conectorD.setPosicion(0, 0, 1);
 
         var controlF = [
@@ -343,5 +343,28 @@ class ComponenteHelicoptero {
         todo.agregarHijos(union, conectorD, conectorI);
 
         return todo;
+    }
+
+    static crearBaseDespegue(posX, posY, posZ) {
+        var controlF = [
+            [0, -1, 0],
+            [1.25, -1, 0],
+            [1.25, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [-1.25, 1, 0],
+            [-1.25, -1, 0],
+            [0, -1, 0]
+        ];
+        var controlR = [
+            [0, 0, 0],
+            [0, -2.5, 0],
+        ];
+
+        var base = new Objeto3D(crearGeometria(controlF, controlR, true, 70, 30), ColorRGB.GRIS_OSCURO);
+        base.setPosicion(posX, posY, posZ-2);
+        base.setEscala(20,20,20);
+
+        return base;
     }
 }

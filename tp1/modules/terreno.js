@@ -1,16 +1,17 @@
 class Terreno {
     static CANTIDAD_PARCELAS = 10;
-    static ESCALA = 1;
+    static ESCALA = null;
+    static ALTURA_TERRENO = -100;
 
     constructor(long_lado_total) {
-        this.textura = new Textura("img/heightmap.png");
+        this.textura = new Textura("img/heightmap-aconcaguav2.png");
 
         this.long_lado_total = long_lado_total;
         Terreno.ESCALA = long_lado_total / 30;
 
         this.parcelas = this._crearParcelas(long_lado_total);
 
-        this._crearMatrizModeladoEn(0, -200, 0);
+        this._crearMatrizModeladoEn(0, Terreno.ALTURA_TERRENO, 0);
     }
 
     _crearParcelas(long_lado_total) {
@@ -38,8 +39,7 @@ class Terreno {
         var deltaX = Math.floor(posHeli.x / this.long_lado_total) * this.long_lado_total;
         var deltaZ = Math.floor(posHeli.z / this.long_lado_total) * this.long_lado_total;
 
-
-        this._crearMatrizModeladoEn(deltaX, -200, deltaZ);
+        this._crearMatrizModeladoEn(deltaX, Terreno.ALTURA_TERRENO, deltaZ);
     }
 
 

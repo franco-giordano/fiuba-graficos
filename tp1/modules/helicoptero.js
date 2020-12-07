@@ -1,25 +1,28 @@
 class Helicoptero {
     constructor(long_terreno) {
 
-        var cabina = ComponenteHelicoptero.crearCabina();
+        // me guardo estos dos componentes porque tienen interaccion especial
+        this.cola = new ColaHelicoptero();
         this.brazos = new ColeccionDeBrazosHelice();
+
+        var cabina = ComponenteHelicoptero.crearCabina();
         var trenAterrizaje = ComponenteHelicoptero.crearTrenAterrizaje();
         trenAterrizaje.setPosicion(0, -3, 0);
-        var cola = ComponenteHelicoptero.crearCola();
 
         this.contenedor = new Objeto3D();
-        this.contenedor.agregarHijos(cabina, this.brazos, trenAterrizaje, cola);
+        this.contenedor.agregarHijos(cabina, this.brazos, trenAterrizaje, this.cola);
 
         // spawnear heli en el centro del terreno
         this.controlHelicoptero = new ControlHelicoptero(long_terreno);
     }
 
     actualizar() {
-        var [ numeroCamara, brazosRetraidos ] =  this.controlHelicoptero.update();
+        var [numeroCamara, brazosRetraidos] = this.controlHelicoptero.update();
 
         var p = this.posicion;
 
         this.brazos.actualizar(p, brazosRetraidos);
+        this.cola.actualizar(p);
 
         this.mover(p.x, p.y, p.z);
         this.rotar(p.roll, p.yaw, p.pitch);
@@ -140,16 +143,16 @@ class BrazoHelice extends IDibujable {
 
     actualizar(posHeli, brazoRetraido) {
         this.estaRetraido = brazoRetraido;
-        
+
         this.helice.actualizar(posHeli, this.estaRetraido);
-        
+
         this._actualizarRetraccion();
     }
 
     _actualizarRetraccion() {
 
         var delta = this.estaRetraido ? -BrazoHelice.VELOCIDAD_RETRACCION : BrazoHelice.VELOCIDAD_RETRACCION;
-        if (this.anguloRotacion+delta <= 0 && this.anguloRotacion+delta >= -Math.PI / 2) {
+        if (this.anguloRotacion + delta <= 0 && this.anguloRotacion + delta >= -Math.PI / 2) {
             this.anguloRotacion += delta;
         }
 
@@ -202,11 +205,11 @@ class Helice extends IDibujable {
             this.helice.setRotacion(0, 0, 0);
 
             this.conjunto.setRotacionZ(0);
-            
+
             return;
         }
 
-        this.rotacionHelice += Helice.VEL_ROT_HELICE;
+        this.rotacionHelice -= Helice.VEL_ROT_HELICE;
 
         this.helice.setRotacion(0, this.rotacionHelice, 0);
 
@@ -216,7 +219,48 @@ class Helice extends IDibujable {
     dibujar(matrizPadre) {
         this.conjunto.dibujar(matrizPadre);
     }
+}
 
+class ColaHelicoptero extends IDibujable {
+    constructor() {
+        super();
+        this.contenedor = new Objeto3D();
+
+        this.soporteCola = ComponenteHelicoptero.crearSoporteCola();
+        this.aletas = new ColeccionAletas();
+
+        this.contenedor.agregarHijos(this.soporteCola, this.aletas);
+        this.contenedor.setPosicion(-3.5, 0, 0);
+    }
+
+    dibujar(matrizModelado) {
+        this.contenedor.dibujar(matrizModelado);
+    }
+
+    actualizar(posHeli) {
+        this.aletas.actualizar(posHeli);
+    }
+}
+
+class ColeccionAletas extends IDibujable {
+    constructor() {
+        super();
+
+        this.aletaI = ComponenteHelicoptero.crearAletaCola();
+        this.aletaD = ComponenteHelicoptero.crearAletaCola();
+        this.aletaI.setPosicion(-7.7, 1.65, -1.7);
+        this.aletaD.setPosicion(-7.7, 1.65, 1.7);
+    }
+
+    dibujar(matrizModelado) {
+        this.aletaD.dibujar(matrizModelado);
+        this.aletaI.dibujar(matrizModelado);
+    }
+
+    actualizar(posHeli) {
+        this.aletaI.setRotacion(0, posHeli.roll, 0);
+        this.aletaD.setRotacion(0, posHeli.roll, 0);
+    }
 }
 
 class ComponenteHelicoptero {
@@ -258,18 +302,6 @@ class ComponenteHelicoptero {
         ]);
 
         var cabina = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), color);
-
-        // var controlR = [
-        //     [0, 0, -2],
-        //     [0, 0, -1],
-        //     [0, 0, -1],
-        //     [0, 0, 0]
-        // ];
-
-        // var cabinaIzq = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert), color);
-
-        // var cabina = new Objeto3D();
-        // cabina.agregarHijos(cabina, cabinaIzq);
 
         return cabina;
     }
@@ -469,131 +501,50 @@ class ComponenteHelicoptero {
 
         return aleta;
     }
-
-    static crearBrazoHelice() {
-        var brazo = new Objeto3D();
-        var helice = ComponenteHelicoptero.crearHelice();
-        var protector = ComponenteHelicoptero.crearProtector();
-        protector.escalarPor(0.5, 0.5, 0.5);
-        helice.escalarPor(0.5, 0.5, 0.5);
-
-        protector.setPosicion(0, 0, 6);
-        helice.setPosicion(0, 0, 6);
-
-        var controlF = [
-            [0, -1, 0],
-            [1.25, -1, 0],
-            [1.25, 1, 0],
-            [0, 1, 0],
-            [0, 1, 0],
-            [-1.25, 1, 0],
-            [-1.25, -1, 0],
-            [0, -1, 0]
-        ];
-        var controlR = [
-            [-1.5, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [1.5, 0, 0]
-        ];
-        var soporte = new Objeto3D(crearGeometria(controlF, controlR, true), ColorRGB.GRIS_OSCURO);
-        soporte.setEscala(0.7, 0.7, 0.7);
-
-        var controlF = [
-            [0, -1, 0],
-            [1.25, -1, 0],
-            [1.25, 1, 0],
-            [0, 1, 0],
-            [0, 1, 0],
-            [-1.25, 1, 0],
-            [-1.25, -1, 0],
-            [0, -1, 0]
-        ];
-        var controlR = [
-            [0, 0, 0],
-            [0, 0, 1],
-            [0, 0, 1],
-            [0, 0, 6]
-        ];
-
-        // var escalado = {
-        //     inicio: .75,
-        //     fin: 0.4
-        // };
-
-        var escalado = new Escalado([
-            [0, 0.75, 0],
-            [1, 0.4, 0]
-        ]);
-
-        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BLANCO);
-        conector.setEscala(1, .7, .7);
-
-        brazo.agregarHijos(soporte, protector, helice, conector);
-        brazo.setEscala(0.7, 0.7, 0.7);
-
-        return brazo;
-    }
-
-    static crearBrazosHelices() {
-        var brazos = new Objeto3D();
-
-        var brazoFder = ComponenteHelicoptero.crearBrazoHelice()
-        brazoFder.setPosicion(1, 1.15, 1.85);
-
-        var brazoFizq = ComponenteHelicoptero.crearBrazoHelice()
-        brazoFizq.setPosicion(1, 1.15, -1.85);
-        brazoFizq.setRotacion(0, Math.PI, 0);
-
-        var brazoDder = ComponenteHelicoptero.crearBrazoHelice()
-        brazoDder.setPosicion(-2.5, 1.15, 1.85);
-
-        var brazoDizq = ComponenteHelicoptero.crearBrazoHelice()
-        brazoDizq.setPosicion(-2.5, 1.15, -1.85);
-        brazoDizq.setRotacion(0, Math.PI, 0);
-
-        brazos.agregarHijos(brazoFder, brazoFizq, brazoDder, brazoDizq);
-
-        return brazos;
-    }
-
-    static crearCola() {
-        var conectorI = ComponenteHelicoptero.crearConectorCola();
-        conectorI.setPosicion(0, 0, -1);
-        var conectorD = ComponenteHelicoptero.crearConectorCola()
-        conectorD.setPosicion(0, 0, 1);
-
-        var controlF = [
-            [0, -1, 0],
-            [1.25, -1, 0],
-            [1.25, 1, 0],
-            [0, 1, 0],
-            [0, 1, 0],
-            [-1.25, 1, 0],
-            [-1.25, -1, 0],
-            [0, -1, 0]
-        ];
-
-        var controlR = [
-            [0, 0, 2],
-            [0, 0, -2]
-        ];
-
-        var union = new Objeto3D(crearGeometria(controlF, controlR, true, 10, 30), ColorRGB.BEIGE);
-        union.setEscala(.2, .2, 1);
-        union.setPosicion(-7.7, 1.65, 0);
-
-        var cola = new Objeto3D();
-        cola.agregarHijos(conectorI, conectorD, union);
-
-        cola.setPosicion(-3.5, 0, 0);
-
-        return cola;
-
-    }
-
+    
     static crearAletaCola() {
 
+        var controlF = [
+            [0, -1, 0],
+            [5, -1, 0],
+            [0, 0, 0],
+            [5, 1, 0],
+            [0, 1, 0]
+        ];
+
+        var controlR = [
+            [0, 0, .3],
+            [0, 0, -.3]
+        ];
+
+        var aletaS = new Objeto3D(crearGeometria(controlF, controlR, true, 10, 30), ColorRGB.ROJO);
+        aletaS.setRotacion(0, 0, Math.PI / 2);
+        aletaS.setPosicion(-.8, 0, 0);
+
+        var controlF = [
+            [0, -1, 0],
+            [5, -1, 0],
+            [0, 0, 0],
+            [5, 1, 0],
+            [0, 1, 0]
+        ];
+
+        var controlR = [
+            [0, 0, .3],
+            [0, 0, -.3]
+        ];
+
+        var aletaInf = new Objeto3D(crearGeometria(controlF, controlR, true, 10, 30), ColorRGB.ROJO);
+        aletaInf.setRotacion(0, 0, -Math.PI / 2);
+        aletaInf.setPosicion(-.8, 0, 0);
+
+        var aleta = new Objeto3D();
+        aleta.agregarHijos(aletaInf, aletaS);
+        aleta.setEscala(1, 1, 0.25);
+        aleta.setRotacion(0, 0, Math.PI / 10);
+
+
+        return aleta;
     }
 
     static crearConectorCola() {
@@ -623,5 +574,39 @@ class ComponenteHelicoptero {
         conector.setRotacion(0, 0, -Math.PI / 15);
 
         return conector;
+    }
+
+    static crearSoporteCola() {
+
+        var todo = new Objeto3D();
+
+        var conectorI = ComponenteHelicoptero.crearConectorCola();
+        conectorI.setPosicion(0, 0, -1);
+        var conectorD = ComponenteHelicoptero.crearConectorCola()
+        conectorD.setPosicion(0, 0, 1);
+
+        var controlF = [
+            [0, -1, 0],
+            [1.25, -1, 0],
+            [1.25, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [-1.25, 1, 0],
+            [-1.25, -1, 0],
+            [0, -1, 0]
+        ];
+
+        var controlR = [
+            [0, 0, 2],
+            [0, 0, -2]
+        ];
+
+        var union = new Objeto3D(crearGeometria(controlF, controlR, true, 10, 30), ColorRGB.BEIGE);
+        union.setEscala(.2, .2, 1);
+        union.setPosicion(-7.7, 1.65, 0);
+
+        todo.agregarHijos(union, conectorD, conectorI);
+
+        return todo;
     }
 }

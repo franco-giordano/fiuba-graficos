@@ -9,8 +9,6 @@ class Planeta {
 
         this.terreno = new Terreno(LONG_TERRENO);
 
-        // this.mountains = new TexturedSphere("img/heightmap-aconcagua.png", 512);
-
         this.numCamaraActual = 1;
         this.camara = Camara.crearConNumero(this.numCamaraActual);
 
@@ -27,7 +25,6 @@ class Planeta {
         this.heli.dibujar(matrizModelado);
 
         Planeta.TERRAIN_SHADER.setearParametros();
-        // this.mountains.dibujar(Planeta.TERRAIN_SHADER);
         this.terreno.dibujar(this.heli.posicion);
     }
 

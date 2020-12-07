@@ -1,7 +1,8 @@
 <!doctype html>
+
 <head>
     <script src="js/jquery.js"></script>
-    <script src="js/gl-matrix-3.3.0.js"></script>    
+    <script src="js/gl-matrix-3.3.0.js"></script>
     <script src="js/webgl-utils.js"></script>
     <script src="js/dat.gui.js"></script>
     <script src="modules/vector.js"></script>
@@ -9,6 +10,7 @@
     <script src="modules/geometria.js"></script>
     <script src="modules/control-helicoptero.js"></script>
     <script src="modules/obj3d.js"></script>
+    <script src="modules/componente-heli-factory.js"></script>
     <script src="modules/helicoptero.js"></script>
     <script src="modules/camara.js"></script>
     <script src="modules/planeta.js"></script>
@@ -18,45 +20,43 @@
     <script src="modules/terreno.js"></script>
     <script src="modules/main.js"></script>
 
-
-
-<style>
-        html{
+    <style>
+        html {
             height: 100%;
         }
-        body{
+
+        body {
             padding: 0;
             margin: 0;
-            height: 100%;;
+            height: 100%;
+            ;
         }
 
-        #myCanvas{
+        #myCanvas {
             width: 100%;
             height: 100%;
             overflow: hidden;
         }
-
     </style>
 
 </head>
 
 <body>
-           
-    <canvas id="myCanvas" >
+
+    <canvas id="myCanvas">
         Your browser does not support the HTML5 canvas element.
     </canvas>
 
     <script>
-    
-        var $canvas=$("#myCanvas");
-        var aspect=$canvas.width()/$canvas.height();
-        
+        var $canvas = $("#myCanvas");
+        var aspect = $canvas.width() / $canvas.height();
+
         // cuando el documento HTML esta completo, iniciamos la aplicación
-        $(document).ready(function(){
+        $(document).ready(function () {
             main();
         })
-
     </script>
-    
+
 </body>
+
 </html>

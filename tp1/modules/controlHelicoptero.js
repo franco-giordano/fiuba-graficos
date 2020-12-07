@@ -99,6 +99,13 @@ function ControlHelicoptero(long_terreno) {
 
     this.update = function () {
 
+        if (H_ACTIVADA) {
+            // si aprete H, apagar motores
+            xArrow = 0;
+            yArrow = 0;
+            zArrow = 0;
+        }
+
         if (xArrow != 0) {
             speedTarget += xArrow * deltaSpeed;
         } else {
@@ -137,7 +144,7 @@ function ControlHelicoptero(long_terreno) {
         positionZ += +directionZ;
         positionY = altitude;
 
-        return [ NUMERO_CAMARA, H_ACTIVADA ];
+        return [NUMERO_CAMARA, H_ACTIVADA];
     }
 
     this.getPosition = function () {

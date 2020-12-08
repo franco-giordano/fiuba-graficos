@@ -30,9 +30,6 @@ class ShaderProgram {
     }
 
     setearParametros() {
-        // if (gl.CURRENT_PROGRAM == this.program) {
-        //     return;
-        // }
 
         gl.useProgram(this.program);
         

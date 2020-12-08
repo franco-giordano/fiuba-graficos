@@ -6,7 +6,7 @@ class Camara {
         }
     }
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {}
+    generarVista(posHeli) {}
 
     actualizar() {}
 
@@ -39,13 +39,13 @@ class CamaraGiratoria extends Camara {
         this.VELOCIDAD_ANGULAR = 0.009;
     }
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var matrizVista = mat4.create();
 
         // mat4.rotate(matrizVista, matrizVista, this.rotAccum, [0,1,0]);
         var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
-        var ojo = vec3.fromValues(posHeli.x, posHeli.y + alturaCamara, posHeli.z + distanciaCamara);
+        var ojo = vec3.fromValues(posHeli.x, posHeli.y + 2, posHeli.z + 20);
 
         vec3.rotateY(ojo, ojo, centro, this.rotAccum);
 
@@ -73,7 +73,7 @@ class CamaraInteractuableRaton extends Camara {
         this.control = new ControlRaton();
     }
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var posObserver = this.control.obtener_posicion();
 
@@ -173,7 +173,7 @@ function ControlRaton() {
 
 class CamaraLateral extends Camara {
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var matrizVista = mat4.create();
 
@@ -196,7 +196,7 @@ class CamaraLateral extends Camara {
 
 class CamaraTrasera extends Camara {
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var matrizVista = mat4.create();
 
@@ -219,7 +219,7 @@ class CamaraTrasera extends Camara {
 
 class CamaraSuperior extends Camara {
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var matrizVista = mat4.create();
 
@@ -242,7 +242,7 @@ class CamaraSuperior extends Camara {
 
 class CamaraHombro extends Camara {
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var matrizVista = mat4.create();
 
@@ -267,7 +267,7 @@ class CamaraHombro extends Camara {
 
 class CamaraFija extends Camara {
 
-    generarVista(alturaCamara, distanciaCamara, posHeli) {
+    generarVista(posHeli) {
 
         var matrizVista = mat4.create();
 

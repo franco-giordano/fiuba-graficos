@@ -1,14 +1,7 @@
-var modo = "smooth"; // wireframe, smooth, edges
-var time = 0;
-
 var gl;
 var mat4 = glMatrix.mat4;
 var mat3 = glMatrix.mat3;
 var vec3 = glMatrix.vec3;
-
-
-var distanciaCamara = 15;
-var alturaCamara = 2;
 
 var matrizProyeccion = mat4.create();
 var matrizVista = mat4.create();
@@ -42,21 +35,20 @@ function drawScene() {
 
 function tick() {
     requestAnimFrame(tick);
-    time += 1 / 60;
 
     planeta.actualizar();
 
-    matrizVista = planeta.generarVista(alturaCamara, distanciaCamara);
+    matrizVista = planeta.generarVista();
 
     drawScene();
 }
 
 function initMenu() {
-    var gui = new dat.GUI();
-    gui.add(window, "distanciaCamara", 1, 20).step(0.01);
-    gui.add(window, "alturaCamara", -10, 10).step(0.01);
-    // gui.add(window, "velocidadAngular",0, 1).step(0.01);
-    gui.add(window, "modo", ["wireframe", "smooth", "edges"]);
+    // var gui = new dat.GUI();
+    // gui.add(window, "distanciaCamara", 1, 20).step(0.01);
+    // gui.add(window, "alturaCamara", -10, 10).step(0.01);
+    // // gui.add(window, "velocidadAngular",0, 1).step(0.01);
+    // gui.add(window, "modo", ["wireframe", "smooth", "edges"]);
 }
 
 function webGLStart() {

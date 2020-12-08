@@ -25,9 +25,9 @@ class Planeta {
         this.terreno.dibujar(this.heli.posicion);
     }
 
-    generarVista(alturaCamara, distanciaCamara) {
+    generarVista() {
 
-        return this.camara.generarVista(alturaCamara, distanciaCamara, this.heli.posicion);
+        return this.camara.generarVista(this.heli.posicion);
 
     }
 

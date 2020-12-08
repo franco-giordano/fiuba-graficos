@@ -20,6 +20,7 @@ TODO:
     - ~~Cola rota segun orientacion~~
     - ~~Brazos de Helices se retraen/extienden con tecla H para aterrizar~~
 - ~~Pista de despegue/aterrizaje~~
-- Mover pista de despegue con terreno
-- 
-- Superficie revolucion?
+- ~~Mover pista de despegue con terreno~~
+- Pequenio HUD?
+- Performance?
+- Eliminar alturaCamara, distCamara

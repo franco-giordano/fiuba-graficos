@@ -1,5 +1,5 @@
 class Terreno {
-    static CANTIDAD_PARCELAS = 3;
+    static CANTIDAD_PARCELAS = 9;
     static ESCALA = null;
     static ALTURA_TERRENO = -70;
 
@@ -60,7 +60,7 @@ class Terreno {
 
 class Parcela {
 
-    static CANT_BANDAS = 128;
+    static CANT_BANDAS = 64;
     static TERRAIN_SHADER = null;
 
     constructor(numeroX, numeroZ, long_parcela, cant_parcelas) {

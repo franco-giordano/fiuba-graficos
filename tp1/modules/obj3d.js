@@ -44,7 +44,7 @@ class Objeto3D extends IDibujable {
         mat4.scale(this.matrizModelado, this.matrizModelado, this.escala);
     };
 
-    dibujar(matPadre) {
+    async dibujar(matPadre) {
         this.matrizModelado = mat4.create();
         var mat = mat4.create();
         this._actualizarMatrizModelado();

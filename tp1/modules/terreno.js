@@ -167,7 +167,7 @@ class Parcela {
         return (x >= xInicio && x < xFinal) && (z >= zInicio && z < zFinal);
     }
 
-    dibujar(textura, matrizModelado) {
+    async dibujar(textura, matrizModelado) {
 
         Planeta.MAIN_SHADER.setearParametros();
         var identidad = mat4.create();

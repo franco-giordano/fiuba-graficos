@@ -154,6 +154,10 @@ class Parcela {
         var x = posHeli.x % (this.long_parcela * this.cant_parcelas);
         var z = posHeli.z % (this.long_parcela * this.cant_parcelas);
 
+        x = x < 0 ? (this.long_parcela * this.cant_parcelas + x) : x;
+        z = z < 0 ? (this.long_parcela * this.cant_parcelas + z) : z;
+
+
         var xInicio = (this.posX - 1) * this.long_parcela;
         var xFinal = (this.posX + 2) * this.long_parcela;
 

@@ -68,9 +68,12 @@ class ComponenteFactory {
             [0, 1, 0]
         ];
 
-        var ejeSup = new Objeto3D(crearGeometria(controlFsup, controlR, true), ColorRGB.BLANCO);
+        const cant_niveles = 5;
+        const cant_vert = 15;
+
+        var ejeSup = new Objeto3D(crearGeometria(controlFsup, controlR, true, cant_niveles, cant_vert), ColorRGB.BLANCO);
         ejeSup.setEscala(0.7, 1, 0.7);
-        var ejeInf = new Objeto3D(crearGeometria(controlFinf, controlR, true), ColorRGB.BLANCO);
+        var ejeInf = new Objeto3D(crearGeometria(controlFinf, controlR, true, cant_niveles, cant_vert), ColorRGB.BLANCO);
         ejeInf.setEscala(0.7, 1, 0.7);
         var eje = new Objeto3D();
         eje.agregarHijos(ejeSup, ejeInf);
@@ -83,6 +86,9 @@ class ComponenteFactory {
     static crearUnSoporteAterrizaje() {
 
         var unTren = new Objeto3D();
+
+        const cant_niveles = 5;
+        const cant_vert = 15;
 
         var controlF = [
             [0, -1, 0],
@@ -103,7 +109,7 @@ class ComponenteFactory {
             [-27, 2, 0]
         ];
 
-        var base = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.NEGRO);
+        var base = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), ColorRGB.NEGRO);
 
 
         var controlF = [
@@ -122,7 +128,7 @@ class ComponenteFactory {
             [14, 2, 0],
             [14, 20, 0]
         ];
-        var soporteFrente = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.NEGRO);
+        var soporteFrente = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), ColorRGB.NEGRO);
         soporteFrente.setRotacion(Math.PI / 12, 0, 0);
 
         var controlF = [
@@ -141,7 +147,7 @@ class ComponenteFactory {
             [-14, 2, 0],
             [-14, 20, 0]
         ];
-        var soporteDetras = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.NEGRO);
+        var soporteDetras = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), ColorRGB.NEGRO);
         soporteDetras.setRotacion(Math.PI / 12, 0, 0);
 
         soporteFrente.setEscala(0.3, 0.3, 0.3);
@@ -171,6 +177,10 @@ class ComponenteFactory {
     }
 
     static crearProtector() {
+
+        const cant_niveles = 10;
+        const cant_vert = 15;
+
 
         var protector = new Objeto3D();
 
@@ -203,11 +213,11 @@ class ComponenteFactory {
             [0, -5, 0]
         ];
 
-        var protectorSupIzq = new Objeto3D(crearGeometria(controlFsup, controlRIzq), ColorRGB.ROJO);
-        var protectorInfIzq = new Objeto3D(crearGeometria(controlFinf, controlRIzq), ColorRGB.ROJO);
+        var protectorSupIzq = new Objeto3D(crearGeometria(controlFsup, controlRIzq, false, cant_niveles, cant_vert), ColorRGB.ROJO);
+        var protectorInfIzq = new Objeto3D(crearGeometria(controlFinf, controlRIzq, false, cant_niveles, cant_vert), ColorRGB.ROJO);
 
-        var protectorSupDer = new Objeto3D(crearGeometria(controlFsup, controlRDer), ColorRGB.ROJO);
-        var protectorInfDer = new Objeto3D(crearGeometria(controlFinf, controlRDer), ColorRGB.ROJO);
+        var protectorSupDer = new Objeto3D(crearGeometria(controlFsup, controlRDer, false, cant_niveles, cant_vert), ColorRGB.ROJO);
+        var protectorInfDer = new Objeto3D(crearGeometria(controlFinf, controlRDer, false, cant_niveles, cant_vert), ColorRGB.ROJO);
 
         protector.agregarHijos(protectorSupIzq, protectorInfIzq, protectorSupDer, protectorInfDer);
 
@@ -218,6 +228,10 @@ class ComponenteFactory {
     }
 
     static crearAleta() {
+
+        const cant_niveles = 2;
+        const cant_vert = 2;
+
 
         var controlF = [
             [0, -0.5, 0],
@@ -232,7 +246,7 @@ class ComponenteFactory {
             [0, 0, 0]
         ];
 
-        var aleta = new Objeto3D(crearGeometria(controlF, controlR), ColorRGB.GRIS_OSCURO);
+        var aleta = new Objeto3D(crearGeometria(controlF, controlR, false, cant_niveles, cant_vert), ColorRGB.GRIS_OSCURO);
 
         return aleta;
     }
@@ -304,7 +318,7 @@ class ComponenteFactory {
             [1, 0.25, 0]
         ]);
 
-        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BEIGE);
+        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 5, 20, escalado), ColorRGB.BEIGE);
         conector.setEscala(1, 1, .15);
         conector.setRotacion(0, 0, -Math.PI / 15);
 
@@ -336,7 +350,7 @@ class ComponenteFactory {
             [0, 0, -2]
         ];
 
-        var union = new Objeto3D(crearGeometria(controlF, controlR, true, 10, 30), ColorRGB.BEIGE);
+        var union = new Objeto3D(crearGeometria(controlF, controlR, true, 20, 10), ColorRGB.BEIGE);
         union.setEscala(.2, .2, 1);
         union.setPosicion(-7.7, 1.65, 0);
 

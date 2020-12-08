@@ -210,7 +210,7 @@ function generarSuperficie(superficie, filas, columnas) {
     }
 }
 
-function dibujarMalla(mallaDeTriangulos) {
+async function dibujarMalla(mallaDeTriangulos) {
 
     // Se configuran los buffers que alimentaron el pipeline
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_position_buffer);

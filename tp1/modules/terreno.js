@@ -1,20 +1,20 @@
 class Terreno {
     static CANTIDAD_PARCELAS = 3;
     static ESCALA = null;
-    static ALTURA_TERRENO = -50;
+    static ALTURA_TERRENO = -70;
 
     constructor(long_lado_total) {
         this.textura = new Textura("img/heightmap-aconcagua.png");
 
         this.long_lado_total = long_lado_total;
-        Terreno.ESCALA = long_lado_total / 30;
+        Terreno.ESCALA = long_lado_total / 20;
 
         this.parcelas = this._crearParcelas(long_lado_total);
 
         var parcelaCentro = Math.floor(Terreno.CANTIDAD_PARCELAS * Terreno.CANTIDAD_PARCELAS / 2);
 
         //TODO: dibuja la base siempre en 0,0. No soporta terreno infinito
-        var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 47.22, long_lado_total/2);
+        var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 62.22, long_lado_total/2);
         this.parcelas[parcelaCentro].agregarObjeto(base);
 
         this._crearMatrizModeladoEn(0, Terreno.ALTURA_TERRENO, 0);

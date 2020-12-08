@@ -13,7 +13,7 @@ class Helicoptero {
         this.contenedor.agregarHijos(cabina, this.brazos, trenAterrizaje, this.cola);
 
         // spawnear heli en el centro del terreno
-        this.controlHelicoptero = new ControlHelicoptero(long_terreno, 50);
+        this.controlHelicoptero = new ControlHelicoptero(long_terreno, 65);
     }
 
     actualizar() {

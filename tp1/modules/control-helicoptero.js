@@ -20,7 +20,7 @@ function ControlHelicoptero(long_terreno, yInicial) {
     var maxAltitude = 300;
     var minAltitude = 0;
 
-    var positionX = long_terreno / 2;
+    var positionX = long_terreno / 2 + 5;
     var positionY = 0;
     var positionZ = long_terreno / 2;
 
@@ -104,8 +104,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
             xArrow = 0;
             yArrow = 0;
             zArrow = 0;
-
-            altitudeTarget = positionY-10;
         }
 
         if (xArrow != 0) {

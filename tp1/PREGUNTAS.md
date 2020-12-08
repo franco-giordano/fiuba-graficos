@@ -13,11 +13,13 @@ TODO:
 - ~~Parcelas~~
 - Completar heli:
     - ~~variar escala en bezier, tapas~~
-    - terminar cola
+    - ~~terminar cola~~
 - Movimiento componentes heli al volar:
-    - Helices girando
-    - Helices orientan para delante/atras
-    - Cola rota segun orientacion
-    - Brazos de Helices se retraen/extienden con tecla H para aterrizar
-- Pista de despegue/aterrizaje
+    - ~~Helices girando~~
+    - ~~Helices orientan para delante/atras~~
+    - ~~Cola rota segun orientacion~~
+    - ~~Brazos de Helices se retraen/extienden con tecla H para aterrizar~~
+- ~~Pista de despegue/aterrizaje~~
+- Mover pista de despegue con terreno
+- 
 - Superficie revolucion?

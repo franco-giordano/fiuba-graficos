@@ -167,6 +167,8 @@ class Parcela {
 
         Planeta.MAIN_SHADER.setearParametros();
         var identidad = mat4.create();
+        mat4.scale(identidad, matrizModelado, [1, 1 / Terreno.ESCALA, 1]);
+        mat4.translate(identidad, identidad, [0, -Terreno.ALTURA_TERRENO, 0]);
         for (const objeto of this.objetos3Dextra) {
             objeto.dibujar(identidad);
         }

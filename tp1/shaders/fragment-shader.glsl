@@ -1,4 +1,4 @@
-precision highp float;
+precision mediump float;
 
 varying vec3 vNormal;
 varying vec3 vWorldPosition;

@@ -1,4 +1,4 @@
-precision highp float;
+precision mediump float;
 
 // atributos del vértice (cada uno se alimenta de un ARRAY_BUFFER distinto)
 

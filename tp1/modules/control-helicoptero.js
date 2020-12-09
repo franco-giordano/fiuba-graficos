@@ -39,7 +39,25 @@ function ControlHelicoptero(long_terreno, yInicial) {
 
     var NUMERO_CAMARA = 1;
     var H_ACTIVADA = false;
+    var TUTO_ACTIVADO = false;
+    var HUD = $("#hud");
 
+    const BIENVENIDA = "<i>Presiona M para mostrar ayuda y creditos.</i>"
+    HUD.html(BIENVENIDA);
+
+    const TUTORIAL = `
+    <b>Controles:</b><br>
+    Usa WASD para desplazarte, E y Q para ascender/descender, y H para retraer/extender las helices. <br>
+    Presiona los numeros 1 a 7 para probar las distintas camaras disponibles. La camara 1 responde a arrastres del raton. <br>
+    <br>
+    <b>Comportamiento:</b><br>
+    - El Helicoptero no respondera a los controles cuando tenga las helices retraidas ('motores apagados').<br>
+    - El terreno se repite infinitamente en todas las direcciones, cargando un area visible en forma de parcelas ('chunks').<br>
+    <br>
+    <b>Sobre el Proyecto:</b><br>
+    Realizado por Franco Giordano para la materia Sistemas Graficos, FIUBA, 2C2020.<br>
+    <br>
+    `
 
     $("body").keydown(function (e) {
         switch (e.key) {
@@ -63,6 +81,10 @@ function ControlHelicoptero(long_terreno, yInicial) {
                 break;
             case "h":
                 H_ACTIVADA = !H_ACTIVADA;
+                break;
+            case "m":
+                TUTO_ACTIVADO = !TUTO_ACTIVADO;
+                toggleTutorial();
                 break;
             case "1":
             case "2":
@@ -179,27 +201,12 @@ function ControlHelicoptero(long_terreno, yInicial) {
         return speed;
     }
 
-    this.getInfo = function () {
+    var toggleTutorial = function () {
 
-        var out = "";
-
-        out += " speedTarget: " + speedTarget.toFixed(2) + "<br>";
-        out += " altitudeTarget: " + altitudeTarget.toFixed(2) + "<br>";
-        out += " angleTarget: " + angleTarget.toFixed(2) + "<br><br>";
-
-        out += " speed: " + speed.toFixed(2) + "<br>";
-        out += " altitude: " + altitude.toFixed(2) + "<br><br>";
-
-
-        out += " xArrow: " + xArrow.toFixed(2) + "<br>";
-        out += " yArrow: " + yArrow.toFixed(2) + "<br>";
-        out += " zArrow: " + zArrow.toFixed(2) + "<br><br>";
-
-        out += " yaw: " + angle.toFixed(2) + "<br>";
-        out += " pitch: " + pitch.toFixed(2) + "<br>";
-        out += " roll: " + roll.toFixed(2) + "<br>";
-
-
-        return out;
+        if (TUTO_ACTIVADO) {
+            HUD.html(TUTORIAL);
+        } else {
+            HUD.html(BIENVENIDA);
+        }
     }
 }

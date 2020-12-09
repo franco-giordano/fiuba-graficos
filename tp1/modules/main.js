@@ -43,14 +43,6 @@ function tick() {
     drawScene();
 }
 
-function initMenu() {
-    // var gui = new dat.GUI();
-    // gui.add(window, "distanciaCamara", 1, 20).step(0.01);
-    // gui.add(window, "alturaCamara", -10, 10).step(0.01);
-    // // gui.add(window, "velocidadAngular",0, 1).step(0.01);
-    // gui.add(window, "modo", ["wireframe", "smooth", "edges"]);
-}
-
 function webGLStart() {
 
     var canvas = document.getElementById("myCanvas");
@@ -75,7 +67,6 @@ function webGLStart() {
     gl.enable(gl.DEPTH_TEST);
 
     $(window).on("resize", onResize);
-    // initMenu();
     tick();
 }
 

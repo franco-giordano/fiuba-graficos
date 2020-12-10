@@ -42,22 +42,65 @@ function ControlHelicoptero(long_terreno, yInicial) {
     var TUTO_ACTIVADO = false;
     var HUD = $("#hud");
 
+    var JOYSTICK = null;
+
+    // var BOTONES_TOUCH = 'createTouch' in document ? new BotonesTouch() : null;
+
     const BIENVENIDA = "<i>Presiona M para mostrar ayuda y creditos.</i>"
     HUD.html(BIENVENIDA);
 
-    const TUTORIAL = `
-    <b>Controles:</b><br>
+    const TUTORIAL_PC = `
+    <b>Controles en PC:</b><br>
     Usa WASD para desplazarte, E y Q para ascender/descender, y H para retraer/extender las helices. <br>
     Presiona los numeros 1 a 7 para probar las distintas camaras disponibles. La camara 1 responde a arrastres del raton. <br>
     <br>
     <b>Comportamiento:</b><br>
     - El Helicoptero no respondera a los controles cuando tenga las helices retraidas ('motores apagados').<br>
     - El terreno se repite infinitamente en todas las direcciones, cargando un area visible en forma de parcelas ('chunks').<br>
+    - En <b>pantallas tactiles</b> se presentan controles y joysticks virtuales para poder interactuar con la simulacion. <br>
     <br>
     <b>Sobre el Proyecto:</b><br>
     Realizado por Franco Giordano para la materia Sistemas Graficos, FIUBA, 2C2020.<br>
     <br>
     `
+
+    const TUTORIAL_MOBILE = `
+    Controles en Dispositivos Moviles:
+    Usa el joystick izquierdo para desplazarte y el derecho para orientar la primer camara. Presionando en SUBIR y BAJAR podras ascender y descender el helicoptero, y con BRAZOS cambiaras la posicion de las helices. Usando el boton CAMARA podras ir cambiando entre las 7 camaras disponibles. Solo la primer camara respondera a movimientos del joystick derecho.
+    
+    Comportamiento:
+    - El Helicoptero no respondera a los controles cuando tenga las helices retraidas ('motores apagados').
+    - El terreno se repite infinitamente en todas las direcciones, cargando un area visible en forma de parcelas ('chunks').
+    - Solo en pantallas tactiles se presentan estos controles y joysticks virtuales.
+    - Recomendacion: ver la simulacion en orientacion landscape, no vertical.
+    
+    Sobre el Proyecto:
+    Realizado por Franco Giordano para la materia Sistemas Graficos, FIUBA, 2C2020.
+    
+    `
+
+    var enableTouchControlsIfNeeded = function () {
+        var touchable = 'ontouchstart' in window;
+
+        if (!touchable) {
+            $("#subir").hide();
+            $("#bajar").hide();
+            $("#camara").hide();
+            $("#brazos").hide();
+            return;
+        }
+
+        JOYSTICK = new JoyStick('joyMov', {
+            "internalFillColor": "grey",
+            "internalStrokeColor": "black",
+            "externalStrokeColor": "black"
+        });
+
+        $("#hud").removeClass("hud-desktop");
+        $("#hud").addClass("hud-mobile");
+        $("#hud").html("AYUDA");
+
+    }
 
     $("body").keydown(function (e) {
         switch (e.key) {
@@ -118,8 +161,57 @@ function ControlHelicoptero(long_terreno, yInicial) {
         }
     });
 
+    $("#subir").on("touchstart", () => {
+        yArrow = 1;
+        $("#subir").addClass("on");
+    });
+
+    $("#subir").on("touchend", () => {
+        yArrow = 0;
+        $("#subir").removeClass("on");
+    });
+
+    $("#bajar").on("touchstart", () => {
+        yArrow = -1;
+        $("#bajar").addClass("on");
+
+    });
+
+    $("#bajar").on("touchend", () => {
+        yArrow = 0;
+        $("#bajar").removeClass("on");
+    });
+
+    $("#camara").on("touchstart", () => {
+        NUMERO_CAMARA %= 7;
+        NUMERO_CAMARA++;
+        $("#camara").addClass("on");
+    });
+    
+    $("#camara").on("touchend", () => {
+        $("#camara").removeClass("on");
+    });
+
+    $("#hud").on("touchstart", () => {
+        alert(TUTORIAL_MOBILE);
+    });
+    
+    $("#brazos").on("touchstart", () => {
+        H_ACTIVADA = !H_ACTIVADA;
+        $("#brazos").addClass("on");
+    });
+
+    $("#brazos").on("touchend", () => {
+        $("#brazos").removeClass("on");
+    });
+
+    enableTouchControlsIfNeeded();
 
     this.update = function () {
+
+        if (JOYSTICK) {
+            updateJoystick();
+        }
 
         if (H_ACTIVADA) {
             // si aprete H, apagar motores
@@ -156,8 +248,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
         speed += (speedTarget - speed) * speedInertia;
         altitude += (altitudeTarget - altitude) * altitudeInertia;
         angle += (angleTarget - angle) * angleInertia;
-
-
 
         var directionX = Math.cos(-angle) * speed;
         var directionZ = Math.sin(-angle) * speed;
@@ -204,9 +294,14 @@ function ControlHelicoptero(long_terreno, yInicial) {
     var toggleTutorial = function () {
 
         if (TUTO_ACTIVADO) {
-            HUD.html(TUTORIAL);
+            HUD.html(TUTORIAL_PC);
         } else {
             HUD.html(BIENVENIDA);
         }
+    }
+
+    var updateJoystick = function () {
+        zArrow = -JOYSTICK.GetX() / 100;
+        xArrow = JOYSTICK.GetY() / 100;
     }
 }

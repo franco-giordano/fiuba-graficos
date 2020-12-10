@@ -13,7 +13,7 @@ class Camara {
     static crearConNumero(num) {
         switch (num) {
             case 1:
-                return new CamaraInteractuableRaton();
+                return new CamaraInteractuableArrastre();
             case 2:
                 return new CamaraTrasera();
             case 3:
@@ -66,11 +66,12 @@ class CamaraGiratoria extends Camara {
 
 
 
-class CamaraInteractuableRaton extends Camara {
+class CamaraInteractuableArrastre extends Camara {
 
     constructor() {
         super();
-        this.control = new ControlRaton();
+        var touchable = 'ontouchstart' in window
+        this.control = touchable ? new ControlJoystick() : new ControlRaton();
     }
 
     generarVista(posHeli) {
@@ -167,6 +168,90 @@ function ControlRaton() {
 
     }
 
+}
+
+
+const FACTOR_VELOCIDAD = 0.01;
+const RADIO = 20;
+var JOYSTICK_CONTROLLER = null;
+
+class ControlJoystick {
+
+    constructor() {
+        var existe = $("#joyCamara").length;
+
+        if (!existe) {
+            jQuery('<div id="joyCamara" class="joystick" style="right: 0"></div>').appendTo("body");
+            
+            JOYSTICK_CONTROLLER = new JoyStick('joyCamara', {
+                "internalFillColor": "grey",
+                "internalStrokeColor": "black",
+                "externalStrokeColor": "black"
+            });
+        }
+
+        this.joystick = JOYSTICK_CONTROLLER;
+
+        this.TOUCH = {
+            x: 0,
+            y: 0
+        };
+        this.PREV_TOUCH = {
+            x: 0,
+            y: 0
+        };
+
+        this.IS_PRESSING_JOYSTICK = false;
+        this.ALFA = Math.PI / 4;
+        this.BETA = Math.PI / 2;
+
+
+    }
+
+    obtener_posicion() {
+        return {
+            x: RADIO * Math.sin(this.ALFA) * Math.sin(this.BETA),
+            y: RADIO * Math.cos(this.BETA),
+            z: RADIO * Math.cos(this.ALFA) * Math.sin(this.BETA)
+        }
+    };
+
+    actualizar() {
+        this.IS_PRESSING_JOYSTICK = this.joystick.GetX() || this.joystick.GetY();
+        this.TOUCH.x = this.joystick.GetX();
+        this.TOUCH.y = this.joystick.GetY();
+
+        if (!this.IS_PRESSING_JOYSTICK) {
+            return;
+        }
+
+        var deltaX = this.TOUCH.x / 35;
+        var deltaY = -this.TOUCH.y / 35;
+
+        // if (this.PREV_TOUCH.x) {
+        //     deltaX = this.TOUCH.x - this.PREV_TOUCH.x;
+        // }
+        // if (this.PREV_TOUCH.y) {
+        //     deltaY = this.TOUCH.y - this.PREV_TOUCH.y;
+        // }
+
+        // if (Math.abs(this.TOUCH.x) != 100 || Math.abs(this.TOUCH.x) != 100) {
+        //     this.PREV_TOUCH.x = this.TOUCH.x;
+        //     this.PREV_TOUCH.y = this.TOUCH.y;
+        // } else {
+
+
+        this.ALFA = this.ALFA + deltaX * FACTOR_VELOCIDAD;
+        this.BETA = this.BETA + deltaY * FACTOR_VELOCIDAD;
+
+        if (this.BETA <= 0) {
+            this.BETA = 0.001;
+        }
+        if (this.BETA > Math.PI) {
+            this.BETA = Math.PI - 0.001;
+        }
+
+    }
 }
 
 

@@ -87,6 +87,7 @@ function ControlHelicoptero(long_terreno, yInicial) {
             $("#bajar").hide();
             $("#camara").hide();
             $("#brazos").hide();
+            $("#fullscreen").hide();
             return;
         }
 
@@ -99,7 +100,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
         $("#hud").removeClass("hud-desktop");
         $("#hud").addClass("hud-mobile");
         $("#hud").html("AYUDA");
-
     }
 
     $("body").keydown(function (e) {
@@ -187,7 +187,7 @@ function ControlHelicoptero(long_terreno, yInicial) {
         NUMERO_CAMARA++;
         $("#camara").addClass("on");
     });
-    
+
     $("#camara").on("touchend", () => {
         $("#camara").removeClass("on");
     });
@@ -195,7 +195,7 @@ function ControlHelicoptero(long_terreno, yInicial) {
     $("#hud").on("touchstart", () => {
         alert(TUTORIAL_MOBILE);
     });
-    
+
     $("#brazos").on("touchstart", () => {
         H_ACTIVADA = !H_ACTIVADA;
         $("#brazos").addClass("on");
@@ -203,6 +203,19 @@ function ControlHelicoptero(long_terreno, yInicial) {
 
     $("#brazos").on("touchend", () => {
         $("#brazos").removeClass("on");
+    });
+
+    $("#fullscreen").on("touchstart", () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+        $("#fullscreen").addClass("on");
+    });
+
+    $("#fullscreen").on("touchend", () => {
+        $("#fullscreen").removeClass("on");
     });
 
     enableTouchControlsIfNeeded();

@@ -182,7 +182,7 @@ class ControlJoystick {
 
         if (!existe) {
             jQuery('<div id="joyCamara" class="joystick" style="right: 0"></div>').appendTo("body");
-            
+
             JOYSTICK_CONTROLLER = new JoyStick('joyCamara', {
                 "internalFillColor": "grey",
                 "internalStrokeColor": "black",
@@ -205,7 +205,6 @@ class ControlJoystick {
         this.ALFA = Math.PI / 4;
         this.BETA = Math.PI / 2;
 
-
     }
 
     obtener_posicion() {
@@ -227,19 +226,6 @@ class ControlJoystick {
 
         var deltaX = this.TOUCH.x / 35;
         var deltaY = -this.TOUCH.y / 35;
-
-        // if (this.PREV_TOUCH.x) {
-        //     deltaX = this.TOUCH.x - this.PREV_TOUCH.x;
-        // }
-        // if (this.PREV_TOUCH.y) {
-        //     deltaY = this.TOUCH.y - this.PREV_TOUCH.y;
-        // }
-
-        // if (Math.abs(this.TOUCH.x) != 100 || Math.abs(this.TOUCH.x) != 100) {
-        //     this.PREV_TOUCH.x = this.TOUCH.x;
-        //     this.PREV_TOUCH.y = this.TOUCH.y;
-        // } else {
-
 
         this.ALFA = this.ALFA + deltaX * FACTOR_VELOCIDAD;
         this.BETA = this.BETA + deltaY * FACTOR_VELOCIDAD;

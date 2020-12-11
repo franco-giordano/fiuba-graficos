@@ -32,7 +32,7 @@ class ShaderProgram {
     setearParametros() {
 
         gl.useProgram(this.program);
-        
+
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
         gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
     }

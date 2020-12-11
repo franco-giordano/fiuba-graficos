@@ -117,6 +117,8 @@
 
     <div id="hud" class="hud-desktop"></div>
 
+    <!-- controles para mobile -->
+
     <div id="joyMov" class="joystick" style="left: 0"></div>
 
     <div id="subir" class="botonTouch" style="right: 200px">SUBIR</div>
@@ -130,10 +132,8 @@
         var $canvas = $("#myCanvas");
         var aspect = $canvas.width() / $canvas.height();
 
-        // cuando el documento HTML esta completo, iniciamos la aplicación
         $(document).ready(function () {
             $("#hud").html("Iniciando escena...");
-
             main();
         })
     </script>

@@ -6,7 +6,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
     var yArrow = 0;
     var zArrow = 0;
 
-
     var altitudeInertia = 0.01;
     var speedInertia = 1;
     var angleInertia = 0.08;
@@ -23,8 +22,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
     var positionX = long_terreno / 2 + 5;
     var positionY = 0;
     var positionZ = long_terreno / 2;
-
-    //var umbral=0.01;
 
     var speed = 0;
     var altitude = yInicial;
@@ -43,8 +40,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
     var HUD = $("#hud");
 
     var JOYSTICK = null;
-
-    // var BOTONES_TOUCH = 'createTouch' in document ? new BotonesTouch() : null;
 
     const BIENVENIDA = "<i>Presiona M para mostrar ayuda y creditos.</i>"
     HUD.html(BIENVENIDA);
@@ -174,7 +169,6 @@ function ControlHelicoptero(long_terreno, yInicial) {
     $("#bajar").on("touchstart", () => {
         yArrow = -1;
         $("#bajar").addClass("on");
-
     });
 
     $("#bajar").on("touchend", () => {

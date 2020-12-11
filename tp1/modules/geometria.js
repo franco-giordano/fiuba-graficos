@@ -191,12 +191,6 @@ function generarSuperficie(superficie, filas, columnas) {
     webgl_normal_buffer.itemSize = 3;
     webgl_normal_buffer.numItems = normalBuffer.length / 3;
 
-    // webgl_uvs_buffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, webgl_uvs_buffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvBuffer), gl.STATIC_DRAW);
-    // webgl_uvs_buffer.itemSize = 2;
-    // webgl_uvs_buffer.numItems = uvBuffer.length / 2;
-
     webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webgl_index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBuffer), gl.STATIC_DRAW);
@@ -215,9 +209,6 @@ async function dibujarMalla(mallaDeTriangulos) {
     // Se configuran los buffers que alimentaron el pipeline
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_position_buffer);
     gl.vertexAttribPointer(dibujarMalla.MAIN_SHADER.attribs.vertexPos, mallaDeTriangulos.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
-
-    // gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_uvs_buffer);
-    // gl.vertexAttribPointer(dibujarMalla.MAIN_SHADER.textureCoordAttribute, mallaDeTriangulos.webgl_uvs_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_normal_buffer);
     gl.vertexAttribPointer(dibujarMalla.MAIN_SHADER.attribs.normal, mallaDeTriangulos.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);

@@ -58,7 +58,6 @@ function webGLStart() {
 
     Planeta.MAIN_SHADER = MAIN_SHADER_PROGRAM;
     Planeta.TERRAIN_SHADER = TERRAIN_SHADER_PROGRAM;
-    Parcela.TERRAIN_SHADER = TERRAIN_SHADER_PROGRAM;
 
     planeta = new Planeta();
 

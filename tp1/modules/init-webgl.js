@@ -14,9 +14,6 @@ function initGL(canvas) {
         gl = canvas.getContext("webgl");
         gl.canvas.width = $canvas.width();
         gl.canvas.height = $canvas.height();
-
-        // enable UInt32Array types
-        var ext = gl.getExtension('OES_element_index_uint');
     } catch (e) {
         console.error(e);
     }

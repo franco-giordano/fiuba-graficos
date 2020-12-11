@@ -376,8 +376,8 @@ class ComponenteFactory {
         ];
 
         var base = new Objeto3D(crearGeometria(controlF, controlR, true, 70, 30), ColorRGB.GRIS_OSCURO);
-        base.setPosicion(posX, posY, posZ-2);
-        base.setEscala(20,20,20);
+        base.setPosicion(posX, posY, posZ - 2);
+        base.setEscala(20, 20, 20);
 
         return base;
     }

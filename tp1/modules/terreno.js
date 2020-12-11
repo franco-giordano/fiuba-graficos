@@ -180,16 +180,16 @@ class Parcela {
 
         // Se configuran los buffers que alimentaron el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(Parcela.TERRAIN_SHADER.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(Planeta.TERRAIN_SHADER.attribs.vertexPos, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-        gl.vertexAttribPointer(Parcela.TERRAIN_SHADER.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(Planeta.TERRAIN_SHADER.attribs.texCoord, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textura.gl_tex);
-        gl.uniform1i(Parcela.TERRAIN_SHADER.unifs.sampler, 0);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.sampler, 0);
 
-        gl.uniformMatrix4fv(Parcela.TERRAIN_SHADER.unifs.modelMatrix, false, matrizModelado);
+        gl.uniformMatrix4fv(Planeta.TERRAIN_SHADER.unifs.modelMatrix, false, matrizModelado);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 

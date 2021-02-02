@@ -77,10 +77,11 @@ class CamaraInteractuableArrastre extends Camara {
     generarVista(posHeli) {
 
         var posObserver = this.control.obtener_posicion();
+        var scroll = posObserver.scroll;
 
         var matrizVista = mat4.create();
 
-        var ojo = vec3.fromValues(posHeli.x + posObserver.x, posHeli.y + posObserver.y, posHeli.z + posObserver.z);
+        var ojo = vec3.fromValues(posHeli.x + scroll*posObserver.x, posHeli.y + scroll*posObserver.y, posHeli.z + scroll*posObserver.z);
         var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
 
         mat4.lookAt(matrizVista,
@@ -108,6 +109,8 @@ function ControlRaton() {
         y: 0
     };
 
+    var WHEEL_SCROLL = 1;
+
     var IS_MOUSE_DOWN = false;
     var ALFA = Math.PI / 4;
     var BETA = Math.PI / 2;
@@ -130,15 +133,22 @@ function ControlRaton() {
         IS_MOUSE_DOWN = false;
     });
 
+    $('body').on("wheel",function (event) {
+        WHEEL_SCROLL += event.originalEvent.deltaY / 12;
+        WHEEL_SCROLL = Math.max(0.01, Math.min(6, WHEEL_SCROLL));
+    });
+
     this.obtener_posicion = function () {
         return {
             x: RADIO * Math.sin(ALFA) * Math.sin(BETA),
             y: RADIO * Math.cos(BETA),
-            z: RADIO * Math.cos(ALFA) * Math.sin(BETA)
+            z: RADIO * Math.cos(ALFA) * Math.sin(BETA),
+            scroll: WHEEL_SCROLL
         }
     };
 
     this.actualizar = function () {
+
         if (!IS_MOUSE_DOWN) {
             return;
         }
@@ -211,7 +221,8 @@ class ControlJoystick {
         return {
             x: RADIO * Math.sin(this.ALFA) * Math.sin(this.BETA),
             y: RADIO * Math.cos(this.BETA),
-            z: RADIO * Math.cos(this.ALFA) * Math.sin(this.BETA)
+            z: RADIO * Math.cos(this.ALFA) * Math.sin(this.BETA),
+            scroll: 1
         }
     };
 

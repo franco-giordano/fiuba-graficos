@@ -47,7 +47,8 @@ function ControlHelicoptero(long_terreno, yInicial) {
     const TUTORIAL_PC = `
     <b>Controles en PC:</b><br>
     Usa WASD para desplazarte, E y Q para ascender/descender, y H para retraer/extender las helices. <br>
-    Presiona los numeros 1 a 7 para probar las distintas camaras disponibles. La camara 1 responde a arrastres del raton. <br>
+    Presiona los numeros 1 a 7 para probar las distintas camaras disponibles. <br> 
+    La camara 1 responde a arrastres/clicks y desplazamientos con la rueda del raton. <br>
     <br>
     <b>Comportamiento:</b><br>
     - El Helicoptero no respondera a los controles cuando tenga las helices retraidas ('motores apagados').<br>

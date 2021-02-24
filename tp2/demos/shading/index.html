@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script  src="js/three.js"></script>
+    <script  src="js/jquery-1.9.1.js"></script>
+    <script  src="js/controls/OrbitControls.js"></script>
+    <script  src="js/loaders/ColladaLoader.js"></script>    
+    <script  src="js/dat.gui.js"></script>
+    <style>
+
+    body{
+        background-color:grey;
+    }
+
+    #container{
+        display: inline-block;
+        border: 1px solid white;
+    }
+    </style>
+</head>
+<body>
+
+<div id="container">
+
+</div>
+
+<!--  A continuación se define el programa de vértices, que va a modificar la posición de los vértices !-->
+
+<script type="x-shader/x-vertex" id="vertex-Shader">
+
+    varying vec3 color;
+    varying vec2 vUv;
+    varying vec3 vecPos;    
+    varying vec3 vecNormal;    
+
+    uniform float t;
+
+    void main() {
+
+       // posicion en coordenadas de modelado 
+
+       vecPos=position.xyz;
+             
+
+       // normal en coordenadas de modelado
+
+       //vecNormal = normalMatrix * normal;    // NormalMatrix transforma a espacio de camara
+       vecNormal = normal;
+
+       // coordenadas uv
+
+       vUv = uv;  
+
+       gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xyz,1.0);
+       
+    }
+
+</script>
+
+
+<script type="x-shader/x-fragment" id="fragment-Shader">
+
+    precision highp float;
+    varying vec3 color;
+    varying vec2 vUv;
+    varying vec3 vecPos;
+    varying vec3 vecNormal;   
+
+    uniform sampler2D pastoTex;
+    uniform sampler2D piedrasTex;
+    uniform sampler2D tierraTex;
+    uniform sampler2D ruidoTex;
+
+    uniform float h1;
+    uniform float h2;
+    uniform float h3;
+
+    // Perlin Noise						
+						
+    vec3 mod289(vec3 x)
+    {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+    }
+
+    vec4 mod289(vec4 x)
+    {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+    }
+
+    vec4 permute(vec4 x)
+    {
+        return mod289(((x*34.0)+1.0)*x);
+    }
+
+    vec4 taylorInvSqrt(vec4 r)
+    {
+        return 1.79284291400159 - 0.85373472095314 * r;
+    }
+
+    vec3 fade(vec3 t) {
+        return t*t*t*(t*(t*6.0-15.0)+10.0);
+    }
+
+    // Classic Perlin noise
+    float cnoise(vec3 P)
+    {
+        vec3 Pi0 = floor(P); // Integer part for indexing
+        vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+        Pi0 = mod289(Pi0);
+        Pi1 = mod289(Pi1);
+        vec3 Pf0 = fract(P); // Fractional part for interpolation
+        vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+        vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+        vec4 iy = vec4(Pi0.yy, Pi1.yy);
+        vec4 iz0 = Pi0.zzzz;
+        vec4 iz1 = Pi1.zzzz;
+
+        vec4 ixy = permute(permute(ix) + iy);
+        vec4 ixy0 = permute(ixy + iz0);
+        vec4 ixy1 = permute(ixy + iz1);
+
+        vec4 gx0 = ixy0 * (1.0 / 7.0);
+        vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+        gx0 = fract(gx0);
+        vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+        vec4 sz0 = step(gz0, vec4(0.0));
+        gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+        gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+        vec4 gx1 = ixy1 * (1.0 / 7.0);
+        vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+        gx1 = fract(gx1);
+        vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+        vec4 sz1 = step(gz1, vec4(0.0));
+        gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+        gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+        vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+        vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+        vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+        vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+        vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+        vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+        vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+        vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+        vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+        g000 *= norm0.x;
+        g010 *= norm0.y;
+        g100 *= norm0.z;
+        g110 *= norm0.w;
+        vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+        g001 *= norm1.x;
+        g011 *= norm1.y;
+        g101 *= norm1.z;
+        g111 *= norm1.w;
+
+        float n000 = dot(g000, Pf0);
+        float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+        float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+        float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+        float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+        float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+        float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+        float n111 = dot(g111, Pf1);
+
+        vec3 fade_xyz = fade(Pf0);
+        vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+        vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+        float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+        return 2.2 * n_xyz;
+    }
+
+			
+			
+
+
+    void main() {    
+
+       // vector +Z
+       vec3 up=vec3(0.0,0.0,1.0);
+
+       vec3 rojo=vec3(1.0,0.0,1.0);
+       vec3 verde=vec3(0.0,1.0,0.0);
+       vec3 azul=vec3(0.0,0.0,1.0);
+
+       // si upFactor==1 ambos vectores coinciden, si es 0 son ortogonales
+       float upFactor=max(0.0,dot(up,vecNormal));
+
+       // remapeo upFactor para que suba de 0 a 1 entre 0.7 y 0.8 
+
+       // ejemplo de smoothstep: https://thebookofshaders.com/05/?lan=es
+       float a=smoothstep(0.75,0.8,upFactor);                
+       
+       // sampleo las texturas y colores de base
+
+       vec4 piedras=texture2D(piedrasTex, vUv*2.3);
+       vec4 pasto=texture2D(pastoTex, vUv*3.33);
+       vec4 tierra=texture2D(tierraTex, vUv*8.53);
+       vec3 colorNieve=vec3(0.93,0.93,1.0);
+
+       vec3 color=vec3(0.0,0.0,0.0);
+
+       // la nieve se acumula a partir de cierta altura y en las zonas planas
+
+       float agujerosNieve=smoothstep(-1.0,0.2,cnoise(vecPos*1.87))+smoothstep(-1.0,0.3,cnoise(32.23+vecPos*0.21));
+       float mixNieve=min(1.0,smoothstep(h2,h3,vecPos.z)*a*agujerosNieve);
+
+       
+       // ruido perlin para mezclar pasto y tierra
+
+       float noise1=smoothstep(0.0,0.2,cnoise(vecPos*0.17));
+       float mixTierraPasto=noise1*smoothstep(0.0,h2,vecPos.z);
+
+       vec3 colorTerrenoPlano=mix(pasto.xyz,tierra.xyz,mixTierraPasto);
+       vec3 colorTerrenoVertical=piedras.xyz;
+
+       // mezclo colores de terreno segun "verticalidad"
+       
+       vec3 colorTerreno=mix(colorTerrenoVertical,colorTerrenoPlano,a);
+
+       color+=mix(colorTerreno,colorNieve,mixNieve);
+
+       // color difuso
+       gl_FragColor = vec4(color,1.0);	
+
+       // zonas planas y verticales
+       //gl_FragColor = vec4(colorTerreno,1.0);
+
+       //gl_FragColor = vec4(a,1.0-a,0.0,1.0);
+
+       // ver el valor de las normales
+       //gl_FragColor = vec4(0.5+0.5*vecNormal,1.0);
+
+       //gl_FragColor=vec4(mixTierraPasto,0.0,0.0,1.0);
+
+       // color difuso
+       vec3 lightVec=normalize(vec3(1.0,1.0,1.0));
+       float factorDifuso=max(0.4,dot(vecNormal,lightVec)*1.1);
+
+       gl_FragColor = vec4(color*factorDifuso,1.0);	
+
+
+    }
+
+</script>
+
+<script >
+
+    // https://cpetry.github.io/TextureGenerator-Online/
+
+    var parametros={
+        delta1:4,
+        delta2:9,
+        delta3:12
+    }
+
+    var texturas={
+        "ruido1.jpg":null,
+        "ruido2.jpg":null,
+        "ruido3.jpg":null,
+        "ruido4.jpg":null,
+        "ruido1.jpg":null,
+        "pasto1.jpg":null,
+        "pasto2.jpg":null,
+        "piedras1.jpg":null,
+        "piedras2.jpg":null,
+        "tierra1.jpg":null,
+    }
+
+    var W = 1300,H = 900;
+    var $container = $('#container');
+
+    var renderer = new THREE.WebGLRenderer({preserveDrawingBuffer:false});
+    renderer.setSize(W, H);
+	renderer.sortObjects=false;
+	renderer.autoClear = false;
+	renderer.autoClearDepth = false;
+	renderer.autoClearColor = false;
+	renderer.autoClearSencil = true;
+			 
+    var camera = new THREE.PerspectiveCamera(65,W/H,0.1,100000);
+
+    camera.position.set(50,50,50);
+    camera.lookAt(new THREE.Vector3(0,2,0));
+    var scene = new THREE.Scene();
+
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+    $container.append(renderer.domElement);
+
+
+    manager = new THREE.LoadingManager();
+
+    manager.onProgress = function () {
+        console.log('loading');
+    };
+    manager.onLoad = function () {
+        console.log('loaded');
+    };
+    manager.onError = function () {
+        console.log('there has been an error');
+    };
+
+
+    var tex= new THREE.TextureLoader().load("maps/tierra1.jpg");
+
+    $.each(texturas,function(k,v){
+        console.log("load "+k);
+        var textureLoader= new THREE.TextureLoader(manager);
+        texturas[k]=textureLoader.load('maps/'+k,            
+            function(texture){
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;     
+            }            
+        );   
+
+    })
+
+
+   
+
+    uniforms=THREE.UniformsUtils.merge([THREE.UniformsLib['lights'],uniforms]);
+
+    var uniforms = {
+        t: {type: 'f', value: 0},
+        h1: {type: 'f', value: 0},
+        h2: {type: 'f', value: 0},
+        h3: {type: 'f', value: 0},
+        pastoTex:{type: "t",value:texturas["pasto1.jpg"]},
+        piedrasTex:{type: "t",value:texturas["piedras1.jpg"]},        
+        tierraTex:{type: "t",value:texturas["piedras2.jpg"]}, 
+        ruidoTex:{type: "t",value:texturas["ruido4.jpg"]},
+    };
+
+
+    // http://blog.2pha.com/experimenting-threejs-shaders-and-shadermaterial
+    // https://threejs.org/docs/#Reference/Materials/ShaderMaterial
+
+    var shaderMaterial = new THREE.ShaderMaterial({
+        uniforms:       uniforms,
+        vertexShader:   $('#vertex-Shader').text(),
+        fragmentShader:$('#fragment-Shader').text(),
+        transparent: true,
+        lights:false,
+        side: THREE.DoubleSide
+    });
+
+    var modelo="isla.dae";
+    //var modelo="pozo.dae";
+    //var modelo="costa.dae";
+
+    loader = new THREE.ColladaLoader();
+    
+    loader.load(
+        'modelos/'+modelo,
+        function ( collada ) {
+            mesh=collada.scene.children[0].children[0];
+            mesh.material=shaderMaterial;
+            mesh.rotation.x=-Math.PI/2;
+            scene.add(mesh);
+        }               
+    );
+
+    var gui = new dat.GUI();
+
+    gui.add(parametros, 'delta1',0,20).name("h1").step(0.01);
+    gui.add(parametros, 'delta2',0,20).name("h2").step(0.01);
+    gui.add(parametros, 'delta3',0,20).name("h3").step(0.01);
+    
+
+    scene.add(camera);
+
+    function render()
+    {
+        uniforms.t.value += 0.5;
+        uniforms.h1.value=parametros.delta1;
+        uniforms.h2.value=parametros.delta2;
+        uniforms.h3.value=parametros.delta3
+
+        requestAnimationFrame( render );
+        renderer.render(scene, camera,false,false);
+    }
+
+    render();
+
+</script>
+
+</body>
+</html>

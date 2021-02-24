@@ -1,0 +1,143 @@
+<!doctype html>
+
+<head>
+    <title>TP1 - Franco Giordano</title>
+    <link rel="icon" href="./favicon.png">
+    <meta name="description" content="Trabajo Practico 1 - Sistemas Graficos, FIUBA.">
+
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/gl-matrix-3.3.0.min.js"></script>
+    <script src="lib/webgl-utils.js"></script>
+    <script src="lib/joystick.min.js"></script>
+    <script src="modules/vector.js"></script>
+    <script src="modules/curva-bezier.js"></script>
+    <script src="modules/discretizador.js"></script>
+    <script src="modules/geometria.js"></script>
+    <script src="modules/control-helicoptero.js"></script>
+    <script src="modules/obj3d.js"></script>
+    <script src="modules/componente-factory.js"></script>
+    <script src="modules/helicoptero.js"></script>
+    <script src="modules/camara.js"></script>
+    <script src="modules/planeta.js"></script>
+    <script src="modules/init-webgl.js"></script>
+    <script src="modules/shader.js"></script>
+    <script src="modules/textura.js"></script>
+    <script src="modules/terreno.js"></script>
+    <script src="modules/main.js"></script>
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            ;
+        }
+
+
+        .hud-desktop {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            border: 1px solid white;
+            padding: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            min-height: 0px;
+            min-width: 200px;
+            text-align: left;
+            font-size: 1.23rem;
+        }
+
+        .hud-mobile {
+            position: absolute;
+            margin: auto 40vw;
+            bottom: 25px;
+            left: 0;
+            right: 0;
+            border: 1px solid grey;
+            padding: 2.5vw;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            min-height: 1vw;
+            min-width: 0px;
+            text-align: center;
+            font-size: 1.23rem;
+            border-radius: 15px;
+        }
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .joystick {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .on {
+            background-color: grey !important;
+        }
+
+        .botonTouch {
+            /* width: 100px;
+            height: 100px; */
+            display: flex;
+            position: absolute;
+            bottom: 25px;
+            background: red;
+            user-select: none;
+            border: 1px solid grey;
+            padding: 3vw;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            min-height: 3vw;
+            min-width: 0vw;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.23rem;
+            border-radius: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="myCanvas">
+        Your browser does not support the HTML5 canvas element.
+    </canvas>
+
+    <div id="hud" class="hud-desktop"></div>
+
+    <!-- controles para mobile -->
+
+    <div id="joyMov" class="joystick" style="left: 0"></div>
+
+    <div id="subir" class="botonTouch" style="right: 200px">SUBIR</div>
+    <div id="bajar" class="botonTouch" style="left: 200px">BAJAR</div>
+    <div id="camara" class="botonTouch" style="right: 20px; bottom: 200px; min-height: 0px;">CAMARA</div>
+    <div id="brazos" class="botonTouch" style="left: 20px; bottom: 200px; min-height: 0px;">BRAZOS</div>
+
+    <div id="fullscreen" class="botonTouch" style="top: 0px; bottom: auto; padding: 1vh; min-height: 0">FULLSCREEN</div>
+
+    <script>
+        var $canvas = $("#myCanvas");
+        var aspect = $canvas.width() / $canvas.height();
+
+        $(document).ready(function () {
+            $("#hud").html("Iniciando escena...");
+            main();
+        })
+    </script>
+
+</body>
+
+</html>

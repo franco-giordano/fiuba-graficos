@@ -181,25 +181,19 @@ class ComponenteFactory {
         const cant_niveles = 10;
         const cant_vert = 15;
 
-
         var protector = new Objeto3D();
 
-        var controlFsup = [
-            [-0.7, 0, 0],
-            [-0.7, 5, 0],
-            [-0.7, 4, 0],
-            [0.7, 4, 0],
-            [0.7, 5, 0],
-            [0.7, 0, 0]
+        var controlF = [
+            [0, -1.25, 0],
+            [1, -1.25, 0],
+            [1, 1.25, 0],
+            [0, 1.25, 0],
+            [0, 1.25, 0],
+            [-1, 1.25, 0],
+            [-1, -1.25, 0],
+            [0, -1.25, 0]
         ];
-        var controlFinf = [
-            [0.7, 0, 0],
-            [0.7, -5, 0],
-            [0.7, -4, 0],
-            [-0.7, -4, 0],
-            [-0.7, -5, 0],
-            [-0.7, 0, 0]
-        ];
+
         var controlRIzq = [
             [0, -5, 0],
             [6.25, -5, 0],
@@ -213,16 +207,14 @@ class ComponenteFactory {
             [0, -5, 0]
         ];
 
-        var protectorSupIzq = new Objeto3D(crearGeometria(controlFsup, controlRIzq, false, cant_niveles, cant_vert), ColorRGB.ROJO);
-        var protectorInfIzq = new Objeto3D(crearGeometria(controlFinf, controlRIzq, false, cant_niveles, cant_vert), ColorRGB.ROJO);
+        var protectorIzq = new Objeto3D(crearGeometria(controlF, controlRIzq, false, cant_niveles, cant_vert), ColorRGB.ROJO);
 
-        var protectorSupDer = new Objeto3D(crearGeometria(controlFsup, controlRDer, false, cant_niveles, cant_vert), ColorRGB.ROJO);
-        var protectorInfDer = new Objeto3D(crearGeometria(controlFinf, controlRDer, false, cant_niveles, cant_vert), ColorRGB.ROJO);
+        var protectorDer = new Objeto3D(crearGeometria(controlF, controlRDer, false, cant_niveles, cant_vert), ColorRGB.ROJO);
 
-        protector.agregarHijos(protectorSupIzq, protectorInfIzq, protectorSupDer, protectorInfDer);
+        protector.agregarHijos(protectorIzq, protectorDer);
 
         protector.setRotacion(Math.PI / 2, 0, 0);
-        protector.setEscala(0.7, 0.7, 0.3);
+        protector.setEscala(0.7, 0.7, 1);
 
         return protector;
     }

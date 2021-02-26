@@ -26,7 +26,7 @@ const vec3 VECTOR_NULO = vec3(0.);
 
 // TODO: recibir como varying, propia del material
 // vec3 kd = vec3(1.);
-const vec3 ks = vec3(.75);
+vec3 ks = vec3(.75);
 const float shininness = 20.;
 
 const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.08), VECTOR_NULO, VECTOR_NULO);
@@ -74,6 +74,8 @@ vec3 calcular_una_intensidad(Luz luz, vec3 kd_material, vec3 ks_material, float 
 
 void main(void) {
     vec3 kd = vColor;
+    vec3 ks = vColor + vec3(.15);
+
     
     Luz luces[NUM_LUCES];
     luces[0] = luz_puntual;

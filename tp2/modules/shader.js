@@ -27,6 +27,11 @@ class ShaderProgram {
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "uMMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "uVMatrix");
 
+        this.attribs.texCoord = gl.getAttribLocation(this.program, "aUv");
+        gl.enableVertexAttribArray(this.attribs.texCoord);
+
+        this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
+
     }
 
     setearParametros() {
@@ -50,17 +55,11 @@ class MainProgram extends ShaderProgram {
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
         this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
-
 }
 
 
 class TerrainProgram extends ShaderProgram {
     constructor() {
         super(TERRAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
-
-        this.attribs.texCoord = gl.getAttribLocation(this.program, "aUv");
-        gl.enableVertexAttribArray(this.attribs.texCoord);
-
-        this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
     }
 }

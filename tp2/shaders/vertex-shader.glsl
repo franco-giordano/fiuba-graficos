@@ -4,6 +4,7 @@ precision mediump float;
 
 attribute vec3 aPosition;   //posicion (x,y,z)
 attribute vec3 aNormal;     //vector normal (x,y,z)
+attribute vec2 aUv;         //coordenadas de texture (x,y)  x e y (en este caso) van de 0 a 1
 
 // variables Uniform (son globales a todos los vértices y de solo-lectura)
 
@@ -12,6 +13,9 @@ uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
 uniform mat3 uNMatrix;     // matriz de normales
 uniform vec3 uColor;      //color del modelo
+
+uniform sampler2D uSampler;
+
 
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
 // Es importante remarcar que no hay una relacion 1 a 1 entre un programa de vertices y uno de fragmentos
@@ -24,6 +28,7 @@ varying vec3 vWorldPosition;
 varying vec3 vFromPointToCameraNormalized;
 varying vec3 vNormal;
 varying vec3 vColor;
+varying vec2 vUv;
 
 void main(void) {        
     
@@ -34,5 +39,6 @@ void main(void) {
     vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     vWorldPosition=worldPos.xyz;              
     vNormal=normalize(uNMatrix * aNormal);
-    vColor = uColor;
+    vColor = texture2D(uSampler, vec2(aUv.s, aUv.t)).xyz;
+    vUv = aUv;
 }

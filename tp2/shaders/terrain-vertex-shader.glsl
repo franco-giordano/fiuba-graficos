@@ -23,6 +23,8 @@ varying vec3 vWorldPosition;
 varying vec3 vFromPointToCameraNormalized;
 varying vec3 vNormal;
 varying vec3 vColor;
+varying vec2 vUv;
+
 
 // constantes
 
@@ -35,17 +37,17 @@ void main(void) {
     vec3 position = aPosition;		
     vec2 uv = aUv;
                             
-    vec4 center = texture2D(uSampler, vec2(uv.s, uv.t));                     
-    vec4 masU = texture2D(uSampler, vec2(uv.s+epsilon, uv.t));  
-    vec4 masV = texture2D(uSampler, vec2(uv.s, uv.t+epsilon));  
+    vec4 center = texture2D(uSampler, vec2(uv.s, uv.t));
+    vec4 masU = texture2D(uSampler, vec2(uv.s+epsilon, uv.t));
+    vec4 masV = texture2D(uSampler, vec2(uv.s, uv.t+epsilon));
 
-    vec4 menosU = texture2D(uSampler, vec2(uv.s-epsilon, uv.t));  
-    vec4 menosV = texture2D(uSampler, vec2(uv.s, uv.t-epsilon));  
+    vec4 menosU = texture2D(uSampler, vec2(uv.s-epsilon, uv.t));
+    vec4 menosV = texture2D(uSampler, vec2(uv.s, uv.t-epsilon));
 
     // elevamos la coordenada Y
     position.y+=center.x*amplitud;
 
-    vec4 worldPos = uMMatrix*vec4(position, 1.0);                        
+    vec4 worldPos = uMMatrix*vec4(position, 1.0);
     vec4 viewProd = uVMatrix*worldPos;
     gl_Position = uPMatrix*viewProd;
 
@@ -85,4 +87,5 @@ void main(void) {
     vWorldPosition=worldPos.xyz;
     vNormal=cross(tan1,tan2);
     vColor = vec3(0.39,0.29,0.21);
+    vUv = aUv;
 }

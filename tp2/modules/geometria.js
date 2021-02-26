@@ -79,6 +79,9 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         return normal;
     }
 
+    this.getCoordenadasTextura = function (u, v) {
+        return [u, v];
+    }
 }
 
 
@@ -129,7 +132,7 @@ function generarSuperficie(superficie, filas, columnas) {
 
     positionBuffer = [];
     normalBuffer = [];
-    // uvBuffer = [];
+    uvBuffer = [];
 
     for (var i = 0; i <= filas; i += 1) {
         for (var j = 0; j <= columnas; j += 1) {
@@ -149,6 +152,10 @@ function generarSuperficie(superficie, filas, columnas) {
             normalBuffer.push(nrm[1]);
             normalBuffer.push(nrm[2]);
 
+            var uv = superficie.getCoordenadasTextura(u, v);
+
+            uvBuffer.push(uv[0]);
+            uvBuffer.push(uv[1]);
         }
     }
 
@@ -191,6 +198,12 @@ function generarSuperficie(superficie, filas, columnas) {
     webgl_normal_buffer.itemSize = 3;
     webgl_normal_buffer.numItems = normalBuffer.length / 3;
 
+    webgl_uvs_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, webgl_uvs_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvBuffer), gl.STATIC_DRAW);
+    webgl_uvs_buffer.itemSize = 2;
+    webgl_uvs_buffer.numItems = uvBuffer.length / 2;
+
     webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webgl_index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBuffer), gl.STATIC_DRAW);
@@ -200,6 +213,7 @@ function generarSuperficie(superficie, filas, columnas) {
     return {
         webgl_position_buffer,
         webgl_normal_buffer,
+        webgl_uvs_buffer,
         webgl_index_buffer
     }
 }
@@ -209,6 +223,9 @@ async function dibujarMalla(mallaDeTriangulos) {
     // Se configuran los buffers que alimentaron el pipeline
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_position_buffer);
     gl.vertexAttribPointer(dibujarMalla.MAIN_SHADER.attribs.vertexPos, mallaDeTriangulos.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_uvs_buffer);
+    gl.vertexAttribPointer(dibujarMalla.MAIN_SHADER.attribs.texCoord, mallaDeTriangulos.webgl_uvs_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, mallaDeTriangulos.webgl_normal_buffer);
     gl.vertexAttribPointer(dibujarMalla.MAIN_SHADER.attribs.normal, mallaDeTriangulos.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);

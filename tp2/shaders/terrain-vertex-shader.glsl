@@ -20,9 +20,9 @@ uniform sampler2D uSampler;         // sampler de textura de la tierra
 // del pixel a cada uno de los 3 vértices. Se realiza un promedio ponderado
 
 varying vec3 vWorldPosition;
+varying vec3 vFromPointToCameraNormalized;
 varying vec3 vNormal;
 varying vec3 vColor;
-
 
 // constantes
 
@@ -46,8 +46,8 @@ void main(void) {
     position.y+=center.x*amplitud;
 
     vec4 worldPos = uMMatrix*vec4(position, 1.0);                        
-
-    gl_Position = uPMatrix*uVMatrix*worldPos;
+    vec4 viewProd = uVMatrix*worldPos;
+    gl_Position = uPMatrix*viewProd;
 
     /*
         hay que calcular la normal ya que el valor original es la normal del plano
@@ -80,7 +80,8 @@ void main(void) {
     // calculo el producto vectorial
     vec3 tan1=(gradV1+gradV2)/2.0;
     vec3 tan2=(gradU1+gradU2)/2.0;
-    
+
+    vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     vWorldPosition=worldPos.xyz;
     vNormal=cross(tan1,tan2);
     vColor = vec3(0.39,0.29,0.21);

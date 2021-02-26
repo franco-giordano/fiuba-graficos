@@ -21,15 +21,17 @@ uniform vec3 uColor;      //color del modelo
 // del pixel a cada uno de los 3 vértices. Se realiza un promedio ponderado
 
 varying vec3 vWorldPosition;
+varying vec3 vFromPointToCameraNormalized;
 varying vec3 vNormal;
 varying vec3 vColor;
 
 void main(void) {        
     
     vec4 worldPos = uMMatrix*vec4(aPosition, 1.0);                   
+    vec4 viewProd = uVMatrix*worldPos;
+    gl_Position = uPMatrix*viewProd;
 
-    gl_Position = uPMatrix*uVMatrix*worldPos;
-
+    vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     vWorldPosition=worldPos.xyz;              
     vNormal=normalize(uNMatrix * aNormal);
     vColor = uColor;

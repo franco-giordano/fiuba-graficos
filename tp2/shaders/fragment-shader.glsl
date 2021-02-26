@@ -29,7 +29,7 @@ const vec3 VECTOR_NULO = vec3(0.);
 vec3 ks = vec3(.75);
 const float shininness = 20.;
 
-const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.08), VECTOR_NULO, VECTOR_NULO);
+const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.05), VECTOR_NULO, VECTOR_NULO);
 const Luz luz_puntual = Luz(PUNTUAL, vec3(1.), vec3(0,100.,0), VECTOR_NULO);
 const Luz luz_sol = Luz(DIRECCIONAL, vec3(1.), VECTOR_NULO, vec3(-100.,-100.,-100.));
 

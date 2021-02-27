@@ -61,12 +61,11 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
         if ((indiceV <= 1 || indiceV >= this.cantNiveles - 1) && conTapas) {
             // si es con tapas y estoy en los primeros o ultimos niveles
-            normal = recorrido[1][indiceV].subarray(8, 12); // agarrar solo la tangente, recordar que la matriz es NBT+(0,0,0,1)
-
+            normal = recorrido[1][indiceV].subarray(8, 11).slice(); // agarrar solo la tangente, recordar que la matriz es NBT+(0,0,0,1)
             // una tapa tiene normal como la tngnt, la otra apunta al otro lado
-            // if (indiceV <= 1) {
-            //     normal = vec3.scale(normal, normal, -1);
-            // }
+            if (indiceV <= 1) {
+                vec3.negate(normal, normal);
+            }
         } else {
             var orig = this.getPosicion(u, v);
             deltaU = (u + deltaU >= 1) ? -deltaU : deltaU;

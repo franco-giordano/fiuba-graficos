@@ -22,7 +22,6 @@ uniform sampler2D uSampler;         // sampler de textura de la tierra
 varying vec3 vWorldPosition;
 varying vec3 vFromPointToCameraNormalized;
 varying vec3 vNormal;
-varying vec3 vColor;
 varying vec2 vUv;
 
 
@@ -86,6 +85,5 @@ void main(void) {
     vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     vWorldPosition=worldPos.xyz;
     vNormal=cross(tan1,tan2);
-    vColor = vec3(0.39,0.29,0.21);
     vUv = aUv;
 }

@@ -33,7 +33,7 @@ class Objeto3D extends IDibujable {
         this.escala = vec3.fromValues(1, 1, 1);
         this.hijos = [];
         this.color = colorArray ? colorArray : ColorRGB.AZUL;
-        this.textura = new Textura("assets/textures/agua.jpg");
+        this.textura = new Textura("assets/textures/cabina.png");
     }
 
     // método privado, usa posición, rotación y escala
@@ -54,7 +54,7 @@ class Objeto3D extends IDibujable {
 
         if (this.mallaTriangulos) {
             gl.uniformMatrix4fv(Objeto3D.MODEL_MATRIX_UNIFORM, false, mat);
-            gl.uniform3fv(Objeto3D.COLOR_UNIFORM, this.color);
+            // gl.uniform3fv(Objeto3D.COLOR_UNIFORM, this.color);
 
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.textura.gl_tex);

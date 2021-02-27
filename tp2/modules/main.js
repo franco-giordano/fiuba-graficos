@@ -53,7 +53,7 @@ function webGLStart() {
 
     Objeto3D.MODEL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.modelMatrix;
     Objeto3D.NORMAL_MATRIX_UNIFORM = MAIN_SHADER_PROGRAM.unifs.normalMatrix;
-    Objeto3D.COLOR_UNIFORM = MAIN_SHADER_PROGRAM.unifs.color;
+    // Objeto3D.COLOR_UNIFORM = MAIN_SHADER_PROGRAM.unifs.color;
     dibujarMalla.MAIN_SHADER = MAIN_SHADER_PROGRAM;
 
     Planeta.MAIN_SHADER = MAIN_SHADER_PROGRAM;

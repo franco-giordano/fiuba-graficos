@@ -53,7 +53,7 @@ class MainProgram extends ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.normal);
 
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
-        this.unifs.color = gl.getUniformLocation(this.program, "uColor");
+        // this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
 }
 

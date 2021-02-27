@@ -5,7 +5,7 @@ precision mediump float;
 varying vec3 vNormal;
 varying vec3 vWorldPosition;
 varying vec3 vFromPointToCameraNormalized;
-varying vec3 vColor;
+// varying vec3 vColor;
 varying vec2 vUv;
 
 uniform sampler2D uSampler;
@@ -76,10 +76,9 @@ vec3 calcular_una_intensidad(Luz luz, vec3 kd_material, vec3 ks_material, float 
 }
 
 void main(void) {
-    vec3 kd = vColor;
-    vec3 ks = vColor + vec3(.15);
+    vec3 kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
+    vec3 ks = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
 
-    
     Luz luces[NUM_LUCES];
     luces[0] = luz_puntual;
     luces[1] = luz_sol;
@@ -106,7 +105,5 @@ void main(void) {
         color += calcular_una_intensidad(luces[i], kd, ks, shininness);
     }
 
-    gl_FragColor = texture2D(uSampler, vec2(vUv.s, vUv.t));//vec4(color,1.0);
+    gl_FragColor = vec4(color,1.0);
 }
-
-

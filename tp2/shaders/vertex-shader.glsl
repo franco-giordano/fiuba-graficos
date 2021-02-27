@@ -12,7 +12,6 @@ uniform mat4 uMMatrix;     // matriz de modelado
 uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
 uniform mat3 uNMatrix;     // matriz de normales
-uniform vec3 uColor;      //color del modelo
 
 uniform sampler2D uSampler;
 
@@ -39,6 +38,5 @@ void main(void) {
     vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     vWorldPosition=worldPos.xyz;              
     vNormal=normalize(uNMatrix * aNormal);
-    vColor = texture2D(uSampler, vec2(aUv.s, aUv.t)).xyz;
     vUv = aUv;
 }

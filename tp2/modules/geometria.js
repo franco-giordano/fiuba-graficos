@@ -31,7 +31,7 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
     this.getPosicion = function (u, v) {
 
-        var vectorModelado = vec4.clone(recorrido[0][Math.round(v * this.cantNiveles)].elementos);
+        var vectorModelado = vec4.clone(recorrido[0][(v * this.cantNiveles).toFixed()].elementos);
         // console.log(vectorModelado);
 
         // colapsar ppio y final en el origen si quiero tapas
@@ -39,10 +39,13 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
             return vectorModelado;
         }
 
-        var matrizNormal = recorrido[1][Math.round(v * this.cantNiveles)];
+        var matrizNormal = recorrido[1][(v * this.cantNiveles).toFixed()];
         // console.log(matrizNormal);
 
-        var vec = forma[Math.round(u * this.cantVertices)];
+        var vec = forma[(u * this.cantVertices).toFixed()];
+        // if(v * this.cantNiveles!=(v * this.cantNiveles).toFixed()) {
+        //     console.log(u,v);
+        // }
         var vertice = vec4.clone(Vector.extender3Da4H(vec).elementos);
         // console.log(vertice);
 
@@ -53,12 +56,12 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         return nuevoVertice;
     }
 
-    this.getNormal = function (u, v) {
+    this.getNormal = function (u, v, deltaU, deltaV) {
 
         var orig = this.getPosicion(u, v);
-        var deltaU = (u + this.deltaNorm >= 1) ? -this.deltaNorm : this.deltaNorm;
-        var deltaV = (v + this.deltaNorm >= 1) ? -this.deltaNorm : this.deltaNorm;
-        var delta1 = this.getPosicion(u + deltaU, v);
+        deltaU = (u + deltaU >= 1) ? -deltaU : deltaU;
+        deltaV = (v + deltaV >= 1) ? -deltaV : deltaV;
+        var delta1 = this.getPosicion(u + deltaU, v + deltaV);
         var delta2 = this.getPosicion(u, v + deltaV);
 
         var sup1 = vec3.create();
@@ -66,7 +69,10 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         vec3.sub(sup1, delta1, orig);
         vec3.sub(sup2, delta2, orig);
 
-        // if (vec3.equals(delta1,orig)) console.log(delta1);
+        // if (vec3.equals(delta2,orig) || vec3.equals(delta1,orig)) {
+        //     console.log(deltaU, deltaV, sup1, sup2);
+        //     console.log(delta1, delta2, orig);
+        // }
         var normal = vec3.create();
         vec3.cross(normal, sup2, sup1);
 
@@ -75,7 +81,7 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
             vec3.scale(normal, normal, -1);
         }
 
-
+        vec3.normalize(normal,normal)
         return normal;
     }
 
@@ -146,7 +152,7 @@ function generarSuperficie(superficie, filas, columnas) {
             positionBuffer.push(pos[1]);
             positionBuffer.push(pos[2]);
 
-            var nrm = superficie.getNormal(u, v);
+            var nrm = superficie.getNormal(u, v, 1 / columnas, 1 / filas);
 
             normalBuffer.push(nrm[0]);
             normalBuffer.push(nrm[1]);

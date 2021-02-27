@@ -8,6 +8,7 @@ varying vec3 vFromPointToCameraNormalized;
 // varying vec3 vColor;
 varying vec2 vUv;
 
+uniform vec3 uColor;
 uniform sampler2D uSampler;
 uniform float uShininess;
 
@@ -76,8 +77,17 @@ vec3 calcular_una_intensidad(Luz luz, vec3 kd_material, vec3 ks_material, float 
 }
 
 void main(void) {
-    vec3 kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
-    vec3 ks = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
+    vec3 kd;
+    vec3 ks;
+    
+    if (uColor != vec3(0.,0.,0.)) {
+        kd = uColor;
+        ks = vec3(.25);
+    } else {
+        kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
+        ks = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
+    }
+
 
     Luz luces[NUM_LUCES];
     luces[0] = luz_puntual;

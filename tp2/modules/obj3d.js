@@ -1,12 +1,13 @@
 const ColorRGB = {
-    ROJO: [1, 0, 0],
-    AZUL: [0, 0, 1],
-    VERDE: [0, 1, 0],
-    BLANCO: [1, 1, 1],
-    GRIS_CLARO: [.8, .8, .8],
-    GRIS_OSCURO: [.5, .5, .5],
-    BEIGE: [204 / 256, 185 / 256, 171 / 256],
-    NEGRO: [0, 0, 0]
+    ROJO: new ColorLiso([1, 0, 0]),
+    AZUL: new ColorLiso([0, 0, 1]),
+    VIOLETA: new ColorLiso([0, 1, 1]),
+    VERDE: new ColorLiso([0, 1, 0]),
+    BLANCO: new ColorLiso([1, 1, 1]),
+    GRIS_CLARO: new ColorLiso([.8, .8, .8]),
+    GRIS_OSCURO: new ColorLiso([.5, .5, .5]),
+    BEIGE: new ColorLiso([204 / 256, 185 / 256, 171 / 256]),
+    NEGRO: new ColorLiso([0.01, 0.01, 0.01])
 };
 
 
@@ -22,7 +23,7 @@ class Objeto3D extends IDibujable {
     static COLOR_UNIFORM = null;
     static NORMAL_MATRIX_UNIFORM = null;
 
-    constructor(bufferWebGL, colorArray) {
+    constructor(bufferWebGL, imaterial = undefined) {
         super();
         this.mallaTriangulos = bufferWebGL;
         this.matrizModelado = mat4.create();
@@ -32,9 +33,8 @@ class Objeto3D extends IDibujable {
         this.rotZ = 0;
         this.escala = vec3.fromValues(1, 1, 1);
         this.hijos = [];
-        this.color = colorArray ? colorArray : ColorRGB.AZUL;
-        // this.textura = new Textura("assets/textures/agua.jpg");
-        this.material = new Material("assets/textures/agua.jpg", 10.);
+        // this.color = colorArray ? colorArray : ColorRGB.AZUL;
+        this.material = imaterial ? imaterial : ColorRGB.VIOLETA;
     }
 
     // método privado, usa posición, rotación y escala

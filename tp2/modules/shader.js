@@ -33,6 +33,7 @@ class ShaderProgram {
         this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
 
         this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
+        this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
 
     setearParametros() {

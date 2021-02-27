@@ -5,7 +5,7 @@ class ComponenteFactory {
         const cant_niveles = 7;
         const cant_vert = 30;
 
-        var color = ColorRGB.BEIGE;
+        // var color = ColorRGB.BEIGE;
 
         var controlF = [
             [4, 1.5, 0],
@@ -36,7 +36,7 @@ class ComponenteFactory {
             [1, 1.35, 0]
         ]);
 
-        var cabina = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), color);
+        var cabina = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), MaterialTexturado.CABINA_HELI());
 
         return cabina;
     }

@@ -13,7 +13,7 @@ uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
 uniform mat3 uNMatrix;     // matriz de normales
 
-uniform sampler2D uSampler;
+// uniform sampler2D uSampler;      No lo usa para nada aca
 
 
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
@@ -26,7 +26,6 @@ uniform sampler2D uSampler;
 varying vec3 vWorldPosition;
 varying vec3 vFromPointToCameraNormalized;
 varying vec3 vNormal;
-varying vec3 vColor;
 varying vec2 vUv;
 
 void main(void) {        

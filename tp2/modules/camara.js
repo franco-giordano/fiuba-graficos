@@ -134,7 +134,7 @@ function ControlRaton() {
     });
 
     $('body').on("wheel",function (event) {
-        var mi_delta = window.chrome ? 200 : 12
+        var mi_delta = window.chrome ? 400 : 12;
         WHEEL_SCROLL += event.originalEvent.deltaY / mi_delta;
         WHEEL_SCROLL = Math.max(0.01, Math.min(6, WHEEL_SCROLL));
     });

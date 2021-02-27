@@ -189,6 +189,8 @@ class Parcela {
         gl.bindTexture(gl.TEXTURE_2D, textura.gl_tex);
         gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.sampler, 0);
 
+        gl.uniform1f(Planeta.TERRAIN_SHADER.unifs.shininess, 10000.);
+
         gl.uniformMatrix4fv(Planeta.TERRAIN_SHADER.unifs.modelMatrix, false, matrizModelado);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);

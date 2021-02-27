@@ -9,6 +9,7 @@ varying vec3 vFromPointToCameraNormalized;
 varying vec2 vUv;
 
 uniform sampler2D uSampler;
+uniform float uShininess;
 
 // DEFINICIONES PARA LUCES
 
@@ -30,7 +31,6 @@ const vec3 VECTOR_NULO = vec3(0.);
 // TODO: recibir como varying, propia del material
 // vec3 kd = vec3(1.);
 vec3 ks = vec3(.75);
-const float shininness = 20.;
 
 const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.05), VECTOR_NULO, VECTOR_NULO);
 const Luz luz_puntual = Luz(PUNTUAL, vec3(1.), vec3(0,100.,0), VECTOR_NULO);
@@ -102,7 +102,7 @@ void main(void) {
     vec3 color = vec3(0.);
 
     for (int i=0; i < NUM_LUCES; i++) {
-        color += calcular_una_intensidad(luces[i], kd, ks, shininness);
+        color += calcular_una_intensidad(luces[i], kd, ks, uShininess);
     }
 
     gl_FragColor = vec4(color,1.0);

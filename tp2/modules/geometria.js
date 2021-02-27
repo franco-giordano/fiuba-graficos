@@ -10,7 +10,7 @@ function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT
 
     var supp = new SuperficieDiscretizada(controlF, controlR, cantNiveles, cantVertices, escalado);
     var superficie3D = new SuperficieBarrido(supp.forma, supp.recorrido, conTapas);
-    return generarSuperficie(superficie3D, cantNiveles, cantVertices);
+    return generarSuperficie(superficie3D);
 
 }
 
@@ -108,6 +108,23 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         return mapa;
     }
 
+    this._extenderSuperficieSiConTapas = function(recorrido) {
+
+        if (!conTapas) {
+            return;
+        }
+
+        recorrido[0].splice( 0, 0, recorrido[0][0] );
+        recorrido[0].splice( recorrido[0].length-1, 0, recorrido[0][recorrido[0].length-1] );
+        
+        recorrido[1].splice( 0, 0, recorrido[1][0] );
+        recorrido[1].splice( recorrido[1].length-1, 0, recorrido[1][recorrido[1].length-1] );
+
+        this.cantNiveles = recorrido[0].length - 1;
+        this.cantVertices = forma.length - 1;
+    }
+
+    this._extenderSuperficieSiConTapas(recorrido);
     this.mapaLongitudesU = this._obtenerMapaLongitudes(forma);
     this.mapaLongitudesV = this._obtenerMapaLongitudes(recorrido[0], true);
 
@@ -157,7 +174,10 @@ function Esfera(radio) {
 }
 
 
-function generarSuperficie(superficie, filas, columnas) {
+function generarSuperficie(superficie) {
+
+    var filas = superficie.cantNiveles;
+    var columnas = superficie.cantVertices;
 
     positionBuffer = [];
     normalBuffer = [];

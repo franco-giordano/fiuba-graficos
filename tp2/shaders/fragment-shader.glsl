@@ -33,8 +33,8 @@ const vec3 VECTOR_NULO = vec3(0.);
 // vec3 kd = vec3(1.);
 vec3 ks = vec3(.75);
 
-const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.05), VECTOR_NULO, VECTOR_NULO);
-const Luz luz_puntual = Luz(PUNTUAL, vec3(1.), vec3(0,100.,0), VECTOR_NULO);
+const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.025), VECTOR_NULO, VECTOR_NULO);
+const Luz luz_puntual = Luz(PUNTUAL, vec3(.5), vec3(0,100.,0), VECTOR_NULO);
 const Luz luz_sol = Luz(DIRECCIONAL, vec3(1.), VECTOR_NULO, vec3(-100.,-100.,-100.));
 
 const int NUM_LUCES = 2;
@@ -82,7 +82,7 @@ void main(void) {
     
     if (uColor != vec3(0.,0.,0.)) {
         kd = uColor;
-        ks = vec3(.25);
+        ks = uColor + vec3(.4);
     } else {
         kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
         ks = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz + vec3(.15);

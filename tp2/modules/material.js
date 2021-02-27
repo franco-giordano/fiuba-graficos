@@ -29,7 +29,7 @@ class MaterialTexturado extends IMaterial {
 
 
 class ColorLiso extends IMaterial {
-    constructor(color, shininess = 1.) {
+    constructor(color, shininess = 20.) {
         super();
         this.color = color ? color : [0, 1, 1];
         this.shininess = shininess;

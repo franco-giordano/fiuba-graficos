@@ -1,6 +1,10 @@
 class ShaderProgram {
     constructor(vertexSrc, fragmentSrc) {
         var vertexShader = buildShader(gl, vertexSrc, "vertex");
+
+        // agregar utils a frag shader
+        fragmentSrc = UTILS_SHADER_SRC + fragmentSrc;
+        console.log(fragmentSrc)
         var fragmentShader = buildShader(gl, fragmentSrc, "fragment");
 
         this.program = gl.createProgram();
@@ -62,6 +66,6 @@ class MainProgram extends ShaderProgram {
 
 class TerrainProgram extends ShaderProgram {
     constructor() {
-        super(TERRAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
+        super(TERRAIN_VRTXSHADER_SRC, TERRAIN_FRAGMENT_SHADER_SRC);
     }
 }

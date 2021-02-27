@@ -1,12 +1,16 @@
 const vertexShaderFile = "vertex-shader.glsl";
-const terrainVertexShaderFile = "terrain-vertex-shader.glsl";
 const fragmentShaderFile = "fragment-shader.glsl";
+const terrainVertexShaderFile = "terrain-vertex-shader.glsl";
+const terrainFragmentShaderFile = "terrain-fragment-shader.glsl";
+const utilsShaderFile = "utils.glsl";
+
 
 
 var MAIN_VRTXSHADER_SRC;
-var TERRAIN_VRTXSHADER_SRC;
 var FRAGMENT_SHADER_SRC;
-
+var TERRAIN_VRTXSHADER_SRC;
+var TERRAIN_FRAGMENT_SHADER_SRC;
+var UTILS_SHADER_SRC;
 
 function initGL(canvas) {
 
@@ -32,7 +36,7 @@ function getShaderSource(url) {
 
 function loadShaders(onDone) {
 
-    $.when(loadVS(), loadTerrainVS(), loadFS()).done(function (res1, res2, res3) {
+    $.when(loadVS(), loadTerrainVS(), loadFS(), loadTerrainFS(), loadUtils()).done(function (...res) {
         //this code is executed when all ajax calls are done     
         onDone();
     });
@@ -60,6 +64,24 @@ function loadShaders(onDone) {
             url: "shaders/" + fragmentShaderFile,
             success: function (result) {
                 FRAGMENT_SHADER_SRC = result;
+            }
+        });
+    }
+
+    function loadTerrainFS() {
+        return $.ajax({
+            url: "shaders/" + terrainFragmentShaderFile,
+            success: function (result) {
+                TERRAIN_FRAGMENT_SHADER_SRC = result;
+            }
+        });
+    }
+
+    function loadUtils() {
+        return $.ajax({
+            url: "shaders/" + utilsShaderFile,
+            success: function (result) {
+                UTILS_SHADER_SRC = result;
             }
         });
     }

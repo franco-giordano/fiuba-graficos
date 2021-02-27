@@ -10,7 +10,7 @@ attribute vec2 aUv;         //coordenadas de texture (x,y)  x e y (en este caso)
 uniform mat4 uMMatrix;     // matriz de modelado
 uniform mat4 uVMatrix;     // matriz de vista
 uniform mat4 uPMatrix;     // matriz de proyección
-uniform sampler2D uSampler;         // sampler de textura de la tierra
+uniform sampler2D uSamplerHeightmap;         // sampler de textura de la tierra
 
 // variables varying (comunican valores entre el vertex-shader y el fragment-shader)
 // Es importante remarcar que no hay una relacion 1 a 1 entre un programa de vertices y uno de fragmentos
@@ -36,12 +36,12 @@ void main(void) {
     vec3 position = aPosition;		
     vec2 uv = aUv;
                             
-    vec4 center = texture2D(uSampler, vec2(uv.s, uv.t));
-    vec4 masU = texture2D(uSampler, vec2(uv.s+epsilon, uv.t));
-    vec4 masV = texture2D(uSampler, vec2(uv.s, uv.t+epsilon));
+    vec4 center = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t));
+    vec4 masU = texture2D(uSamplerHeightmap, vec2(uv.s+epsilon, uv.t));
+    vec4 masV = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t+epsilon));
 
-    vec4 menosU = texture2D(uSampler, vec2(uv.s-epsilon, uv.t));
-    vec4 menosV = texture2D(uSampler, vec2(uv.s, uv.t-epsilon));
+    vec4 menosU = texture2D(uSamplerHeightmap, vec2(uv.s-epsilon, uv.t));
+    vec4 menosV = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t-epsilon));
 
     // elevamos la coordenada Y
     position.y+=center.x*amplitud;

@@ -187,7 +187,7 @@ class Parcela {
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textura.gl_tex);
-        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.sampler, 0);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerHeightmap, 0);
 
         gl.uniform1f(Planeta.TERRAIN_SHADER.unifs.shininess, 10000.);
 

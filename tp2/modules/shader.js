@@ -4,7 +4,6 @@ class ShaderProgram {
 
         // agregar utils a frag shader
         fragmentSrc = UTILS_SHADER_SRC + fragmentSrc;
-        console.log(fragmentSrc)
         var fragmentShader = buildShader(gl, fragmentSrc, "fragment");
 
         this.program = gl.createProgram();
@@ -34,8 +33,6 @@ class ShaderProgram {
         this.attribs.texCoord = gl.getAttribLocation(this.program, "aUv");
         gl.enableVertexAttribArray(this.attribs.texCoord);
 
-        this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
-
         this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
         this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
@@ -59,7 +56,9 @@ class MainProgram extends ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.normal);
 
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
-        // this.unifs.color = gl.getUniformLocation(this.program, "uColor");
+        this.unifs.color = gl.getUniformLocation(this.program, "uColor");
+        this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
+
     }
 }
 
@@ -67,5 +66,21 @@ class MainProgram extends ShaderProgram {
 class TerrainProgram extends ShaderProgram {
     constructor() {
         super(TERRAIN_VRTXSHADER_SRC, TERRAIN_FRAGMENT_SHADER_SRC);
+
+        this.unifs.samplerHeightmap = gl.getUniformLocation(this.program, "uSamplerHeightmap");
+        this.unifs.samplerPasto = gl.getUniformLocation(this.program, "uSamplerPasto");
+        this.texturaPasto = new Textura("assets/textures/pasto.jpg");
+    }
+    
+    setearParametros() {
+        
+        gl.useProgram(this.program);
+
+        gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
+        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
+        
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaPasto.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerPasto, 1);
     }
 }

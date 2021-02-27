@@ -9,7 +9,8 @@ precision mediump float;
 varying vec2 vUv;
 
 uniform vec3 uColor;
-uniform sampler2D uSampler;
+uniform sampler2D uSamplerHeightmap;
+uniform sampler2D uSamplerPasto;
 uniform float uShininess;
 
 void main(void) {
@@ -20,8 +21,8 @@ void main(void) {
         kd = uColor;
         ks = uColor + vec3(.4);
     } else {
-        kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
-        ks = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
+        kd = texture2D(uSamplerHeightmap, vec2(vUv.t, vUv.s)).xyz;
+        ks = texture2D(uSamplerHeightmap, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
     }
 
 
@@ -35,5 +36,5 @@ void main(void) {
         color += calcular_una_intensidad(luces[i], kd, ks, uShininess);
     }
 
-    gl_FragColor = vec4(vNormal,1.0);
+    gl_FragColor = vec4(texture2D(uSamplerPasto, vec2(vUv.s, vUv.t)).xyz,1.0);
 }

@@ -126,6 +126,8 @@ function ControlRaton() {
     });
 
     $('body').mousedown(function (event) {
+        PREV_MOUSE.x = MOUSE.x;
+        PREV_MOUSE.y = MOUSE.y;
         IS_MOUSE_DOWN = true;
     });
 

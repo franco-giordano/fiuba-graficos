@@ -15,10 +15,10 @@ class ComponenteFactory {
         ];
         
         var controlR = [
-            [0, 0, -2.25],
+            [0, 0, -1.75],
             [0, 0, -1],
             [0, 0, 1],
-            [0, 0, 2.25]
+            [0, 0, 1.75]
         ];
         
         var escalado = new Escalado([
@@ -313,7 +313,7 @@ class ComponenteFactory {
             [1, 0.25, 0]
         ]);
 
-        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 5, 20, escalado), ColorRGB.BEIGE);
+        var conector = new Objeto3D(crearGeometria(controlF, controlR, true, 5, 20, escalado), ColorRGB.BEIGE);
         conector.setEscala(1, 1, .15);
         conector.setRotacion(0, 0, -Math.PI / 15);
 
@@ -341,8 +341,8 @@ class ComponenteFactory {
         ];
 
         var controlR = [
-            [0, 0, 2],
-            [0, 0, -2]
+            [0, 0, 1.85],
+            [0, 0, -1.85]
         ];
 
         var union = new Objeto3D(crearGeometria(controlF, controlR, true, 20, 10), ColorRGB.BEIGE);

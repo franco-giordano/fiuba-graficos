@@ -55,39 +55,68 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
     this.getNormal = function (u, v, deltaU, deltaV) {
 
-        var orig = this.getPosicion(u, v);
-        deltaU = (u + deltaU >= 1) ? -deltaU : deltaU;
-        deltaV = (v + deltaV >= 1) ? -deltaV : deltaV;
-        var delta1 = this.getPosicion(u + deltaU, v + deltaV);
-        var delta2 = this.getPosicion(u, v + deltaV);
-
-        var sup1 = vec3.create();
-        var sup2 = vec3.create();
-        vec3.sub(sup1, delta1, orig);
-        vec3.sub(sup2, delta2, orig);
-
-        // if (vec3.equals(delta2,orig) || vec3.equals(delta1,orig)) {
-        //     console.log(deltaU, deltaV, sup1, sup2);
-        //     console.log(delta1, delta2, orig);
-        // }
         var normal = vec3.create();
-        vec3.cross(normal, sup2, sup1);
 
-        // cambia el sentido si movi algun delta en negativo
-        if ((deltaU < 0 && deltaV > 0) || (deltaU > 0 && deltaV < 0)) {
-            vec3.scale(normal, normal, -1);
+        var indiceV = (v * this.cantNiveles).toFixed();
+
+        if ((indiceV <= 1 || indiceV >= this.cantNiveles - 1) && conTapas) {
+            // si es con tapas y estoy en los primeros o ultimos niveles
+            normal = recorrido[1][indiceV].subarray(8, 12); // agarrar solo la tangente, recordar que la matriz es NBT+(0,0,0,1)
+
+            // una tapa tiene normal como la tngnt, la otra apunta al otro lado
+            // if (indiceV <= 1) {
+            //     normal = vec3.scale(normal, normal, -1);
+            // }
+        } else {
+            var orig = this.getPosicion(u, v);
+            deltaU = (u + deltaU >= 1) ? -deltaU : deltaU;
+            deltaV = (v + deltaV >= 1) ? -deltaV : deltaV;
+
+            // si es conTapas y estoy en el antepenultimo nivel, no puedo usar un delta que pase a la tapa
+            deltaV = (conTapas && indiceV == this.cantNiveles - 2) ? -deltaV : deltaV;
+
+            var delta1 = this.getPosicion(u + deltaU, v + deltaV);
+            var delta2 = this.getPosicion(u, v + deltaV);
+
+            var sup1 = vec3.create();
+            var sup2 = vec3.create();
+            vec3.sub(sup1, delta1, orig);
+            vec3.sub(sup2, delta2, orig);
+
+            // if (vec3.equals(delta2,orig) || vec3.equals(delta1,orig)) {
+            //     console.log(deltaU, deltaV, sup1, sup2);
+            //     console.log(delta1, delta2, orig);
+            // }
+            vec3.cross(normal, sup2, sup1);
+
+            // cambia el sentido si movi algun delta en negativo
+            if ((deltaU < 0 && deltaV > 0) || (deltaU > 0 && deltaV < 0)) {
+                vec3.scale(normal, normal, -1);
+            }
         }
 
-        vec3.normalize(normal,normal)
+        vec3.normalize(normal, normal);
         return normal;
     }
 
     this.getCoordenadasTextura = function (u, v) {
+
+        var indiceV = (v * this.cantNiveles).toFixed();
+
+        if ((indiceV <= 1 || indiceV >= this.cantNiveles - 1) && conTapas) {
+            // si es con tapas y estoy en los primeros o ultimos niveles
+            if (v == 0 || v == 1) {
+                return [1, 1];
+            }
+
+            return [u, 0];
+        }
+
         var totalU = this.mapaLongitudesU.total;
         var proporcionU = this.mapaLongitudesU[(u * this.cantVertices).toFixed()] / totalU;
 
         var totalV = this.mapaLongitudesV.total;
-        var proporcionV = this.mapaLongitudesV[(v * this.cantNiveles).toFixed()] / totalV;
+        var proporcionV = this.mapaLongitudesV[indiceV] / totalV;
 
         return [proporcionU, proporcionV];
     }
@@ -97,9 +126,9 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         var distAccum = 0;
 
         for (let i = 0; i < arrayVectores.length; i++) {
-            var idxAnterior =  i==0 ? 0 : (i - 1) % arrayVectores.length;
+            var idxAnterior = i == 0 ? 0 : (i - 1) % arrayVectores.length;
             distAccum += vecs3D ? Vector.distancia3D(arrayVectores[i], arrayVectores[idxAnterior]) : Vector.distancia2D(arrayVectores[i], arrayVectores[idxAnterior]);
-            
+
             mapa[i] = distAccum;
         }
 
@@ -108,17 +137,47 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         return mapa;
     }
 
-    this._extenderSuperficieSiConTapas = function(recorrido) {
+    this._obtenerMapaTapas = function (forma) {
+        var mapa = {};
+        var xAccum = 0;
+        var yAccum = 0;
+
+        for (let i = 0; i < forma.length; i++) {
+            xAccum += arrayVectores[i].elementos[0];
+            yAccum += arrayVectores[i].elementos[1];
+
+            // mapa[i] = distAccum;
+        }
+
+        var promX = xAccum / forma.length;
+        var promY = yAccum / forma.length;
+
+        // mapa["total"] = distAccum;
+
+        return mapa;
+    }
+
+    this._extenderSuperficieSiConTapas = function (recorrido) {
 
         if (!conTapas) {
             return;
         }
 
-        recorrido[0].splice( 0, 0, recorrido[0][0] );
-        recorrido[0].splice( recorrido[0].length-1, 0, recorrido[0][recorrido[0].length-1] );
-        
-        recorrido[1].splice( 0, 0, recorrido[1][0] );
-        recorrido[1].splice( recorrido[1].length-1, 0, recorrido[1][recorrido[1].length-1] );
+        // duplicar extremos del recorrido, en posicion y matrix NBT
+
+        recorrido[0].splice(0, 0, recorrido[0][0]);
+        recorrido[0].splice(0, 0, recorrido[0][0]);
+        recorrido[0].splice(recorrido[0].length - 1, 0, recorrido[0][recorrido[0].length - 1]);
+        recorrido[0].splice(recorrido[0].length - 1, 0, recorrido[0][recorrido[0].length - 1]);
+
+        recorrido[1].splice(0, 0, recorrido[1][0]);
+        recorrido[1].splice(0, 0, recorrido[1][0]);
+        recorrido[1].splice(recorrido[1].length - 1, 0, recorrido[1][recorrido[1].length - 1]);
+        recorrido[1].splice(recorrido[1].length - 1, 0, recorrido[1][recorrido[1].length - 1]);
+
+        // // centrar cierre en promedio de forma, no en eje de recorrido
+
+        // recorrido[0][0] = ;
 
         this.cantNiveles = recorrido[0].length - 1;
         this.cantVertices = forma.length - 1;

@@ -19,7 +19,7 @@ class MaterialTexturado extends IMaterial {
     }
 
     static CABINA_HELI() {
-        return new MaterialTexturado("assets/textures/cabina.png", 20.);
+        return new MaterialTexturado("assets/textures/uv.jpg", 20.);
     }
 
     static HELIPAD() {

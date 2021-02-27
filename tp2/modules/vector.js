@@ -34,4 +34,28 @@ class Vector {
         norm = norm == 0 ? 1 : norm; // TODO: ???????????????????????????
         return new Vector([x / norm, y / norm, z / norm]);
     }
+
+    static distancia2D(vecA, vecB) {
+        assert(vecA.elementos.length == 3);
+        assert(vecA.elementos.length == 3);
+        assert(vecA.elementos[2] == 0);
+        assert(vecB.elementos[2] == 0);
+        var x = vecA.elementos[0] - vecB.elementos[0];
+        var y = vecA.elementos[1] - vecB.elementos[1];
+        
+        return Math.sqrt([x, y].flatMap(x => Math.pow(x, 2)).reduce((a, b) => a + b, 0));
+    }
+
+    static distancia3D(vecA, vecB) {
+        assert(vecA.elementos.length == 4);
+        assert(vecA.elementos.length == 4);
+        assert(vecA.elementos[3] == 1);
+        assert(vecB.elementos[3] == 1);
+
+        var x = vecA.elementos[0] - vecB.elementos[0];
+        var y = vecA.elementos[1] - vecB.elementos[1];
+        var z = vecA.elementos[2] - vecB.elementos[2];
+        
+        return Math.sqrt([x, y, z].flatMap(x => Math.pow(x, 2)).reduce((a, b) => a + b, 0));
+    }
 }

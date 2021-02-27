@@ -26,9 +26,6 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     this.cantNiveles = recorrido[0].length - 1;
     this.cantVertices = forma.length - 1;
 
-    // peor precision si tengo pocas dimensiones, sino aproxima mal
-    this.deltaNorm = (this.cantNiveles < 40 || this.cantVertices < 40) ? 0.1 : 0.01;
-
     this.getPosicion = function (u, v) {
 
         var vectorModelado = vec4.clone(recorrido[0][(v * this.cantNiveles).toFixed()].elementos);
@@ -86,8 +83,34 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     }
 
     this.getCoordenadasTextura = function (u, v) {
-        return [u, v];
+        var totalU = this.mapaLongitudesU.total;
+        var proporcionU = this.mapaLongitudesU[(u * this.cantVertices).toFixed()] / totalU;
+
+        var totalV = this.mapaLongitudesV.total;
+        var proporcionV = this.mapaLongitudesV[(v * this.cantNiveles).toFixed()] / totalV;
+
+        return [proporcionU, proporcionV];
     }
+
+    this._obtenerMapaLongitudes = function (arrayVectores, vecs3D = false) {
+        var mapa = {};
+        var distAccum = 0;
+
+        for (let i = 0; i < arrayVectores.length; i++) {
+            var idxAnterior =  i==0 ? 0 : (i - 1) % arrayVectores.length;
+            distAccum += vecs3D ? Vector.distancia3D(arrayVectores[i], arrayVectores[idxAnterior]) : Vector.distancia2D(arrayVectores[i], arrayVectores[idxAnterior]);
+            
+            mapa[i] = distAccum;
+        }
+
+        mapa["total"] = distAccum;
+
+        return mapa;
+    }
+
+    this.mapaLongitudesU = this._obtenerMapaLongitudes(forma);
+    this.mapaLongitudesV = this._obtenerMapaLongitudes(recorrido[0], true);
+
 }
 
 

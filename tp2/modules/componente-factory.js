@@ -13,30 +13,33 @@ class ComponenteFactory {
             [-4, 1.5, 0],
             [-4, -1.5, 0]
         ];
-
-        controlF.push(
-            [-4, -1.5, 0],
-            [-4, -1.5, 0],
-            [-4, -1.5, 0],
-            [1, -1.5, 0],
-            [4, -1.5, 0],
-            [4, 1.5, 0]
-        );
-
+        
         var controlR = [
             [0, 0, -2.25],
             [0, 0, -1],
             [0, 0, 1],
             [0, 0, 2.25]
         ];
-
+        
         var escalado = new Escalado([
             [0, 1.35, 0],
             [0.5, 1.7, 0],
             [1, 1.35, 0]
         ]);
-
-        var cabina = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), MaterialTexturado.CABINA_HELI());
+        var cabinaSup = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), MaterialTexturado.CABINA_HELI());
+        
+        var controlF = [
+            [-4, -1.5, 0],
+            [-4, -1.5, 0],
+            [-4, -1.5, 0],
+            [1, -1.5, 0],
+            [4, -1.5, 0],
+            [4, 1.5, 0]
+        ];    
+        
+        var cabinaInf  = new Objeto3D(crearGeometria(controlF, controlR, true, cant_niveles, cant_vert, escalado), MaterialTexturado.CABINA_HELI());
+        var cabina = new Objeto3D();
+        cabina.agregarHijos(cabinaInf, cabinaSup);
 
         return cabina;
     }

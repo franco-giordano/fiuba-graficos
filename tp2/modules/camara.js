@@ -81,7 +81,7 @@ class CamaraInteractuableArrastre extends Camara {
 
         var matrizVista = mat4.create();
 
-        var ojo = vec3.fromValues(posHeli.x + scroll*posObserver.x, posHeli.y + scroll*posObserver.y, posHeli.z + scroll*posObserver.z);
+        var ojo = vec3.fromValues(posHeli.x + scroll * posObserver.x, posHeli.y + scroll * posObserver.y, posHeli.z + scroll * posObserver.z);
         var centro = vec3.fromValues(posHeli.x, posHeli.y, posHeli.z);
 
         mat4.lookAt(matrizVista,
@@ -135,7 +135,15 @@ function ControlRaton() {
         IS_MOUSE_DOWN = false;
     });
 
-    $('body').on("wheel",function (event) {
+    document.documentElement.addEventListener('mouseover', function (e) {
+        if (e.relatedTarget == null) {
+            if (IS_MOUSE_DOWN && !e.button) {
+                IS_MOUSE_DOWN = false;
+            }
+        }
+    });
+
+    $('body').on("wheel", function (event) {
         var mi_delta = window.chrome ? 400 : 12;
         WHEEL_SCROLL += event.originalEvent.deltaY / mi_delta;
         WHEEL_SCROLL = Math.max(0.01, Math.min(6, WHEEL_SCROLL));

@@ -14,6 +14,12 @@ function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT
 
 }
 
+function crearGeometriaPlano(ancho, largo, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO, escalado = null) {
+
+    var plano = new Plano(ancho, largo);
+    return generarSuperficie(plano);
+
+}
 
 function SuperficieBarrido(forma, recorrido, conTapas) {
 
@@ -190,6 +196,9 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
 
 function Plano(ancho, largo) {
+
+    this.cantNiveles = ancho-1;
+    this.cantVertices = largo-1;
 
     this.getPosicion = function (u, v) {
 

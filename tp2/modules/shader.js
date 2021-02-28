@@ -74,7 +74,10 @@ class TerrainProgram extends ShaderProgram {
         this.texturaRoca = new Textura("assets/textures/roca2.jpg");
 
         this.unifs.samplerTierra = gl.getUniformLocation(this.program, "uSamplerTierra");
-        this.texturaTierra = new Textura("assets/textures/tierra3.jpg");
+        this.texturaTierra = new Textura("assets/textures/tierra7.jpg");
+
+        this.unifs.samplerRocaBaja = gl.getUniformLocation(this.program, "uSamplerRocaBaja");
+        this.texturaRocaBaja = new Textura("assets/textures/roca1.jpg");
     }
 
     setearParametros() {
@@ -95,5 +98,9 @@ class TerrainProgram extends ShaderProgram {
         gl.activeTexture(gl.TEXTURE3);
         gl.bindTexture(gl.TEXTURE_2D, this.texturaTierra.gl_tex);
         gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerTierra, 3);
+        
+        gl.activeTexture(gl.TEXTURE4);
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaRocaBaja.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerRocaBaja, 4);
     }
 }

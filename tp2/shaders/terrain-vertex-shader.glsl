@@ -1,4 +1,4 @@
-precision mediump float;
+precision highp float;
 
 // atributos del vértice (cada uno se alimenta de un ARRAY_BUFFER distinto)
 
@@ -27,7 +27,7 @@ varying vec2 vUv;
 
 // constantes
 
-const float epsilon=0.025;
+const float epsilon=0.01;
 
 const float amplitud=4.0;
 
@@ -35,16 +35,17 @@ void main(void) {
             
     vec3 position = aPosition;		
     vec2 uv = aUv;
-                            
-    vec4 center = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t));
-    vec4 masU = texture2D(uSamplerHeightmap, vec2(uv.s+epsilon, uv.t));
-    vec4 masV = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t+epsilon));
 
-    vec4 menosU = texture2D(uSamplerHeightmap, vec2(uv.s-epsilon, uv.t));
-    vec4 menosV = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t-epsilon));
+    // heightmap es blanco y negro, importa solo una componente                           
+    float center = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t)).x;
+    float masU = texture2D(uSamplerHeightmap, vec2(uv.s+epsilon, uv.t)).x;
+    float masV = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t+epsilon)).x;
+
+    float menosU = texture2D(uSamplerHeightmap, vec2(uv.s-epsilon, uv.t)).x;
+    float menosV = texture2D(uSamplerHeightmap, vec2(uv.s, uv.t-epsilon)).x;
 
     // elevamos la coordenada Y
-    position.y+=center.x*amplitud;
+    position.y+=center*amplitud;
 
     vec4 worldPos = uMMatrix*vec4(position, 1.0);
     vec4 viewProd = uVMatrix*worldPos;
@@ -64,15 +65,15 @@ void main(void) {
         y las promedio
     */
     
-    float angU=atan((masU.x-center.x)*amplitud,epsilon);
-    float angV=atan((masV.x-center.x)*amplitud,epsilon);
+    float angU=atan((masU-center)*amplitud,epsilon);
+    float angV=atan((masV-center)*amplitud,epsilon);
 
     // tangentes en U y en V
     vec3 gradU1=vec3(cos(angU),sin(angU),0.0);
     vec3 gradV1=vec3(0.0,sin(angV),cos(angV));
     
-    angU=atan((center.x-menosU.x)*amplitud,epsilon);
-    angV=atan((center.x-menosV.x)*amplitud,epsilon);
+    angU=atan((center-menosU)*amplitud,epsilon);
+    angV=atan((center-menosV)*amplitud,epsilon);
 
     // segundo conjunto de tangentes en U y en V
     vec3 gradU2=vec3(cos(angU),sin(angU),0.0);
@@ -83,7 +84,7 @@ void main(void) {
     vec3 tan2=(gradU1+gradU2)/2.0;
 
     vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
-    vWorldPosition=worldPos.xyz;
-    vNormal=cross(tan1,tan2);
+    vWorldPosition = worldPos.xyz;
+    vNormal = cross(tan1,tan2);
     vUv = aUv;
 }

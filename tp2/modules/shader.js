@@ -34,7 +34,6 @@ class ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.texCoord);
 
         this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
-        this.unifs.color = gl.getUniformLocation(this.program, "uColor");
     }
 
     setearParametros() {

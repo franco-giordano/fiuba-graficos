@@ -27,7 +27,7 @@ varying vec2 vUv;
 
 // constantes
 
-const float epsilon=0.05;
+const float epsilon=0.025;
 
 const float amplitud=4.0;
 

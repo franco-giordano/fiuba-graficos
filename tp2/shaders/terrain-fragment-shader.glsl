@@ -8,7 +8,6 @@ precision mediump float;
 // varying vec3 vFromPointToCameraNormalized;
 varying vec2 vUv;
 
-uniform vec3 uColor;
 uniform sampler2D uSamplerHeightmap;
 uniform sampler2D uSamplerPasto;
 uniform float uShininess;
@@ -16,15 +15,9 @@ uniform float uShininess;
 void main(void) {
     vec3 kd;
     vec3 ks;
-    
-    if (uColor != vec3(0.,0.,0.)) {
-        kd = uColor;
-        ks = uColor + vec3(.4);
-    } else {
-        kd = texture2D(uSamplerHeightmap, vec2(vUv.t, vUv.s)).xyz;
-        ks = texture2D(uSamplerHeightmap, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
-    }
 
+    kd = texture2D(uSamplerPasto, vUv*50.3).xyz;
+    ks = texture2D(uSamplerPasto, vUv*50.3).xyz + vec3(.15);
 
     Luz luces[NUM_LUCES];
     luces[0] = luz_puntual;
@@ -36,5 +29,5 @@ void main(void) {
         color += calcular_una_intensidad(luces[i], kd, ks, uShininess);
     }
 
-    gl_FragColor = vec4(texture2D(uSamplerPasto, vec2(vUv.s, vUv.t)).xyz,1.0);
+    gl_FragColor = vec4(color,1.0);
 }

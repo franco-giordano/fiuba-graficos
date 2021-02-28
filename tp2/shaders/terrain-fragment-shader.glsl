@@ -10,13 +10,15 @@ varying vec2 vUv;
 
 uniform sampler2D uSamplerHeightmap;
 uniform sampler2D uSamplerPasto;
+uniform sampler2D uSamplerRoca;
+uniform sampler2D uSamplerTierra;
 uniform float uShininess;
 
 void main(void) {
     vec3 kd;
     vec3 ks;
 
-    kd = texture2D(uSamplerPasto, vUv*50.3).xyz;
+    kd = texture2D(uSamplerTierra, vUv*50.3).xyz;
     ks = texture2D(uSamplerPasto, vUv*50.3).xyz + vec3(.15);
 
     Luz luces[NUM_LUCES];

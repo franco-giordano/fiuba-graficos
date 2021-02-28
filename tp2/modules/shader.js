@@ -69,17 +69,31 @@ class TerrainProgram extends ShaderProgram {
         this.unifs.samplerHeightmap = gl.getUniformLocation(this.program, "uSamplerHeightmap");
         this.unifs.samplerPasto = gl.getUniformLocation(this.program, "uSamplerPasto");
         this.texturaPasto = new Textura("assets/textures/pasto.jpg");
+
+        this.unifs.samplerRoca = gl.getUniformLocation(this.program, "uSamplerRoca");
+        this.texturaRoca = new Textura("assets/textures/roca2.jpg");
+
+        this.unifs.samplerTierra = gl.getUniformLocation(this.program, "uSamplerTierra");
+        this.texturaTierra = new Textura("assets/textures/tierra3.jpg");
     }
-    
+
     setearParametros() {
-        
+
         gl.useProgram(this.program);
 
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
         gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
-        
+
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.texturaPasto.gl_tex);
         gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerPasto, 1);
+
+        gl.activeTexture(gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaRoca.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerRoca, 2);
+
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaTierra.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerTierra, 3);
     }
 }

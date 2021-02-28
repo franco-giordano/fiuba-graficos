@@ -17,19 +17,10 @@ uniform float uShininess;
 
 const vec3 UP = vec3(0.0,1.0,0.0);
 
-const float INICIO_ROCA_BAJA = -20.;
-const float DELTA_FIN_ROCA_BAJA = 25.;
+const float INICIO_ROCA_BAJA = -15.;
+const float DELTA_FIN_ROCA_BAJA = 40.;
 const float INICIO_NIEVE = 55.;
 const float DELTA_FIN_NIEVE = 70.;
-
-vec3 samplear_varias_escalas(sampler2D sampler, float escala1, float escala2, float escala3) {
-
-    vec3 color1 = texture2D(sampler,vUv*escala1).xyz;
-    vec3 color2 = texture2D(sampler,vUv*escala2).xyz;
-    vec3 color3 = texture2D(sampler,vUv*escala3).xyz;
-			   
-    return mix(mix(color1, color2, 0.5),color3,0.3);
-}
 
 vec3 generar_kd() {
 
@@ -43,10 +34,10 @@ vec3 generar_kd() {
 
     // sampleo las texturas y colores de base
     
-    vec3 pasto = samplear_varias_escalas(uSamplerPasto, 30., 60., 10.);
-    vec3 rocas = samplear_varias_escalas(uSamplerRoca, 60., 80., 10.);
-    vec3 tierra = samplear_varias_escalas(uSamplerTierra, 5., 15., 22.);
-    vec3 rocasBajas = samplear_varias_escalas(uSamplerRocaBaja, 60., 100., 10.);
+    vec3 pasto = samplear_varias_escalas(uSamplerPasto, 30., 60., 10., vUv);
+    vec3 rocas = samplear_varias_escalas(uSamplerRoca, 60., 80., 10., vUv);
+    vec3 tierra = samplear_varias_escalas(uSamplerTierra, 5., 15., 22., vUv);
+    vec3 rocasBajas = samplear_varias_escalas(uSamplerRocaBaja, 60., 100., 10., vUv);
     vec3 colorNieve=vec3(0.9,0.9,0.91);
 
     // la nieve se acumula a partir de cierta altura y en las zonas planas

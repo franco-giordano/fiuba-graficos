@@ -1,7 +1,7 @@
 const ColorRGB = {
     ROJO: new ColorLiso([1, 0, 0]),
     AZUL: new ColorLiso([0, 0, 1]),
-    VIOLETA: new ColorLiso([0, 1, 1]),
+    VIOLETA: new ColorLiso([1, 0, 1]),
     VERDE: new ColorLiso([0, 1, 0]),
     BLANCO: new ColorLiso([1, 1, 1]),
     GRIS_CLARO: new ColorLiso([.8, .8, .8]),

@@ -14,12 +14,14 @@ class Terreno {
         var parcelaCentro = Math.floor(Terreno.CANTIDAD_PARCELAS * Terreno.CANTIDAD_PARCELAS / 2);
 
         var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 62.22, long_lado_total/2);
-
-        var agua = new Objeto3D(crearGeometriaPlano(1000,1000));
-        agua.setPosicion(long_lado_total*3/4, 62.22, long_lado_total*3/4);
-
+        
         this.parcelas[parcelaCentro].agregarObjeto(base);
-        this.parcelas[parcelaCentro].agregarObjeto(agua);
+        
+        for (const parcela of this.parcelas) {
+            var agua = new Objeto3D(crearGeometriaPlano(long_lado_total / Terreno.CANTIDAD_PARCELAS,long_lado_total / Terreno.CANTIDAD_PARCELAS), MaterialTexturado.AGUA());
+            agua.setPosicion(parcela.long_parcela * (parcela.posX + .5), 1, parcela.long_parcela * (parcela.posZ + .5));
+            parcela.agregarObjeto(agua);
+        }
 
         this._crearMatrizModeladoEn(0, Terreno.ALTURA_TERRENO, 0);
     }

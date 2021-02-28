@@ -3,10 +3,11 @@ class IMaterial {
 }
 
 class MaterialTexturado extends IMaterial {
-    constructor(nombre_textura, shininess) {
+    constructor(nombre_textura, shininess, usar_varios_sampleos = false) {
         super();
         this.shininess = shininess;
         this.textura = new Textura(nombre_textura);
+        this.usar_varios_sampleos = usar_varios_sampleos;
     }
 
     setearUniforms() {
@@ -16,6 +17,7 @@ class MaterialTexturado extends IMaterial {
         gl.uniform3fv(Objeto3D.COLOR_UNIFORM, [0,0,0]);
 
         gl.uniform1f(Planeta.MAIN_SHADER.unifs.shininess, this.shininess);
+        gl.uniform1f(Planeta.MAIN_SHADER.unifs.usarVariosSampleos, this.usar_varios_sampleos);
     }
 
     static CABINA_HELI() {
@@ -24,6 +26,10 @@ class MaterialTexturado extends IMaterial {
 
     static HELIPAD() {
         return new MaterialTexturado("assets/textures/helipad.jpg", 20.);
+    }
+
+    static AGUA() {
+        return new MaterialTexturado("assets/textures/agua.jpg", 10., true);
     }
 }
 

@@ -1,4 +1,6 @@
 class Textura {
+    static TEX_CACHE = {};
+
     constructor(texture_file) {
 
         this.gl_tex = null;
@@ -8,11 +10,17 @@ class Textura {
 
     initTexture(texture_file) {
 
+		if (Textura.TEX_CACHE[texture_file] != null) {
+			this.gl_tex = Textura.TEX_CACHE[texture_file];
+		}
+
         this.gl_tex = gl.createTexture();
         this.gl_tex.image = new Image();
 
         this.gl_tex.image.onload = () => this.onTextureLoaded(this.gl_tex);
         this.gl_tex.image.src = texture_file;
+
+        Textura.TEX_CACHE[texture_file] = this.gl_tex;
     };
 
     onTextureLoaded(tex) {

@@ -11,6 +11,7 @@ varying vec2 vUv;
 uniform vec3 uColor;
 uniform sampler2D uSampler;
 uniform float uShininess;
+uniform bool uUsarVariosSampleos;
 
 void main(void) {
     vec3 kd;
@@ -20,8 +21,13 @@ void main(void) {
         kd = uColor;
         ks = uColor + vec3(.4);
     } else {
-        kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
-        ks = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz + vec3(.15);
+        if (uUsarVariosSampleos) {
+            kd = samplear_varias_escalas(uSampler, 5., 7., 1., vUv);
+        }
+        else {
+            kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
+        }
+        ks = kd + vec3(.15);
     }
 
 

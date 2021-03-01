@@ -27,8 +27,9 @@ vec3 ks = vec3(.75);
 const Luz LUZ_AMBIENTE = Luz(AMBIENTE, vec3(.025), VECTOR_NULO, VECTOR_NULO);
 const Luz luz_puntual = Luz(PUNTUAL, vec3(.5), vec3(0,100.,0), VECTOR_NULO);
 const Luz luz_sol = Luz(DIRECCIONAL, vec3(1.), VECTOR_NULO, vec3(-100.,-100.,-100.));
+const Luz luz_reflejo = Luz(DIRECCIONAL, vec3(164./256., 113./256., 92./256.)*0.6, VECTOR_NULO, vec3(0.,1.,0.));
 
-const int NUM_LUCES = 2;
+const int NUM_LUCES = 3;
 
 vec3 vector_hacia_luz(Luz luz) {
     vec3 res;

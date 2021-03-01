@@ -58,7 +58,7 @@ class MainProgram extends ShaderProgram {
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
         this.unifs.color = gl.getUniformLocation(this.program, "uColor");
         this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
-
+        this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");
     }
 }
 
@@ -88,20 +88,20 @@ class TerrainProgram extends ShaderProgram {
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, matrizVista);
         gl.uniformMatrix4fv(this.unifs.proyMatrix, false, matrizProyeccion);
 
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, this.texturaPasto.gl_tex);
-        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerPasto, 1);
-
         gl.activeTexture(gl.TEXTURE2);
-        gl.bindTexture(gl.TEXTURE_2D, this.texturaRoca.gl_tex);
-        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerRoca, 2);
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaPasto.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerPasto, 2);
 
         gl.activeTexture(gl.TEXTURE3);
-        gl.bindTexture(gl.TEXTURE_2D, this.texturaTierra.gl_tex);
-        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerTierra, 3);
-        
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaRoca.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerRoca, 3);
+
         gl.activeTexture(gl.TEXTURE4);
+        gl.bindTexture(gl.TEXTURE_2D, this.texturaTierra.gl_tex);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerTierra, 4);
+        
+        gl.activeTexture(gl.TEXTURE5);
         gl.bindTexture(gl.TEXTURE_2D, this.texturaRocaBaja.gl_tex);
-        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerRocaBaja, 4);
+        gl.uniform1i(Planeta.TERRAIN_SHADER.unifs.samplerRocaBaja, 5);
     }
 }

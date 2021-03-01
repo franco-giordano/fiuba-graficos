@@ -1,5 +1,6 @@
 precision mediump float;
 
+const float PI = 3.14159265358979;
 
 varying vec3 vNormal;
 varying vec3 vWorldPosition;

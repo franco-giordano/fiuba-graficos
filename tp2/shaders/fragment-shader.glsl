@@ -13,9 +13,13 @@ uniform sampler2D uSampler;
 uniform float uShininess;
 uniform bool uUsarVariosSampleos;
 
+uniform sampler2D uSamplerMapaReflexion;
+
 void main(void) {
     vec3 kd;
     vec3 ks;
+
+    vec3 color_final = vec3(0.);
     
     if (uColor != vec3(0.,0.,0.)) {
         kd = uColor;
@@ -25,9 +29,18 @@ void main(void) {
             kd = samplear_varias_escalas(uSampler, 5., 7., 1., vUv);
         }
         else {
-            kd = texture2D(uSampler, vec2(vUv.t, vUv.s)).xyz;
+            kd = texture2D(uSampler, vec2(vUv.t-.3, vUv.s)).xyz;
         }
+
         ks = kd + vec3(.15);
+
+        vec3 reflexion = reflect(-vFromPointToCameraNormalized, vNormal);
+        float m = length(reflexion);
+        float alfa = map(atan(reflexion.y, reflexion.x), -PI, PI, 0., 1.);
+        float beta = map(acos(reflexion.z / m), 0., PI, 0., 1.);
+        // alfa = reflexion.x / m + 0.5;
+        // beta = reflexion.z / m + 0.5;
+        color_final += texture2D(uSamplerMapaReflexion, vec2(alfa,beta)).xyz*0.3;    // ya le agrego lo del mapa de reflexion
     }
 
 
@@ -35,11 +48,9 @@ void main(void) {
     luces[0] = luz_puntual;
     luces[1] = luz_sol;
 
-    vec3 color = vec3(0.);
-
     for (int i=0; i < NUM_LUCES; i++) {
-        color += calcular_una_intensidad(luces[i], kd, ks, uShininess);
+        color_final += calcular_una_intensidad(luces[i], kd, ks, uShininess);
     }
 
-    gl_FragColor = vec4(color,1.0);
+    gl_FragColor = vec4(color_final,1.0);
 }

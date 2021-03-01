@@ -220,7 +220,7 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 function Cubo(largoLado, conTapas) {
 
     this.cantNiveles = 10;
-    this.cantVertices = 10;
+    this.cantVertices = 40;
 
     this.CARAS = {
         FRENTE: 0,

@@ -51,40 +51,31 @@ void main(void) {
     vec4 viewProd = uVMatrix*worldPos;
     gl_Position = uPMatrix*viewProd;
 
-    /*
-        hay que calcular la normal ya que el valor original es la normal del plano
-        pero luego de elevar Y, el valor original no tiene sentido
-
-        La idea es calcular la diferencia de altura entre 2 muestras proximas
-        y estimar el vector tangente.
-
-        Haciendo lo mismo en el eje U y en el eje V tenemos 2 vectores tangentes a la superficie
-        Luego calculamos el producto vectorial y obtenemos la normal
-
-        Para tener un resultado con mayor precision, para cada eje U y V calculo 2 tangentes
-        y las promedio
-    */
     
-    float angU=atan((masU-center)*amplitud,epsilon);
-    float angV=atan((masV-center)*amplitud,epsilon);
+    // usando angulos producia muchas normales nulas erroneas
+    // float angU=atan((masU-center)*amplitud,epsilon);
+    // float angV=atan((masV-center)*amplitud,epsilon);
+    // angU=atan((center-menosU)*amplitud,epsilon);
+    // angV=atan((center-menosV)*amplitud,epsilon);
+
+    // lo reemplazo por promediar la normal directo
 
     // tangentes en U y en V
-    vec3 gradU1=vec3(cos(angU),sin(angU),0.0);
-    vec3 gradV1=vec3(0.0,sin(angV),cos(angV));
-    
-    angU=atan((center-menosU)*amplitud,epsilon);
-    angV=atan((center-menosV)*amplitud,epsilon);
+    vec3 gradU1=vec3(epsilon, (masU-center)*amplitud, 0.);//vec3(cos(angU),sin(angU),0.0);
+    vec3 gradV1=vec3(0., (masV - center)*amplitud, epsilon);//vec3(0.0,sin(angV),cos(angV));
 
     // segundo conjunto de tangentes en U y en V
-    vec3 gradU2=vec3(cos(angU),sin(angU),0.0);
-    vec3 gradV2=vec3(0.0,sin(angV),cos(angV));
+    vec3 gradU2=vec3(-epsilon, (menosU-center)*amplitud, 0.);//vec3(cos(angU),sin(angU),0.0);
+    vec3 gradV2=vec3(0., (menosV - center)*amplitud, -epsilon);//vec3(0.0,sin(angV),cos(angV));
     
-    // calculo el producto vectorial
-    vec3 tan1=(gradV1+gradV2)/2.0;
-    vec3 tan2=(gradU1+gradU2)/2.0;
+    // // calculo el producto vectorial
+    // vec3 tan1=(gradV1+gradV2)/2.0;
+    // vec3 tan2=(gradU1+gradU2)/2.0;
+    vec3 nMas = normalize(cross(gradV1,gradU1));
+    vec3 nMenos = normalize(cross(gradV2,gradU2));
 
     vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     vWorldPosition = worldPos.xyz;
-    vNormal = cross(tan1,tan2);
+    vNormal = normalize((nMas + nMenos) / 2.0);
     vUv = aUv;
 }

@@ -83,7 +83,7 @@ void main(void) {
     vec3 color = vec3(0.);
 
     for (int i=0; i < NUM_LUCES; i++) {
-        color += calcular_una_intensidad(luces[i], kd, ks, uShininess, 0.5);
+        color += calcular_una_intensidad(luces[i], kd, ks, uShininess, 0.2);
     }
     
     // gl_FragColor = vec4(max(color, vec3(0.1)),1.0);

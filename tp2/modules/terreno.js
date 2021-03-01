@@ -1,13 +1,13 @@
 class Terreno {
     static CANTIDAD_PARCELAS = 9;
     static ESCALA = null;
-    static ALTURA_TERRENO = -100;
+    static ALTURA_TERRENO = -250;
 
     constructor(long_lado_total) {
         this.textura = new Textura("assets/heightmap-isla.png");
 
         this.long_lado_total = long_lado_total;
-        Terreno.ESCALA = long_lado_total / 20;
+        Terreno.ESCALA = long_lado_total / 9;
 
         this.parcelas = this._crearParcelas(long_lado_total);
 
@@ -19,7 +19,7 @@ class Terreno {
 
         for (const parcela of this.parcelas) {
             var agua = new Objeto3D(crearGeometriaPlano(long_lado_total / Terreno.CANTIDAD_PARCELAS,long_lado_total / Terreno.CANTIDAD_PARCELAS), MaterialTexturado.AGUA());
-            agua.setPosicion(parcela.long_parcela * (parcela.posX + .5), 1, parcela.long_parcela * (parcela.posZ + .5));
+            agua.setPosicion(parcela.long_parcela * (parcela.posX + .5), -25, parcela.long_parcela * (parcela.posZ + .5));
             parcela.agregarObjeto(agua);
         }
 

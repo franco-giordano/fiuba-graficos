@@ -42,7 +42,7 @@ class MaterialTexturado extends IMaterial {
     }
 
     static AGUA() {
-        return new MaterialTexturado("assets/textures/agua.jpg", 10., true);
+        return new MaterialTexturado("assets/textures/agua.jpg", 10., true, "assets/textures/cielo2-refmap.jpg", 0.5);
     }
 
     static UV_BASICO() {

@@ -15,6 +15,10 @@ function onResize() {
     aspect = $canvas.width() / $canvas.height();
 }
 
+function _rgbToFloat(r,g,b) {
+    return [r/256, g/256, b/256];
+}
+
 function drawScene() {
 
     // Se configura el viewport dentro del "canvas". 
@@ -22,7 +26,7 @@ function drawScene() {
     gl.viewport(0, 0, $canvas.width(), $canvas.height());
 
     // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
-    gl.clearColor(0.53, 0.81, 0.92, 1);
+    gl.clearColor(..._rgbToFloat(157,184,227), 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Se configura la matriz de proyección
@@ -61,7 +65,6 @@ function webGLStart() {
 
     planeta = new Planeta();
 
-    gl.clearColor(0.2, 0.2, 0.2, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
 

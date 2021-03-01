@@ -19,7 +19,7 @@ const vec3 UP = vec3(0.0,1.0,0.0);
 
 const float INICIO_ROCA_BAJA = -10.;
 const float DELTA_FIN_ROCA_BAJA = 40.;
-const float INICIO_NIEVE = 60.;
+const float INICIO_NIEVE = 110.;
 const float DELTA_FIN_NIEVE = 70.;
 
 vec3 generar_kd() {

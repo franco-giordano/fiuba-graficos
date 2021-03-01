@@ -29,7 +29,7 @@ void main(void) {
             kd = samplear_varias_escalas(uSampler, 5., 7., 1., vUv);
         }
         else {
-            kd = texture2D(uSampler, vec2(vUv.t-.3, vUv.s)).xyz;
+            kd = texture2D(uSampler, vec2(vUv.s, vUv.t)).xyz;
         }
 
         ks = kd + vec3(.15);

@@ -109,12 +109,18 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         var indiceV = (v * this.cantNiveles).toFixed();
 
         if ((indiceV <= 1 || indiceV >= this.cantNiveles - 1) && conTapas) {
-            // si es con tapas y estoy en los primeros o ultimos niveles
-            if (v == 0 || v == 1) {
-                return [1, 1];
-            }
 
-            return [u, 0];
+            var verticeFigura = forma[(u * this.cantVertices).toFixed()];
+            var propU = (verticeFigura.elementos[0] - this.mapaTapasForma.xMin) / (this.mapaTapasForma.xMax - this.mapaTapasForma.xMin);
+            var propV = (verticeFigura.elementos[1] - this.mapaTapasForma.yMin) / (this.mapaTapasForma.yMax - this.mapaTapasForma.yMin);
+
+            // // si es con tapas y estoy en los primeros o ultimos niveles
+            if (v == 0 || v == 1) {
+                return [.5, .5];
+            }
+                
+            return [propU, propV];
+            // return [u, 0];
         }
 
         var totalU = this.mapaLongitudesU.total;
@@ -144,20 +150,17 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
     this._obtenerMapaTapas = function (forma) {
         var mapa = {};
-        var xAccum = 0;
-        var yAccum = 0;
+        mapa.xMin = 0;
+        mapa.xMax = 0;
+        mapa.yMin = 0;
+        mapa.yMax = 0;
 
-        for (let i = 0; i < forma.length; i++) {
-            xAccum += arrayVectores[i].elementos[0];
-            yAccum += arrayVectores[i].elementos[1];
-
-            // mapa[i] = distAccum;
+        for (const f of forma) {
+            mapa.xMin = Math.min(mapa.xMin, f.elementos[0]);
+            mapa.xMax = Math.max(mapa.xMax, f.elementos[0]);
+            mapa.yMin = Math.min(mapa.yMin, f.elementos[1]);
+            mapa.yMax = Math.max(mapa.yMax, f.elementos[1]);
         }
-
-        var promX = xAccum / forma.length;
-        var promY = yAccum / forma.length;
-
-        // mapa["total"] = distAccum;
 
         return mapa;
     }
@@ -191,6 +194,8 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     this._extenderSuperficieSiConTapas(recorrido);
     this.mapaLongitudesU = this._obtenerMapaLongitudes(forma);
     this.mapaLongitudesV = this._obtenerMapaLongitudes(recorrido[0], true);
+
+    this.mapaTapasForma = this._obtenerMapaTapas(forma);
 
 }
 

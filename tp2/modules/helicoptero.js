@@ -139,7 +139,7 @@ class BrazoHelice extends IDibujable {
             [1, 0.4, 0]
         ]);
 
-        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, 10, 30, escalado), ColorRGB.BLANCO);
+        var conector = new Objeto3D(crearGeometria(controlF, controlR, false, undefined, undefined, escalado), ColorRGB.BLANCO);
         conector.setEscala(1, .7, .7);
 
         this.contenedorBrazo.agregarHijos(soporte, this.helice, conector);

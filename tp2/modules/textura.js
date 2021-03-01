@@ -8,7 +8,7 @@ class Textura {
         this.initTexture(texture_file);
     }
 
-    initTexture(texture_file) {
+    async initTexture(texture_file) {
 
 		if (Textura.TEX_CACHE[texture_file] != null) {
 			this.gl_tex = Textura.TEX_CACHE[texture_file];

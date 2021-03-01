@@ -66,7 +66,7 @@ class Terreno {
 
 class Parcela {
 
-    static CANT_BANDAS = 100;
+    static CANT_BANDAS = 64;
     static TERRAIN_SHADER = null;
 
     constructor(numeroX, numeroZ, long_parcela, cant_parcelas) {

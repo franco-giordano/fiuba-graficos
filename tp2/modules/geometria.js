@@ -3,8 +3,8 @@ var vec4 = glMatrix.vec4;
 var vec3 = glMatrix.vec3;
 
 
-const CANT_NIVELES_GEO = 30;
-const CANT_VERTICES_GEO = 30;
+const CANT_NIVELES_GEO = 5;
+const CANT_VERTICES_GEO = 15;
 
 function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO, escalado = null) {
 
@@ -40,13 +40,21 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     this.cantNiveles = recorrido[0].length - 1;
     this.cantVertices = forma.length - 1;
 
+    this.CACHE_POSICIONES = {};
+
     this.getPosicion = function (u, v) {
+        var key = u + "," + v;
+        
+		if (this.CACHE_POSICIONES[key] != null) {
+			return this.CACHE_POSICIONES[key];
+		}
 
         var vectorModelado = vec4.clone(recorrido[0][(v * this.cantNiveles).toFixed()].elementos);
         // console.log(vectorModelado);
 
         // colapsar ppio y final en el origen si quiero tapas
         if (conTapas && (v == 0 || v == 1)) {
+            this.CACHE_POSICIONES[key] = vectorModelado;
             return vectorModelado;
         }
 
@@ -63,7 +71,8 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
         var nuevoVertice = vec4.create();
         mat4.multiply(nuevoVertice, matrizNormal, vertice);
         vec4.add(nuevoVertice, nuevoVertice, vectorModelado);
-
+        
+        this.CACHE_POSICIONES[key] = nuevoVertice;
         return nuevoVertice;
     }
 
@@ -210,8 +219,8 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
 
 function Cubo(largoLado, conTapas) {
 
-    this.cantNiveles = 40;
-    this.cantVertices = 40;
+    this.cantNiveles = 10;
+    this.cantVertices = 10;
 
     this.CARAS = {
         FRENTE: 0,

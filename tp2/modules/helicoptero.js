@@ -1,5 +1,10 @@
 class Helicoptero {
+
+    static SPAWN_HELI = undefined;
+
     constructor(long_terreno) {
+
+        Helicoptero.SPAWN_HELI = [long_terreno / 2 + 135, 20, long_terreno / 2];
 
         // me guardo estos dos componentes porque tienen interaccion especial
         this.cola = new ColaHelicoptero();
@@ -13,7 +18,7 @@ class Helicoptero {
         this.contenedor.agregarHijos(cabina, this.brazos, trenAterrizaje, this.cola);
 
         // spawnear heli en el centro del terreno
-        this.controlHelicoptero = new ControlHelicoptero(long_terreno, 65);
+        this.controlHelicoptero = new ControlHelicoptero();
     }
 
     actualizar() {

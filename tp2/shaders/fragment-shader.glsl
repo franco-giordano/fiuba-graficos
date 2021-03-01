@@ -13,6 +13,7 @@ uniform sampler2D uSampler;
 uniform float uShininess;
 uniform bool uUsarVariosSampleos;
 
+uniform float uFactorReflexion;
 uniform sampler2D uSamplerMapaReflexion;
 
 void main(void) {
@@ -40,7 +41,7 @@ void main(void) {
         float beta = map(acos(reflexion.z / m), 0., PI, 0., 1.);
         // alfa = reflexion.x / m + 0.5;
         // beta = reflexion.z / m + 0.5;
-        color_final += texture2D(uSamplerMapaReflexion, vec2(alfa,beta)).xyz*0.3;    // ya le agrego lo del mapa de reflexion
+        color_final += texture2D(uSamplerMapaReflexion, vec2(alfa,beta)).xyz*uFactorReflexion*0.3;    // ya le agrego lo del mapa de reflexion
     }
 
 

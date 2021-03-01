@@ -3,11 +3,12 @@ class IMaterial {
 }
 
 class MaterialTexturado extends IMaterial {
-    constructor(nombre_textura, shininess, usar_varios_sampleos = false, nombre_mapa_reflexion = null) {
+    constructor(nombre_textura, shininess, usar_varios_sampleos = false, nombre_mapa_reflexion = null, factor_reflexion = 1.) {
         super();
         this.shininess = shininess;
         this.textura = new Textura(nombre_textura);
         this.usar_varios_sampleos = usar_varios_sampleos;
+        this.factor_reflexion = factor_reflexion;
 
         if (nombre_mapa_reflexion) {
             this.mapa_reflexion = new Textura(nombre_mapa_reflexion);
@@ -19,10 +20,11 @@ class MaterialTexturado extends IMaterial {
         gl.bindTexture(gl.TEXTURE_2D, this.textura.gl_tex);
         gl.uniform1i(Planeta.MAIN_SHADER.unifs.sampler, 0);
 
-        gl.uniform3fv(Objeto3D.COLOR_UNIFORM, [0,0,0]);
+        gl.uniform3fv(Objeto3D.COLOR_UNIFORM, [0, 0, 0]);
 
         gl.uniform1f(Planeta.MAIN_SHADER.unifs.shininess, this.shininess);
         gl.uniform1f(Planeta.MAIN_SHADER.unifs.usarVariosSampleos, this.usar_varios_sampleos);
+        gl.uniform1f(Planeta.MAIN_SHADER.unifs.factorReflexion, this.factor_reflexion);
 
         if (this.mapa_reflexion) {
             gl.activeTexture(gl.TEXTURE1);
@@ -32,11 +34,11 @@ class MaterialTexturado extends IMaterial {
     }
 
     static CABINA_HELI() {
-        return new MaterialTexturado("assets/textures/uv.jpg", 5., false, "assets/textures/cielo2-refmap.jpg");
+        return new MaterialTexturado("assets/textures/uv.jpg", 5., false, "assets/textures/cielo2-refmap.jpg", 1);
     }
 
     static HELIPAD() {
-        return new MaterialTexturado("assets/textures/helipad.jpg", 20., false);
+        return new MaterialTexturado("assets/textures/helipad.jpg", 20., false, "assets/textures/cielo2-refmap.jpg", 0.15);
     }
 
     static AGUA() {

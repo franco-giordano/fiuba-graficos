@@ -58,7 +58,8 @@ class MainProgram extends ShaderProgram {
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
         this.unifs.color = gl.getUniformLocation(this.program, "uColor");
         this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
-        this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");
+        this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");        
+        this.unifs.factorReflexion = gl.getUniformLocation(this.program, "uFactorReflexion");
     }
 }
 

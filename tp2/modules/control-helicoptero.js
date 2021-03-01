@@ -1,4 +1,4 @@
-function ControlHelicoptero(long_terreno, yInicial) {
+function ControlHelicoptero() {
 
     $body = $("body");
 
@@ -17,21 +17,21 @@ function ControlHelicoptero(long_terreno, yInicial) {
 
     var maxSpeed = 2;
     var maxAltitude = 300;
-    var minAltitude = 0;
+    var minAltitude = -80;
 
-    var positionX = long_terreno / 2 + 5;
+    var positionX = Helicoptero.SPAWN_HELI[0];
     var positionY = 0;
-    var positionZ = long_terreno / 2;
+    var positionZ = Helicoptero.SPAWN_HELI[2];
 
     var speed = 0;
-    var altitude = yInicial;
+    var altitude = Helicoptero.SPAWN_HELI[1];
     var angle = 0;
 
     var pitch = 0;
     var roll = 0;
 
     var angleTarget = 0;
-    var altitudeTarget = yInicial;
+    var altitudeTarget = Helicoptero.SPAWN_HELI[1];
     var speedTarget = 0;
 
     var NUMERO_CAMARA = 1;

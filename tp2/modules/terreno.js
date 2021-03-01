@@ -13,7 +13,7 @@ class Terreno {
 
         var parcelaCentro = Math.floor(Terreno.CANTIDAD_PARCELAS * Terreno.CANTIDAD_PARCELAS / 2);
 
-        var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 62.22, long_lado_total/2);
+        var base = ComponenteFactory.crearBaseDespegue(...Helicoptero.SPAWN_HELI);
 
         this.parcelas[parcelaCentro].agregarObjeto(base);
 

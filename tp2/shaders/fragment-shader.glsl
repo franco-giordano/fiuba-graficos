@@ -9,6 +9,7 @@ precision mediump float;
 varying vec2 vUv;
 
 uniform vec3 uColor;
+uniform vec4 uDeltaSampler;
 uniform sampler2D uSampler;
 uniform float uShininess;
 uniform bool uUsarVariosSampleos;
@@ -30,7 +31,9 @@ void main(void) {
             kd = samplear_varias_escalas(uSampler, 5., 7., 1., vUv);
         }
         else {
-            kd = texture2D(uSampler, vec2(vUv.s, vUv.t)).xyz;
+            // kd = texture2D(uSampler, vec2(1.13-vUv.s, 1.8-vUv.t)*vec2(0.9, .4)).xyz;
+            kd = texture2D(uSampler, uDeltaSampler.xy * vUv + uDeltaSampler.zw).xyz;
+
         }
 
         ks = kd + vec3(.15);

@@ -353,24 +353,25 @@ class ComponenteFactory {
     }
 
     static crearBaseDespegue(posX, posY, posZ) {
-        var controlF = [
-            [0, -1, 0],
-            [1.25, -1, 0],
-            [1.25, 1, 0],
-            [0, 1, 0],
-            [0, 1, 0],
-            [-1.25, 1, 0],
-            [-1.25, -1, 0],
-            [0, -1, 0]
-        ];
-        var controlR = [
-            [0, 0, 0],
-            [0, -2.5, 0],
-        ];
+        // var controlF = [
+        //     [0, -1, 0],
+        //     [1.25, -1, 0],
+        //     [1.25, 1, 0],
+        //     [0, 1, 0],
+        //     [0, 1, 0],
+        //     [-1.25, 1, 0],
+        //     [-1.25, -1, 0],
+        //     [0, -1, 0]
+        // ];
+        // var controlR = [
+        //     [0, 0, 0],
+        //     [0, -2.5, 0],
+        // ];
 
-        var base = new Objeto3D(crearGeometria(controlF, controlR, true, 70, 30), ColorRGB.GRIS_OSCURO);
+        var base = new Objeto3D(crearGeometriaCubo(50, true), MaterialTexturado.HELIPAD());
         base.setPosicion(posX, posY, posZ - 2);
-        base.setEscala(20, 20, 20);
+        base.setRotacion(0,Math.PI/2,Math.PI/2);
+        // base.setEscala(20, 20, 20);
 
         return base;
     }

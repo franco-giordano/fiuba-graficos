@@ -14,9 +14,9 @@ class Terreno {
         var parcelaCentro = Math.floor(Terreno.CANTIDAD_PARCELAS * Terreno.CANTIDAD_PARCELAS / 2);
 
         var base = ComponenteFactory.crearBaseDespegue(long_lado_total/2, 62.22, long_lado_total/2);
-        
+
         this.parcelas[parcelaCentro].agregarObjeto(base);
-        
+
         for (const parcela of this.parcelas) {
             var agua = new Objeto3D(crearGeometriaPlano(long_lado_total / Terreno.CANTIDAD_PARCELAS,long_lado_total / Terreno.CANTIDAD_PARCELAS), MaterialTexturado.AGUA());
             agua.setPosicion(parcela.long_parcela * (parcela.posX + .5), 1, parcela.long_parcela * (parcela.posZ + .5));

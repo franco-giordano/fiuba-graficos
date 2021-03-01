@@ -36,11 +36,15 @@ class MaterialTexturado extends IMaterial {
     }
 
     static HELIPAD() {
-        return new MaterialTexturado("assets/textures/helipad.jpg", 20.);
+        return new MaterialTexturado("assets/textures/helipad.jpg", 20., false);
     }
 
     static AGUA() {
         return new MaterialTexturado("assets/textures/agua.jpg", 10., true);
+    }
+
+    static UV_BASICO() {
+        return new MaterialTexturado("assets/textures/uv.jpg", 5., false);
     }
 }
 

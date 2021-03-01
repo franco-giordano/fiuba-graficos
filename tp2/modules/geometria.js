@@ -14,10 +14,18 @@ function crearGeometria(controlF, controlR, conTapas = false, cantNiveles = CANT
 
 }
 
-function crearGeometriaPlano(ancho, largo, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO, escalado = null) {
+function crearGeometriaPlano(ancho, largo, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO) {
 
     var plano = new Plano(Math.round(ancho), Math.round(largo));
     return generarSuperficie(plano);
+
+}
+
+
+function crearGeometriaCubo(largo, conTapas = false, cantNiveles = CANT_NIVELES_GEO, cantVertices = CANT_VERTICES_GEO) {
+
+    var cubo = new Cubo(Math.round(largo), conTapas);
+    return generarSuperficie(cubo);
 
 }
 
@@ -118,7 +126,7 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
             if (v == 0 || v == 1) {
                 return [.5, .5];
             }
-                
+
             return [propU, propV];
             // return [u, 0];
         }
@@ -198,6 +206,114 @@ function SuperficieBarrido(forma, recorrido, conTapas) {
     this.mapaTapasForma = this._obtenerMapaTapas(forma);
 
 }
+
+
+function Cubo(largoLado, conTapas) {
+
+    this.cantNiveles = 40;
+    this.cantVertices = 40;
+
+    this.CARAS = {
+        FRENTE: 0,
+        DERECHA: 1,
+        DETRAS: 2,
+        IZQUIERDA: 3,
+    }
+
+    this.getPosicion = function (u, v) {
+
+        if (conTapas && v == 0) {
+            return [0, -largoLado / 2, 0];
+        }
+
+        if (conTapas && v == 1) {
+            return [0, largoLado / 2, 0];
+        }
+
+        var cara = this._seleccionarCara(u);
+
+        var x = 0;
+        var z = 0;
+        var y = (v - 0.5) * largoLado;
+
+        u = this._remapearSegunCara(u);
+
+        if (cara == this.CARAS.FRENTE) {
+            x = largoLado / 2;
+            z = (u - 0.5) * largoLado;
+        } else if (cara == this.CARAS.DERECHA) {
+            x = (-u + 0.5) * largoLado;
+            z = largoLado / 2;
+        } else if (cara == this.CARAS.DETRAS) {
+            x = -largoLado / 2;
+            z = (-u + 0.5) * largoLado;
+        } else if (cara == this.CARAS.IZQUIERDA) {
+            x = (u - 0.5) * largoLado;
+            z = -largoLado / 2;
+        }
+
+        return [x, y, z];
+    }
+
+    this.getNormal = function (u, v) {
+
+        if (conTapas && v == 0) {
+            return [0, -1, 0];
+        }
+
+        if (conTapas && v == 1) {
+            return [0, 1, 0];
+        }
+
+        var cara = this._seleccionarCara(u);
+
+        if (cara == this.CARAS.FRENTE) {
+            return [1, 0, 0];
+        } else if (cara == this.CARAS.DERECHA) {
+            return [0, 0, 1];
+        } else if (cara == this.CARAS.DETRAS) {
+            return [-1, 0, 0];
+        } else if (cara == this.CARAS.IZQUIERDA) {
+            return [0, 0, -1];
+        }
+
+        return [0, 0, 0];
+    }
+
+    this.getCoordenadasTextura = function (u, v) {
+        var cara = this._seleccionarCara(u);
+
+        // si no es la cara principal, hardcodear uv
+        if (cara == this.CARAS.FRENTE) {
+            u = this._remapearSegunCara(u);
+            return [u, v];
+        } else {
+            return [.999,v];
+        }
+
+    }
+
+    this._seleccionarCara = function (u) {
+        if (u <= 0.25) {
+            return this.CARAS.FRENTE;
+        } else if (u <= 0.5) {
+            return this.CARAS.DERECHA;
+        } else if (u <= 0.75) {
+            return this.CARAS.DETRAS;
+        } else if (u <= 1) {
+            return this.CARAS.IZQUIERDA;
+        } else {
+            return undefined;
+        }
+    }
+
+    this._remapearSegunCara = function (u) {
+        var cara = this._seleccionarCara(u);
+
+        return (u - 0.25 * cara) / 0.25;
+    }
+}
+
 
 
 function Plano(ancho, largo) {

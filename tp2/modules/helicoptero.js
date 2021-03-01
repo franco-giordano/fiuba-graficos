@@ -4,7 +4,7 @@ class Helicoptero {
 
     constructor(long_terreno) {
 
-        Helicoptero.SPAWN_HELI = [long_terreno / 2 + 135, 20, long_terreno / 2];
+        Helicoptero.SPAWN_HELI = [long_terreno / 2 + 120, 20, long_terreno / 2 + 50];
 
         // me guardo estos dos componentes porque tienen interaccion especial
         this.cola = new ColaHelicoptero();

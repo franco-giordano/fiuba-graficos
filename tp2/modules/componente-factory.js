@@ -370,7 +370,7 @@ class ComponenteFactory {
 
         var base = new Objeto3D(crearGeometriaCubo(50, true), MaterialTexturado.HELIPAD());
         base.setPosicion(posX, posY-28, posZ);
-        base.setRotacion(0,Math.PI/2,Math.PI/2);
+        base.setRotacion(Math.PI/9,Math.PI/2,Math.PI/2);
         // base.setEscala(20, 20, 20);
 
         return base;

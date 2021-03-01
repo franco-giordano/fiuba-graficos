@@ -17,13 +17,26 @@ class Terreno {
 
         this.parcelas[parcelaCentro].agregarObjeto(base);
 
-        for (const parcela of this.parcelas) {
-            var agua = new Objeto3D(crearGeometriaPlano(long_lado_total / Terreno.CANTIDAD_PARCELAS,long_lado_total / Terreno.CANTIDAD_PARCELAS), MaterialTexturado.AGUA());
-            agua.setPosicion(parcela.long_parcela * (parcela.posX + .5), -25, parcela.long_parcela * (parcela.posZ + .5));
-            parcela.agregarObjeto(agua);
-        }
+        this.parcelasAnillo = this._crearParcelasAnillo(long_lado_total);
 
         this._crearMatrizModeladoEn(0, Terreno.ALTURA_TERRENO, 0);
+    }
+
+    _crearParcelasAnillo(long_lado_total) {
+        var parcelas = {};
+        var long_parcela = long_lado_total / Terreno.CANTIDAD_PARCELAS;
+
+        for (let i = -1; i <= Terreno.CANTIDAD_PARCELAS; i++) {
+            for (let j = -1; j <= Terreno.CANTIDAD_PARCELAS; j++) {
+                if ((i >= 0 && i < Terreno.CANTIDAD_PARCELAS) && (j >= 0 && j < Terreno.CANTIDAD_PARCELAS)) {
+                    continue;
+                }
+
+                parcelas[i + "," + j] = new Parcela(i, j, long_parcela, Terreno.CANTIDAD_PARCELAS);
+            }
+        }
+
+        return parcelas;
     }
 
     _crearParcelas(long_lado_total) {
@@ -44,6 +57,10 @@ class Terreno {
 
         for (const parcela of this.parcelas) {
             parcela.dibujarSiEnRango(posHeli, this.textura, this.matrizModelado);
+        }
+
+        for (const [_key, parcelaAnillo] of Object.entries(this.parcelasAnillo)) {
+            parcelaAnillo.dibujarSiEnRango(posHeli, this.textura, this.matrizModelado);
         }
     }
 
@@ -81,6 +98,10 @@ class Parcela {
         this.webgl_texture_coord_buffer = null;
 
         this.objetos3Dextra = [];
+
+        var agua = new Objeto3D(crearGeometriaPlano(long_parcela, long_parcela), MaterialTexturado.AGUA());
+        agua.setPosicion(long_parcela * (this.posX + .5), -25, long_parcela * (this.posZ + .5));
+        this.agregarObjeto(agua);
 
         this.crearBuffers();
     }

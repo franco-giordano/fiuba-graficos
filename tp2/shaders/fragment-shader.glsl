@@ -46,9 +46,9 @@ void main(void) {
 
 
     Luz luces[NUM_LUCES];
-    luces[0] = luz_puntual;
-    luces[1] = luz_sol;
-    luces[2] = luz_reflejo;
+    // luces[0] = luz_puntual;
+    luces[0] = luz_sol;
+    luces[1] = luz_reflejo;
 
     for (int i=0; i < NUM_LUCES; i++) {
         color_final += calcular_una_intensidad(luces[i], kd, ks, uShininess);

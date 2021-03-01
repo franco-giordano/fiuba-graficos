@@ -76,9 +76,9 @@ void main(void) {
     ks = vec3(0.9);
 
     Luz luces[NUM_LUCES];
-    luces[0] = luz_puntual;
-    luces[1] = luz_sol;
-    luces[2] = luz_reflejo;
+    // luces[0] = luz_puntual;
+    luces[0] = luz_sol;
+    luces[1] = luz_reflejo;
 
     vec3 color = vec3(0.);
 
